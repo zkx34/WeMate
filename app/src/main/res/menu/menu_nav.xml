@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_menu_atme"
+            android:title="@string/atMe"/>
+
+        <item
+            android:id="@+id/nav_menu_comments"
+            android:title="@string/comments" />
+
+        <item
+            android:id="@+id/nav_menu_personalMess"
+            android:title="@string/personalMessage" />
+        <item
+            android:id="@+id/nav_menu_setting"
+            android:title="设置" />
+
+    </group>
+</menu>
