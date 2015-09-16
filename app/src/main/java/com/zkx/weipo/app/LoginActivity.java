@@ -4,8 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +14,9 @@ import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 
+/**
+ * Created by Administrator on 2015/9/15.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private Button mLoginBt;
@@ -24,38 +26,28 @@ public class LoginActivity extends AppCompatActivity {
     private SsoHandler mSsoHandler;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    protected void onCreate(Bundle savedInstanceState) {
+        if ((mAccessToken=AccessTokenKeeper.readAccessToken(this)).isSessionValid()){
+            startActivity(new Intent(LoginActivity.this,MainActivity.class));
         }
-        return super.onOptionsItemSelected(item);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        initLoginView();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (mSsoHandler!=null){
-            mSsoHandler.authorizeCallBack(requestCode,resultCode,data);
+            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+            if ((mAccessToken=AccessTokenKeeper.readAccessToken(this)).isSessionValid()){
+                finish();
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            }
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    private void initLoginView(){
         mLoginBt=(Button)findViewById(R.id.loginButton);
         mRegistBt=(Button)findViewById(R.id.registButton);
         mAuthInfo=new AuthInfo(this,Constants.APP_KEY,Constants.REDIRECT_URL,Constants.SCOPE);
@@ -69,22 +61,25 @@ public class LoginActivity extends AppCompatActivity {
         mRegistBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1=new Intent(LoginActivity.this,RegistActivity.class);
-                intent1.putExtra("url",getString(R.string.regist_address));
+                Intent intent1 = new Intent(LoginActivity.this, RegistActivity.class);
+                intent1.putExtra("url", getString(R.string.regist_address));
                 startActivity(intent1);
             }
         });
-        mAccessToken=AccessTokenKeeper.readAccessToken(this);
     }
 
-    class AuthListener implements WeiboAuthListener{
+    class AuthListener implements WeiboAuthListener {
 
         @Override
         public void onComplete(Bundle bundle) {
-            mAccessToken=Oauth2AccessToken.parseAccessToken(bundle);
+            mAccessToken= Oauth2AccessToken.parseAccessToken(bundle);
             if (mAccessToken.isSessionValid()){
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this,mAccessToken);
-                Toast.makeText(LoginActivity.this,R.string.weibosdk_demo_toast_auth_success,Toast.LENGTH_SHORT).show();
+                String uid=bundle.getString("uid");
+                String token=bundle.getString("access_token");
+                Toast.makeText(LoginActivity.this, uid, Toast.LENGTH_SHORT).show();
+                Log.d("UID is:", uid);
+                Log.d("Token is:",token);
             }else {
                 String code=bundle.getString("code");
                 String message=getString(R.string.weibosdk_demo_toast_auth_failed);

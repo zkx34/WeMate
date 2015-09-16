@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">微mate</string>
+    <string name="app_name">微Mate</string>
 
     <string name="toolbar_title">New Demo</string>
     <string name="action_settings">settings</string>
@@ -10,16 +10,17 @@
     <string name="plusone">+1</string>
     <string name="item_clicked">item clicked！</string>
     <string name="item_longclicked">item long clicked！</string>
-    <string name="atMe">/@我的</string>
+    <string name="atMe">\&#064;我的</string>
     <string name="comments">评论</string>
     <string name="personalMessage">私信</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="weibosdk_demo_token_to_string_format_1">Token：%1$s \n有效期：%2$s</string>
     <string name="hello_world">Hello world!</string>
-    <string name="weibosdk_demo_toast_auth_canceled">取消授权</string>
+    <string name="weibosdk_demo_toast_auth_canceled">取消登录</string>
     <string name="login">登录</string>
     <string name="regist">注册</string>
-    <string name="weibosdk_demo_toast_auth_success">授权成功</string>
-    <string name="weibosdk_demo_toast_auth_failed">授权失败</string>
+    <string name="weibosdk_demo_toast_auth_success">登录成功</string>
+    <string name="weibosdk_demo_toast_auth_failed">登录失败</string>
     <string name="regist_address">https://passport.sina.cn/signup/signup</string>
+    <string name="logout">退出当前帐号</string>
 </resources>

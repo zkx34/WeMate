@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapter mRecyclerViewAdapter;
     private List<TestData> testDatas;
+    private TextView textView;
+
 
     private void initData(){
         testDatas=new ArrayList<TestData>();
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initViews(){
+        textView=(TextView)findViewById(R.id.u_ID);
         mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         mNavigationView=(NavigationView)findViewById(R.id.id_NavigationView);
@@ -89,10 +94,42 @@ public class MainActivity extends AppCompatActivity{
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                mDrawerLayout.closeDrawers();
+                switch (menuItem.getItemId()){
+                    default:
+                        mDrawerLayout.closeDrawers();
+                        break;
+                }
                 return true;
             }
         });
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
+    /*private void sendRequest(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpClient httpClient=new DefaultHttpClient();
+                HttpGet httpGet=new HttpGet("https://api.weibo.com/2/users/show.json?access_token=2.00EJ3T4BCYGghC2a4b32746ag12XFB&uid=1262985202");
+                try {
+                    HttpResponse httpResponse=httpClient.execute(httpGet);
+                    if (httpResponse.getStatusLine().getStatusCode()==200){
+                        HttpEntity httpEntity=httpResponse.getEntity();
+                        String response= EntityUtils.toString(httpEntity,"UTF-8");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }*/
 
 }
