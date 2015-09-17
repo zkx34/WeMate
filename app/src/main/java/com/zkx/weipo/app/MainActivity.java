@@ -8,10 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.RequestListener;
+import com.zkx.weipo.app.openapi.StatusesAPI;
+import com.zkx.weipo.app.openapi.UsersAPI;
+import com.zkx.weipo.app.openapi.models.ErrorInfo;
+import com.zkx.weipo.app.openapi.models.Status;
+import com.zkx.weipo.app.openapi.models.StatusList;
+import com.zkx.weipo.app.openapi.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +36,20 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapter mRecyclerViewAdapter;
     private List<TestData> testDatas;
-    private TextView textView;
-
+    private StatusList mStatusLists;
+    /** 当前 Token 信息 */
+    private Oauth2AccessToken mAccessToken;
+    /** 用户信息接口 */
+    private UsersAPI mUsersAPI;
+    /** 用于获取微博信息流等操作的API */
+    private StatusesAPI mStatusesAPI;
 
     private void initData(){
         testDatas=new ArrayList<TestData>();
         for (int i=0;i<10;i++){
             testDatas.add(new TestData("TestData"+i));
         }
+
     }
 
     private void initAdapter(){
@@ -40,7 +58,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initViews(){
-        textView=(TextView)findViewById(R.id.u_ID);
         mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         mNavigationView=(NavigationView)findViewById(R.id.id_NavigationView);
@@ -67,6 +84,15 @@ public class MainActivity extends AppCompatActivity{
         initData();
         confViews();
         initAdapter();
+        // 获取当前已保存过的 Token
+        mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        // 获取用户信息接口
+        mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
+        mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
+        //sendRequest();
+        getUserInfo();
+        getStatus();
+
     }
 
     @Override
@@ -113,23 +139,56 @@ public class MainActivity extends AppCompatActivity{
         return super.onKeyDown(keyCode,event);
     }
 
-    /*private void sendRequest(){
-        new Thread(new Runnable() {
+    private void getUserInfo(){
+        if (mAccessToken != null && mAccessToken.isSessionValid()) {
+            long uid = Long.parseLong(mAccessToken.getUid());
+            mUsersAPI.show(uid, mListener);
+        }
+    }
+
+    private void getStatus(){
+        mStatusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
             @Override
-            public void run() {
-                HttpClient httpClient=new DefaultHttpClient();
-                HttpGet httpGet=new HttpGet("https://api.weibo.com/2/users/show.json?access_token=2.00EJ3T4BCYGghC2a4b32746ag12XFB&uid=1262985202");
-                try {
-                    HttpResponse httpResponse=httpClient.execute(httpGet);
-                    if (httpResponse.getStatusLine().getStatusCode()==200){
-                        HttpEntity httpEntity=httpResponse.getEntity();
-                        String response= EntityUtils.toString(httpEntity,"UTF-8");
+            public void onComplete(String s) {
+                if (!TextUtils.isEmpty(s)){
+                    if (s.startsWith("{\"statuses\"")){
+                        mStatusLists=StatusList.parse(s);
+                        if (mStatusLists != null && mStatusLists.total_number > 0) {
+                            Toast.makeText(MainActivity.this,
+                                    "获取微博信息流成功, 条数: " + mStatusLists.statusList.size(),
+                                    Toast.LENGTH_LONG).show();
+                            List<Status> s1=mStatusLists.statusList;
+                            for (Status s2:s1){
+                                Log.d("信息是：",s2.text);
+                            }
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
-        }).start();
-    }*/
+            @Override
+            public void onWeiboException(WeiboException e) {
+                ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
+    private RequestListener mListener=new RequestListener(){
+        @Override
+        public void onComplete(String s) {
+            if (!TextUtils.isEmpty(s)){
+                User user=User.parse(s);
+                if (user!=null){
+                    mToolbar.setTitle(user.screen_name);
+                    TextView view=(TextView)findViewById(R.id.u_ID);
+                    view.setText(user.screen_name);
+                }
+            }
+        }
+        @Override
+        public void onWeiboException(WeiboException e) {
+            ErrorInfo info = ErrorInfo.parse(e.getMessage());
+            Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+        }
+    };
 }

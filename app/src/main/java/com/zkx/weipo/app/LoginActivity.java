@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -75,11 +74,6 @@ public class LoginActivity extends AppCompatActivity {
             mAccessToken= Oauth2AccessToken.parseAccessToken(bundle);
             if (mAccessToken.isSessionValid()){
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this,mAccessToken);
-                String uid=bundle.getString("uid");
-                String token=bundle.getString("access_token");
-                Toast.makeText(LoginActivity.this, uid, Toast.LENGTH_SHORT).show();
-                Log.d("UID is:", uid);
-                Log.d("Token is:",token);
             }else {
                 String code=bundle.getString("code");
                 String message=getString(R.string.weibosdk_demo_toast_auth_failed);
