@@ -29,7 +29,6 @@ import java.util.ArrayList;
  * @since 2013-11-22
  */
 public class Status {
-    
     /** 微博创建时间 */
     public String created_at;
     /** 微博ID */
@@ -72,6 +71,7 @@ public class Status {
     public int attitudes_count;
     /** 暂未支持 */
     public int mlevel;
+
     /**
      * 微博的可见性及指定可见分组信息。该 object 中 type 取值，
      * 0：普通微博，1：私密微博，3：指定分组微博，4：密友微博；

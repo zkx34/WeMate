@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
-import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.openapi.models.User;
 
@@ -46,52 +44,39 @@ public class MainActivity extends AppCompatActivity{
 
     private void initData(){
         testDatas=new ArrayList<TestData>();
-        for (int i=0;i<10;i++){
-            testDatas.add(new TestData("TestData"+i));
-        }
 
-    }
-
-    private void initAdapter(){
-        mRecyclerViewAdapter=new MyRecyclerViewAdapter(testDatas);
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
     }
 
     private void initViews(){
-        mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
-        mNavigationView=(NavigationView)findViewById(R.id.id_NavigationView);
-        mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-    }
-
-    private void confViews(){
         setSupportActionBar(mToolbar);
+
+        mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
         ActionBarDrawerToggle mActionBarDrawerToggle=new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        mNavigationView=(NavigationView)findViewById(R.id.id_NavigationView);
         mNavigationView.inflateHeaderView(R.layout.navi_header);
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        initData();
-        confViews();
-        initAdapter();
         // 获取当前已保存过的 Token
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
         // 获取用户信息接口
         mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
         mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
-        //sendRequest();
         getUserInfo();
         getStatus();
+        initData();
 
     }
 
@@ -147,30 +132,38 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
+        mStatusesAPI.friendsTimeline(0L, 0L, 30, 1, false, 0, false, new RequestListener() {
             @Override
             public void onComplete(String s) {
                 if (!TextUtils.isEmpty(s)){
-                    if (s.startsWith("{\"statuses\"")){
-                        mStatusLists=StatusList.parse(s);
-                        if (mStatusLists != null && mStatusLists.total_number > 0) {
-                            Toast.makeText(MainActivity.this,
-                                    "获取微博信息流成功, 条数: " + mStatusLists.statusList.size(),
-                                    Toast.LENGTH_LONG).show();
-                            List<Status> s1=mStatusLists.statusList;
-                            for (Status s2:s1){
-                                Log.d("信息是：",s2.text);
-                            }
-                        }
+                if (s.startsWith("{\"statuses\"")){
+                    mStatusLists=StatusList.parse(s);
+                    if (mStatusLists != null && mStatusLists.total_number > 0) {
+                        Toast.makeText(MainActivity.this,
+                                "获取微博信息流成功, 条数: " + mStatusLists.statusList.size(),
+                                Toast.LENGTH_LONG).show();
                     }
+                    for (int i=0;i<mStatusLists.statusList.size();i++){
+                        testDatas.add(new TestData(mStatusLists.statusList.get(i).user.name+":\n"+mStatusLists.statusList.get(i).text));
+                    }
+                    initAdapter();
                 }
             }
+        }
             @Override
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
                 Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void initAdapter(){
+        mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mRecyclerView.setHasFixedSize(true);//-------------------//
+        mRecyclerViewAdapter=new MyRecyclerViewAdapter(testDatas);
+        mRecyclerView.setAdapter(mRecyclerViewAdapter);
     }
 
     private RequestListener mListener=new RequestListener(){

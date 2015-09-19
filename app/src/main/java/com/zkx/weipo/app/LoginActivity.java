@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if ((mAccessToken=AccessTokenKeeper.readAccessToken(this)).isSessionValid()){
+            finish();
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
         }
         super.onCreate(savedInstanceState);
