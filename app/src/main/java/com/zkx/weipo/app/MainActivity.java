@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity{
                                 Toast.LENGTH_LONG).show();
                     }
                     for (int i=0;i<mStatusLists.statusList.size();i++){
-                        testDatas.add(new TestData(mStatusLists.statusList.get(i).user.name+":\n"+mStatusLists.statusList.get(i).text));
+                        testDatas.add(new TestData(mStatusLists.statusList.get(i).text,mStatusLists.statusList.get(i).user.name,mStatusLists.statusList.get(i).created_at,"来自: "+mStatusLists.statusList.get(i).getTextSource()));
                     }
                     initAdapter();
                 }

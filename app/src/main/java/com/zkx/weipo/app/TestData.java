@@ -6,8 +6,14 @@ package com.zkx.weipo.app;
 public class TestData {
 
     String content;
+    String name;
+    String time;
+    String source;
 
-    public TestData(String content) {
+    public TestData(String content, String name, String time, String source) {
         this.content = content;
+        this.name = name;
+        this.time = time;
+        this.source = source;
     }
 }

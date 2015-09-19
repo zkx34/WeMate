@@ -33,7 +33,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.textView.setText(testDatas.get(i).content);
+        viewHolder.content.setText(testDatas.get(i).content);
+        viewHolder.name.setText(testDatas.get(i).name);
+        viewHolder.time.setText(testDatas.get(i).time);
+        viewHolder.source.setText(testDatas.get(i).source);
     }
 
     @Override
@@ -44,12 +47,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CardView cardView;
-        TextView textView;
+        TextView content;
+        TextView name;
+        TextView time;
+        TextView source;
 
         public ViewHolder(View itemView) {
             super(itemView);
             cardView=(CardView)itemView.findViewById(R.id.id_CardView);
-            textView=(TextView)itemView.findViewById(R.id.id_TextView);
+            content=(TextView)itemView.findViewById(R.id.id_content);
+            name=(TextView)itemView.findViewById(R.id.id_name);
+            time=(TextView)itemView.findViewById(R.id.id_time);
+            source=(TextView)itemView.findViewById(R.id.id_source);
         }
     }
 }
