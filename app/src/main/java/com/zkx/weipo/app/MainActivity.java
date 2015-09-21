@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity{
         getUserInfo();
         getStatus();
         initData();
-
     }
 
     @Override
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity{
                                 Toast.LENGTH_LONG).show();
                     }
                     for (int i=0;i<mStatusLists.statusList.size();i++){
-                        testDatas.add(new TestData(mStatusLists.statusList.get(i).text,mStatusLists.statusList.get(i).user.name,mStatusLists.statusList.get(i).created_at,"来自: "+mStatusLists.statusList.get(i).getTextSource()));
+                        testDatas.add(new TestData(mStatusLists.statusList.get(i).text,mStatusLists.statusList.get(i).user.name,mStatusLists.statusList.get(i).getCreatedAt(),"来自: "+mStatusLists.statusList.get(i).getTextSource()));
                     }
                     initAdapter();
                 }
@@ -160,7 +159,9 @@ public class MainActivity extends AppCompatActivity{
 
     private void initAdapter(){
         mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+        layoutManager.canScrollVertically();
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);//-------------------//
         mRecyclerViewAdapter=new MyRecyclerViewAdapter(testDatas);
         mRecyclerView.setAdapter(mRecyclerViewAdapter);

@@ -16,10 +16,10 @@ import java.util.Locale;
 public class Tools  {
 
 
-    // ½«Î¢²©µÄÈÕÆÚ×Ö·û´®×ª»»ÎªDate¶ÔÏó
+    // å°†å¾®åšçš„æ—¥æœŸå­—ç¬¦ä¸²è½¬æ¢ä¸ºDateå¯¹è±¡
     public static Date strToDate(String str) {
-        // sample£ºTue May 31 17:46:55 +0800 2011
-        // E£ºÖÜ MMM£º×Ö·û´®ĞÎÊ½µÄÔÂ£¬Èç¹ûÖ»ÓĞÁ½¸öM£¬±íÊ¾ÊıÖµĞÎÊ½µÄÔÂ Z±íÊ¾Ê±Çø£¨£«0800£©
+        // sampleï¼šTue May 31 17:46:55 +0800 2011
+        // Eï¼šå‘¨ MMMï¼šå­—ç¬¦ä¸²å½¢å¼çš„æœˆï¼Œå¦‚æœåªæœ‰ä¸¤ä¸ªMï¼Œè¡¨ç¤ºæ•°å€¼å½¢å¼çš„æœˆ Zè¡¨ç¤ºæ—¶åŒºï¼ˆï¼‹0800ï¼‰
         SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy",
                 Locale.US);
         Date result = null;
@@ -95,18 +95,18 @@ public class Tools  {
         String str = "";
         for (int i = 0; i < s.length(); i++) {
             switch (state) {
-                case 1: // ÆÕÍ¨×Ö·û×´Ì¬
-                    // Óöµ½@
+                case 1: // æ™®é€šå­—ç¬¦çŠ¶æ€
+                    // é‡åˆ°@
                     if (s.charAt(i) == '@') {
                         state = 2;
                         str += s.charAt(i);
                     }
-                    // Óöµ½#
+                    // é‡åˆ°#
                     else if (s.charAt(i) == '#') {
                         str += s.charAt(i);
                         state = 3;
                     }
-                    // Ìí¼ÓÆÕÍ¨×Ö·û
+                    // æ·»åŠ æ™®é€šå­—ç¬¦
                     else {
                         if (commonTextColor == Color.BLACK)
                             sb.append(s.charAt(i));
@@ -115,33 +115,33 @@ public class Tools  {
                                     + s.charAt(i) + "</font>");
                     }
                     break;
-                case 2: // ´¦ÀíÓöµ½@µÄÇé¿ö
-                    // ´¦Àí@ºóÃæµÄÆÕÍ¨×Ö·û
+                case 2: // å¤„ç†é‡åˆ°@çš„æƒ…å†µ
+                    // å¤„ç†@åé¢çš„æ™®é€šå­—ç¬¦
                     if (Character.isJavaIdentifierPart(s.charAt(i))) {
                         str += s.charAt(i);
                     }
 
                     else {
-                        // Èç¹ûÖ»ÓĞÒ»¸ö@£¬×÷ÎªÆÕÍ¨×Ö·û´¦Àí
+                        // å¦‚æœåªæœ‰ä¸€ä¸ª@ï¼Œä½œä¸ºæ™®é€šå­—ç¬¦å¤„ç†
                         if ("@".equals(str)) {
                             sb.append(str);
                         }
-                        // ½«@¼°ºóÃæµÄÆÕÍ¨×Ö·û±ä³ÉÀ¶É«
+                        // å°†@åŠåé¢çš„æ™®é€šå­—ç¬¦å˜æˆè“è‰²
                         else {
                             sb.append(setTextColor(str, String.valueOf(signColor)));
                         }
-                        // @ºóÃæÓĞ#µÄÇé¿ö£¬Ê×ÏÈÓ¦½«#Ìí¼Óµ½strÀï£¬Õâ¸öÖµ¿ÉÄÜ»á±ä³ÉÀ¶É«£¬Ò²¿ÉÒÔ×÷ÎªÆÕÍ¨×Ö·û£¬Òª¿´ºóÃæ»¹ÓĞÃ»ÓĞ#ÁË
+                        // @åé¢æœ‰#çš„æƒ…å†µï¼Œé¦–å…ˆåº”å°†#æ·»åŠ åˆ°stré‡Œï¼Œè¿™ä¸ªå€¼å¯èƒ½ä¼šå˜æˆè“è‰²ï¼Œä¹Ÿå¯ä»¥ä½œä¸ºæ™®é€šå­—ç¬¦ï¼Œè¦çœ‹åé¢è¿˜æœ‰æ²¡æœ‰#äº†
                         if (s.charAt(i) == '#') {
 
                             str = String.valueOf(s.charAt(i));
                             state = 3;
                         }
-                        // @ºóÃæ»¹ÓĞ¸ö@µÄÇé¿ö£¬ºÍ#ÀàËÆ
+                        // @åé¢è¿˜æœ‰ä¸ª@çš„æƒ…å†µï¼Œå’Œ#ç±»ä¼¼
                         else if (s.charAt(i) == '@') {
                             str = String.valueOf(s.charAt(i));
                             state = 2;
                         }
-                        // @ºóÃæÓĞ³ıÁË@¡¢#µÄÆäËûÌØÊâ×Ö·û¡£ĞèÒª½«Õâ¸ö×Ö·û×÷ÎªÆÕÍ¨×Ö·û´¦Àí
+                        // @åé¢æœ‰é™¤äº†@ã€#çš„å…¶ä»–ç‰¹æ®Šå­—ç¬¦ã€‚éœ€è¦å°†è¿™ä¸ªå­—ç¬¦ä½œä¸ºæ™®é€šå­—ç¬¦å¤„ç†
                         else {
                             if (commonTextColor == Color.BLACK)
                                 sb.append(s.charAt(i));
@@ -153,8 +153,8 @@ public class Tools  {
                         }
                     }
                     break;
-                case 3: // ´¦ÀíÓöµ½#µÄÇé¿ö
-                    // Ç°ÃæÒÑ¾­Óöµ½Ò»¸ö#ÁË£¬ÕâÀï´¦Àí½áÊøµÄ#
+                case 3: // å¤„ç†é‡åˆ°#çš„æƒ…å†µ
+                    // å‰é¢å·²ç»é‡åˆ°ä¸€ä¸ª#äº†ï¼Œè¿™é‡Œå¤„ç†ç»“æŸçš„#
                     if (s.charAt(i) == '#') {
                         str += s.charAt(i);
                         sb.append(setTextColor(str, String.valueOf(signColor)));
@@ -162,7 +162,7 @@ public class Tools  {
                         state = 1;
 
                     }
-                    // Èç¹û#ºóÃæÓĞ@£¬ÄÇÃ´¿´Ò»ÏÂºóÃæÊÇ·ñ»¹ÓĞ#£¬Èç¹ûÃ»ÓĞ#£¬Ç°ÃæµÄ#×÷·Ï£¬°´Óöµ½@´¦Àí
+                    // å¦‚æœ#åé¢æœ‰@ï¼Œé‚£ä¹ˆçœ‹ä¸€ä¸‹åé¢æ˜¯å¦è¿˜æœ‰#ï¼Œå¦‚æœæ²¡æœ‰#ï¼Œå‰é¢çš„#ä½œåºŸï¼ŒæŒ‰é‡åˆ°@å¤„ç†
                     else if (s.charAt(i) == '@') {
                         if (s.substring(i).indexOf("#") < 0) {
                             sb.append(str);
@@ -173,7 +173,7 @@ public class Tools  {
                             str += s.charAt(i);
                         }
                     }
-                    // ´¦Àí#...#Ö®¼äµÄÆÕÍ¨×Ö·û
+                    // å¤„ç†#...#ä¹‹é—´çš„æ™®é€šå­—ç¬¦
                     else {
                         str += s.charAt(i);
                     }
@@ -210,11 +210,11 @@ public class Tools  {
         long time = (time1 - time2) / 1000;
 
         if (time >= 0 && time < 60) {
-            return "¸Õ²Å";
+            return "åˆšæ‰";
         } else if (time >= 60 && time < 3600) {
-            return time / 60 + "·ÖÖÓÇ°";
+            return time / 60 + "åˆ†é’Ÿå‰";
         } else if (time >= 3600 && time < 3600 * 24) {
-            return time / 3600 + "Ğ¡Ê±Ç°";
+            return time / 3600 + "å°æ—¶å‰";
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             return sdf.format(oldTime);

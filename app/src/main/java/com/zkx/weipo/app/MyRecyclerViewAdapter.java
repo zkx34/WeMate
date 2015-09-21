@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,7 +36,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         viewHolder.content.setText(testDatas.get(i).content);
         viewHolder.name.setText(testDatas.get(i).name);
-        viewHolder.time.setText(testDatas.get(i).time);
+        viewHolder.time.setText(Tools.getTimeStr(testDatas.get(i).time, new Date()));
+        //Tools.getTimeStr(status.getCreatedAt(), new Date())
         viewHolder.source.setText(testDatas.get(i).source);
     }
 
