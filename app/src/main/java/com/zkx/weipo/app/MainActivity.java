@@ -23,9 +23,6 @@ import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.openapi.models.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity{
 
     private DrawerLayout mDrawerLayout;
@@ -33,7 +30,7 @@ public class MainActivity extends AppCompatActivity{
     private NavigationView mNavigationView;
     private RecyclerView mRecyclerView;
     private MyRecyclerViewAdapter mRecyclerViewAdapter;
-    private List<TestData> testDatas;
+    private StatusList testDatas;
     private StatusList mStatusLists;
     /** 当前 Token 信息 */
     private Oauth2AccessToken mAccessToken;
@@ -43,8 +40,7 @@ public class MainActivity extends AppCompatActivity{
     private StatusesAPI mStatusesAPI;
 
     private void initData(){
-        testDatas=new ArrayList<TestData>();
-
+        testDatas=new StatusList();
     }
 
     private void initViews(){
@@ -62,7 +58,6 @@ public class MainActivity extends AppCompatActivity{
         onNavigationViewMenuItemSelected(mNavigationView);
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,11 +136,12 @@ public class MainActivity extends AppCompatActivity{
                         Toast.makeText(MainActivity.this,
                                 "获取微博信息流成功, 条数: " + mStatusLists.statusList.size(),
                                 Toast.LENGTH_LONG).show();
+                        //for (int i=0;i<mStatusLists.statusList.size();i++){
+                            //testDatas.add(new TestData(mStatusLists.statusList.get(i).text,mStatusLists.statusList.get(i).user.name,mStatusLists.statusList.get(i).getCreatedAt(),"来自: "+mStatusLists.statusList.get(i).getTextSource()));
+                            testDatas=mStatusLists;
+                        //}
+                        initAdapter();
                     }
-                    for (int i=0;i<mStatusLists.statusList.size();i++){
-                        testDatas.add(new TestData(mStatusLists.statusList.get(i).text,mStatusLists.statusList.get(i).user.name,mStatusLists.statusList.get(i).getCreatedAt(),"来自: "+mStatusLists.statusList.get(i).getTextSource()));
-                    }
-                    initAdapter();
                 }
             }
         }
@@ -160,7 +156,6 @@ public class MainActivity extends AppCompatActivity{
     private void initAdapter(){
         mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
-        layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);//-------------------//
         mRecyclerViewAdapter=new MyRecyclerViewAdapter(testDatas);
