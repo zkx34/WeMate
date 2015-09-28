@@ -19,6 +19,6 @@ package com.zkx.weipo.app.openapi.models;
 import org.json.JSONObject;
 
 public interface IParseable {
-    public Object parse(String parseString);
-    public Object parse(JSONObject jsonObject);
+    Object parse(String parseString);
+    Object parse(JSONObject jsonObject);
 }

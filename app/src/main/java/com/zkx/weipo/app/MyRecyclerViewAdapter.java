@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.zkx.weipo.app.openapi.models.StatusList;
@@ -36,6 +37,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
+
         viewHolder.content.setText(Html.fromHtml(Tools.atBlue(testDatas.statusList.get(i).text)));
         viewHolder.name.setText(testDatas.statusList.get(i).user.name);
         viewHolder.time.setText(Tools.getTimeStr(Tools.strToDate(testDatas.statusList.get(i).created_at), new Date()));
@@ -64,11 +66,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         TextView time;
         TextView source;
         TextView retweeted_detail;
+        ImageView userhead;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             cardView=(CardView)itemView.findViewById(R.id.id_CardView);
             content=(TextView)itemView.findViewById(R.id.id_content);
+            userhead=(ImageView)itemView.findViewById(R.id.user_headimg);
             name=(TextView)itemView.findViewById(R.id.id_name);
             time=(TextView)itemView.findViewById(R.id.id_time);
             source=(TextView)itemView.findViewById(R.id.id_source);
