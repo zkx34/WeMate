@@ -42,13 +42,23 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         viewHolder.name.setText(testDatas.statusList.get(i).user.name);
         viewHolder.time.setText(Tools.getTimeStr(Tools.strToDate(testDatas.statusList.get(i).created_at), new Date()));
         viewHolder.source.setText("来自:"+testDatas.statusList.get(i).getTextSource());
+
+        //判断微博中是否有图片
+        if (!StringUtil.isEmpty(testDatas.statusList.get(i).thumbnail_pic)){
+            viewHolder.content_img.setVisibility(View.VISIBLE);
+        }
+
+        //转发内容是否为空
         if (testDatas.statusList.get(i).retweeted_status!=null
                 &&testDatas.statusList.get(i).retweeted_status.user!=null){
             viewHolder.insideContent.setVisibility(View.VISIBLE);
             viewHolder.retweeted_detail.setText(Html.fromHtml(Tools.atBlue("@"+testDatas.statusList.get(i).retweeted_status.user.name+
                     ":"+testDatas.statusList.get(i).retweeted_status.text)));
-        }else {
-            viewHolder.insideContent.setVisibility(View.GONE);
+
+            //转发图片是否有图片
+            if (!StringUtil.isEmpty(testDatas.statusList.get(i).retweeted_status.thumbnail_pic)){
+                viewHolder.retweeted_img.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -67,7 +77,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         TextView source;
         TextView retweeted_detail;
         ImageView userhead;
-
+        ImageView content_img;
+        ImageView retweeted_img;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -79,6 +90,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             source=(TextView)itemView.findViewById(R.id.id_source);
             insideContent =(LinearLayout)itemView.findViewById(R.id.inside_content);
             retweeted_detail=(TextView)itemView.findViewById(R.id.id_retweeted_detail);
+            content_img=(ImageView)itemView.findViewById(R.id.content_img);
+            retweeted_img=(ImageView)itemView.findViewById(R.id.retweeted_img);
         }
     }
 }

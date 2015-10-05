@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity{
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
 
+
+        mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mRecyclerView.setHasFixedSize(true);
     }
 
     @Override
@@ -154,12 +158,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initAdapter(){
-        mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setHasFixedSize(true);//-------------------//
-        mRecyclerViewAdapter=new MyRecyclerViewAdapter(testDatas);
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setAdapter(new MyRecyclerViewAdapter(testDatas));
     }
 
     private RequestListener mListener=new RequestListener(){
