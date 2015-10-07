@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.zkx.weipo.app.Util.StringUtil;
+import com.zkx.weipo.app.Util.Tools;
+import com.zkx.weipo.app.imgCache.SimpleImageLoader;
 import com.zkx.weipo.app.openapi.models.StatusList;
 
 import java.util.Date;
@@ -42,10 +45,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         viewHolder.name.setText(testDatas.statusList.get(i).user.name);
         viewHolder.time.setText(Tools.getTimeStr(Tools.strToDate(testDatas.statusList.get(i).created_at), new Date()));
         viewHolder.source.setText("来自:"+testDatas.statusList.get(i).getTextSource());
+        SimpleImageLoader.showImg(viewHolder.userhead, testDatas.statusList.get(i).user.profile_image_url);
 
         //判断微博中是否有图片
         if (!StringUtil.isEmpty(testDatas.statusList.get(i).thumbnail_pic)){
             viewHolder.content_img.setVisibility(View.VISIBLE);
+            SimpleImageLoader.showImg(viewHolder.content_img,testDatas.statusList.get(i).thumbnail_pic);
+        }else {
+            viewHolder.content_img.setVisibility(View.GONE);
         }
 
         //转发内容是否为空
@@ -58,7 +65,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             //转发图片是否有图片
             if (!StringUtil.isEmpty(testDatas.statusList.get(i).retweeted_status.thumbnail_pic)){
                 viewHolder.retweeted_img.setVisibility(View.VISIBLE);
+                SimpleImageLoader.showImg(viewHolder.retweeted_img,testDatas.statusList.get(i).retweeted_status.thumbnail_pic);
+            }else {
+                viewHolder.retweeted_img.setVisibility(View.GONE);
             }
+        }else {
+            viewHolder.insideContent.setVisibility(View.GONE);
         }
     }
 

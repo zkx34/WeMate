@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
@@ -21,7 +20,6 @@ import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
-import com.zkx.weipo.app.openapi.models.User;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -29,7 +27,6 @@ public class MainActivity extends AppCompatActivity{
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private RecyclerView mRecyclerView;
-    private MyRecyclerViewAdapter mRecyclerViewAdapter;
     private StatusList testDatas;
     private StatusList mStatusLists;
     /** 当前 Token 信息 */
@@ -44,6 +41,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initViews(){
+
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
 
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity{
         mNavigationView.inflateHeaderView(R.layout.navi_header);
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
-
 
         mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity{
         // 获取用户信息接口
         mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
         mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
-        getUserInfo();
+        //getUserInfo();
         getStatus();
         initData();
     }
@@ -122,33 +119,27 @@ public class MainActivity extends AppCompatActivity{
         return super.onKeyDown(keyCode,event);
     }
 
-    private void getUserInfo(){
+   /* private void getUserInfo(){
         if (mAccessToken != null && mAccessToken.isSessionValid()) {
             long uid = Long.parseLong(mAccessToken.getUid());
             mUsersAPI.show(uid, mListener);
         }
-    }
+    }*/
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, 0L, 30, 1, false, 0, false, new RequestListener() {
+        mStatusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
             @Override
             public void onComplete(String s) {
                 if (!TextUtils.isEmpty(s)){
-                if (s.startsWith("{\"statuses\"")){
-                    mStatusLists=StatusList.parse(s);
-                    if (mStatusLists != null && mStatusLists.total_number > 0) {
-                        Toast.makeText(MainActivity.this,
-                                "获取微博信息流成功, 条数: " + mStatusLists.statusList.size(),
-                                Toast.LENGTH_LONG).show();
-                        //for (int i=0;i<mStatusLists.statusList.size();i++){
-                            //testDatas.add(new TestData(mStatusLists.statusList.get(i).text,mStatusLists.statusList.get(i).user.name,mStatusLists.statusList.get(i).getCreatedAt(),"来自: "+mStatusLists.statusList.get(i).getTextSource()));
+                    if (s.startsWith("{\"statuses\"")){
+                        mStatusLists=StatusList.parse(s);
+                        if (mStatusLists != null && mStatusLists.total_number > 0) {
                             testDatas=mStatusLists;
-                        //}
-                        initAdapter();
+                            initAdapter();
+                        }
                     }
                 }
             }
-        }
             @Override
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
@@ -161,7 +152,7 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setAdapter(new MyRecyclerViewAdapter(testDatas));
     }
 
-    private RequestListener mListener=new RequestListener(){
+    /*private RequestListener mListener=new RequestListener(){
         @Override
         public void onComplete(String s) {
             if (!TextUtils.isEmpty(s)){
@@ -178,5 +169,5 @@ public class MainActivity extends AppCompatActivity{
             ErrorInfo info = ErrorInfo.parse(e.getMessage());
             Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
-    };
+    };*/
 }

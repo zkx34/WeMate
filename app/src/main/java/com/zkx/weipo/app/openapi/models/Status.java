@@ -17,7 +17,7 @@
 package com.zkx.weipo.app.openapi.models;
 
 import android.text.Html;
-import com.zkx.weipo.app.Tools;
+import com.zkx.weipo.app.Util.Tools;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
