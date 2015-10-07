@@ -1,4 +1,4 @@
-package com.zkx.weipo.app;
+package com.zkx.weipo.app.Adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.Util.StringUtil;
 import com.zkx.weipo.app.Util.Tools;
 import com.zkx.weipo.app.imgCache.SimpleImageLoader;
