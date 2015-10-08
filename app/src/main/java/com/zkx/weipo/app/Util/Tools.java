@@ -1,11 +1,7 @@
 package com.zkx.weipo.app.Util;
 
 import android.graphics.Color;
-import android.view.View;
-import android.widget.ImageView;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -31,59 +27,6 @@ public class Tools  {
         return result;
 
     }
-
-    public static void dataTransfer(InputStream is, OutputStream os) {
-        byte[] buffer = new byte[8192];
-        int count = 0;
-        try {
-            while((count = is.read(buffer)) > -1) {
-                os.write(buffer, 0, count);
-            }
-        } catch (Exception e) {
-
-        }
-    }
-
-    public static void userVerified(ImageView imageView, int verifiedType) {
-        if (verifiedType >= 0) {
-            imageView.setVisibility(View.VISIBLE);
-            switch (verifiedType) {
-                case 0:
-                case 220:
-                    imageView.setImageLevel(verifiedType);
-                    break;
-                default:
-                    imageView.setImageLevel(1);
-                    break;
-            }
-        }
-    }
-
-   /* public static SpannableString changeTextToFace(Context context,
-                                                   Spanned spanned) {
-        String text = spanned.toString();
-        SpannableString spannableString = new SpannableString(spanned);
-
-        Pattern pattern = Pattern.compile("\\[[^\\]]+\\]");
-
-        Matcher matcher = pattern.matcher(text);
-
-        boolean b = true;
-
-        while (b = matcher.find()) {
-            String faceText = text.substring(matcher.start(), matcher.end());
-            int resourceId = FaceMan.getResourceId(faceText);
-            if (resourceId > 0) {
-                Bitmap bitmap = BitmapFactory.decodeResource(
-                        context.getResources(), resourceId);
-                ImageSpan imageSpan = new ImageSpan(bitmap);
-
-                spannableString.setSpan(imageSpan, matcher.start(),
-                        matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-        }
-        return spannableString;
-    }*/
 
     public static String atBlue(String s) {
 

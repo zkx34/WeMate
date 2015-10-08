@@ -87,11 +87,13 @@
                     android:id="@+id/inside_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/shape"
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
+                    android:showDividers="beginning"
+                    android:divider="@drawable/divider"
                     >
                 <TextView
+                        android:layout_marginTop="8dp"
                         android:id="@+id/id_retweeted_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
