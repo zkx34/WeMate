@@ -12,6 +12,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
+import com.zkx.weipo.app.api.Constants;
 
 /**
  * Created by Administrator on 2015/9/15.
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initLoginView(){
         mLoginBt=(Button)findViewById(R.id.loginButton);
         mRegistBt=(Button)findViewById(R.id.registButton);
-        mAuthInfo=new AuthInfo(this,Constants.APP_KEY,Constants.REDIRECT_URL,Constants.SCOPE);
+        mAuthInfo=new AuthInfo(this, Constants.APP_KEY,Constants.REDIRECT_URL,Constants.SCOPE);
         mSsoHandler=new SsoHandler(LoginActivity.this,mAuthInfo);
         mLoginBt.setOnClickListener(new View.OnClickListener() {
             @Override

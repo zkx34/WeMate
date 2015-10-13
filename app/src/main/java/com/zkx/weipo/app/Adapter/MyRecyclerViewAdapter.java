@@ -6,9 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.Util.StringUtil;
 import com.zkx.weipo.app.Util.Tools;
@@ -28,6 +26,19 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         this.testDatas = testDatas;
     }
 
+    public interface OnItemClickLitener
+    {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view , int position);
+    }
+
+    private OnItemClickLitener mOnItemClickLitener;
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
+    {
+        this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view,viewGroup,false);
@@ -40,13 +51,56 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int i) {
 
         viewHolder.content.setText(Html.fromHtml(Tools.atBlue(testDatas.statusList.get(i).text)));
         viewHolder.name.setText(testDatas.statusList.get(i).user.name);
         viewHolder.time.setText(Tools.getTimeStr(Tools.strToDate(testDatas.statusList.get(i).created_at), new Date()));
         viewHolder.source.setText("来自:"+testDatas.statusList.get(i).getTextSource());
         SimpleImageLoader.showImg(viewHolder.userhead, testDatas.statusList.get(i).user.profile_image_url);
+
+        if (mOnItemClickLitener!=null){
+            viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos=viewHolder.getLayoutPosition();
+                    mOnItemClickLitener.onItemClick(viewHolder.cardView,pos);
+                }
+            });
+
+            viewHolder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int pos=viewHolder.getLayoutPosition();
+                    mOnItemClickLitener.onItemLongClick(viewHolder.cardView,pos);
+                    return false;
+                }
+            });
+
+            viewHolder.btn_repeat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos=viewHolder.getLayoutPosition();
+                    mOnItemClickLitener.onItemLongClick(viewHolder.btn_repeat,pos);
+                }
+            });
+
+            viewHolder.btn_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos=viewHolder.getLayoutPosition();
+                    mOnItemClickLitener.onItemLongClick(viewHolder.btn_comment,pos);
+                }
+            });
+
+            viewHolder.userhead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos=viewHolder.getLayoutPosition();
+                    mOnItemClickLitener.onItemLongClick(viewHolder.userhead,pos);
+                }
+            });
+        }
 
         //判断微博中是否有图片
         if (!StringUtil.isEmpty(testDatas.statusList.get(i).thumbnail_pic)){
@@ -80,7 +134,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return testDatas==null?0:testDatas.statusList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder  {
 
         LinearLayout insideContent;
         CardView cardView;
@@ -92,6 +146,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         ImageView userhead;
         ImageView content_img;
         ImageView retweeted_img;
+        Button btn_repeat;
+        Button btn_comment;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -105,6 +162,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             retweeted_detail=(TextView)itemView.findViewById(R.id.id_retweeted_detail);
             content_img=(ImageView)itemView.findViewById(R.id.content_img);
             retweeted_img=(ImageView)itemView.findViewById(R.id.retweeted_img);
+            btn_repeat=(Button)itemView.findViewById(R.id.btn_repeat);
+            btn_comment=(Button)itemView.findViewById(R.id.btn_comment);
         }
     }
 }

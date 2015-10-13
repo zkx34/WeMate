@@ -12,11 +12,13 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.Adapter.MyRecyclerViewAdapter;
+import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
@@ -150,7 +152,47 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initAdapter(){
-        mRecyclerView.setAdapter(new MyRecyclerViewAdapter(testDatas));
+        MyRecyclerViewAdapter mAdapter=new MyRecyclerViewAdapter(testDatas);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickLitener(new MyRecyclerViewAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                switch (view.getId()){
+
+                    case R.id.id_CardView:
+                        Toast.makeText(MainActivity.this, position + " 卡片被点击",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                switch (view.getId()){
+                    case R.id.id_CardView:
+                        Toast.makeText(MainActivity.this, position + " 卡片被长点击",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.btn_repeat:
+                        Toast.makeText(MainActivity.this, position + " 转发按钮被点击",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.btn_comment:
+                        Toast.makeText(MainActivity.this, position + " 评论按钮被点击",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.user_headimg:
+                        Toast.makeText(MainActivity.this, position + " 用户头像被点击",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     /*private RequestListener mListener=new RequestListener(){

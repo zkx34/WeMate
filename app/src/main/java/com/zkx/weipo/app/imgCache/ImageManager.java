@@ -46,7 +46,7 @@ public class ImageManager {
     }
 
     /**
-     * 从Map缓存中获取Bitmap
+     * 浠嶮ap缂撳瓨涓幏鍙朆itmap
      * @param url
      * @return
      */
@@ -67,7 +67,7 @@ public class ImageManager {
     }
 
     /**
-     * 从文件中获取bitmap
+     * 浠庢枃浠朵腑鑾峰彇bitmap
      * @param url
      * @return
      */
@@ -136,7 +136,7 @@ public class ImageManager {
 
 
     /**
-     * 下载图片并保持到系统缓存
+     * 涓嬭浇鍥剧墖骞朵繚鎸佸埌绯荤粺缂撳瓨
      * @param urlS
      * @return
      */

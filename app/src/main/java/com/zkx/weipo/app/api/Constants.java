@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zkx.weipo.app;
+package com.zkx.weipo.app.api;
 
 /**
  * 该类定义了微博授权时所需要的参数。
