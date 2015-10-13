@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
         app:cardCornerRadius="5dp"
         app:elevation="16dp"
@@ -138,7 +138,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_repeat"
                         android:background="@android:color/transparent"
-                        android:text="转发"
+                        android:text="@string/repeat"
+                        android:textColor="@color/main_light"
                         android:layout_alignParentTop="true"
                         android:layout_toStartOf="@+id/btn_comment"/>
                 <Button
@@ -146,7 +147,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_comment"
                         android:background="@android:color/transparent"
-                        android:text="评论"
+                        android:text="@string/comment"
+                        android:textColor="@color/main_light"
                         android:layout_alignParentEnd="true"/>
             </RelativeLayout>
 

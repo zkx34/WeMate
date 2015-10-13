@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -177,12 +178,28 @@ public class MainActivity extends AppCompatActivity{
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.btn_repeat:
-                        Toast.makeText(MainActivity.this, position + " 转发按钮被点击",
-                                Toast.LENGTH_SHORT).show();
+                        new MaterialDialog.Builder(MainActivity.this)
+                                .title(R.string.repeat_title)
+                                .input(R.string.input_hint,R.string.input_prefill, new MaterialDialog.InputCallback() {
+                                    @Override
+                                    public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                                        Toast.makeText(MainActivity.this, "转发",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .show();
                         break;
                     case R.id.btn_comment:
-                        Toast.makeText(MainActivity.this, position + " 评论按钮被点击",
-                                Toast.LENGTH_SHORT).show();
+                        new MaterialDialog.Builder(MainActivity.this)
+                                .title(R.string.com_title)
+                                .input(R.string.com_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
+                                    @Override
+                                    public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                                        Toast.makeText(MainActivity.this, "评论",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .show();
                         break;
                     case R.id.user_headimg:
                         Toast.makeText(MainActivity.this, position + " 用户头像被点击",

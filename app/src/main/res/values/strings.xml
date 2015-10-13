@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">微Mate</string>
+    <string name="app_name">App</string>
 
     <string name="toolbar_title">New Demo</string>
     <string name="action_settings">settings</string>
@@ -23,4 +23,12 @@
     <string name="weibosdk_demo_toast_auth_failed">登录失败</string>
     <string name="regist_address">https://passport.sina.cn/signup/signup</string>
     <string name="logout">退出当前帐号</string>
+    <string name="repeat_title">转发微博</string>
+    <string name="repeat">转发</string>
+    <string name="cancle">取消</string>
+    <string name="input_hint">说说分享心得</string>
+    <string name="input_prefill"></string>
+    <string name="com_hint">说点什么好呢</string>
+    <string name="com_title">评论给Ta</string>
+    <string name="comment">评论</string>
 </resources>
