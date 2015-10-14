@@ -65,6 +65,16 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         WeiboApplication.IMAGE_CACHE.get(testDatas.statusList.get(i).user.profile_image_url, viewHolder.userhead);
 
         if (mOnItemClickLitener!=null){
+
+            viewHolder.content_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos=viewHolder.getLayoutPosition();
+                    mOnItemClickLitener.onItemClick(viewHolder.content_img,pos);
+                }
+            });
+
+
             viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

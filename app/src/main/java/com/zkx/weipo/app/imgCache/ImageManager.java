@@ -25,7 +25,7 @@ public class ImageManager {
     public ImageManager(Context context) {
         this.context=context;
         imgCache=new HashMap<String,SoftReference<Bitmap>>();
-       userDefualtHead =drawabltToBitmap(context.getResources().getDrawable(R.drawable.timeline_card_small_profile));
+       userDefualtHead =drawabltToBitmap(context.getResources().getDrawable(R.drawable.avatar_default_small));
     }
 
     public boolean contains(String url){

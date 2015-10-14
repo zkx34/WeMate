@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -39,13 +40,14 @@ public class MainActivity extends AppCompatActivity{
     private UsersAPI mUsersAPI;
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
+    private ImageView imgLayout;
 
     private void initData(){
         testDatas=new StatusList();
     }
 
     private void initViews(){
-
+        imgLayout= (ImageView) findViewById(R.id.img_layout);
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
 
@@ -157,14 +159,17 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickLitener(new MyRecyclerViewAdapter.OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, final int position) {
                 switch (view.getId()){
 
                     case R.id.id_CardView:
                         Toast.makeText(MainActivity.this, position + " 卡片被点击",
                                 Toast.LENGTH_SHORT).show();
                         break;
-
+                    case R.id.content_img:
+                        Toast.makeText(MainActivity.this, position + " 图片被点击",
+                                Toast.LENGTH_SHORT).show();
+                        break;
                     default:
                         break;
                 }

@@ -35,7 +35,7 @@
                         android:id="@+id/user_headimg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/timeline_card_small_profile"/>
+                        android:src="@drawable/avatar_default_small"/>
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
                         android:id="@+id/content_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/timeline_card_small_profile"
+                        android:src="@drawable/surprise_picturebutton"
                         android:visibility="gone"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"/>
@@ -102,7 +102,7 @@
                         android:id="@+id/retweeted_img"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/timeline_card_small_profile"
+                        android:src="@drawable/surprise_picturebutton"
                         android:layout_marginTop="8dp"/>
             </LinearLayout>
 
