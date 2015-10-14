@@ -29,8 +29,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if ((mAccessToken= AccessTokenKeeper.readAccessToken(this)).isSessionValid()){
-            finish();
+
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            finish();
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
