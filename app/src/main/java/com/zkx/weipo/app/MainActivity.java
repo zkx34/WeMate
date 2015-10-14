@@ -3,24 +3,27 @@ package com.zkx.weipo.app;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.Adapter.MyRecyclerViewAdapter;
+import com.zkx.weipo.app.Util.AccessTokenKeeper;
 import com.zkx.weipo.app.api.Constants;
+import com.zkx.weipo.app.openapi.OnRcvScrollListener;
 import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
@@ -28,26 +31,38 @@ import com.zkx.weipo.app.openapi.models.StatusList;
 
 public class MainActivity extends AppCompatActivity{
 
+    private static Boolean isRefreshing=false;
+    private LinearLayoutManager layoutManage;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private RecyclerView mRecyclerView;
     private StatusList testDatas;
     private StatusList mStatusLists;
+    private SwipeRefreshLayout refreshLayout;
     /** 当前 Token 信息 */
     private Oauth2AccessToken mAccessToken;
     /** 用户信息接口 */
     private UsersAPI mUsersAPI;
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
-    private ImageView imgLayout;
 
     private void initData(){
         testDatas=new StatusList();
     }
 
     private void initViews(){
-        imgLayout= (ImageView) findViewById(R.id.img_layout);
+
+        refreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getStatus();
+                refreshLayout.setRefreshing(isRefreshing);
+                Toast.makeText(MainActivity.this,"加载完毕",Toast.LENGTH_SHORT).show();
+            }
+        });
+
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
 
@@ -62,7 +77,8 @@ public class MainActivity extends AppCompatActivity{
         onNavigationViewMenuItemSelected(mNavigationView);
 
         mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        layoutManage=new LinearLayoutManager(MainActivity.this);
+        mRecyclerView.setLayoutManager(layoutManage);
         mRecyclerView.setHasFixedSize(true);
     }
 
@@ -155,12 +171,24 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void initAdapter(){
-        MyRecyclerViewAdapter mAdapter=new MyRecyclerViewAdapter(testDatas);
+
+        final MyRecyclerViewAdapter mAdapter=new MyRecyclerViewAdapter(testDatas);
         mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
+            @Override
+            public void onBottom() {
+                super.onBottom();
+                if (!isRefreshing){
+                    Log.d("TAG", "loading new data");
+                }
+            }
+        });
+
         mAdapter.setOnItemClickLitener(new MyRecyclerViewAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, final int position) {
-                switch (view.getId()){
+                switch (view.getId()) {
 
                     case R.id.id_CardView:
                         Toast.makeText(MainActivity.this, position + " 卡片被点击",
@@ -177,7 +205,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onItemLongClick(View view, int position) {
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.id_CardView:
                         Toast.makeText(MainActivity.this, position + " 卡片被长点击",
                                 Toast.LENGTH_SHORT).show();
@@ -185,7 +213,7 @@ public class MainActivity extends AppCompatActivity{
                     case R.id.btn_repeat:
                         new MaterialDialog.Builder(MainActivity.this)
                                 .title(R.string.repeat_title)
-                                .input(R.string.input_hint,R.string.input_prefill, new MaterialDialog.InputCallback() {
+                                .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
                                     @Override
                                     public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
                                         Toast.makeText(MainActivity.this, "转发",

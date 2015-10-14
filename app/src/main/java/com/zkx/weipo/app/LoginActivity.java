@@ -12,6 +12,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
+import com.zkx.weipo.app.Util.AccessTokenKeeper;
 import com.zkx.weipo.app.api.Constants;
 
 /**
@@ -27,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if ((mAccessToken=AccessTokenKeeper.readAccessToken(this)).isSessionValid()){
+        if ((mAccessToken= AccessTokenKeeper.readAccessToken(this)).isSessionValid()){
             finish();
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
         }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">App</string>
 
+    <string name="more">更多...</string>
     <string name="toolbar_title">New Demo</string>
     <string name="action_settings">settings</string>
     <string name="open">打开</string>

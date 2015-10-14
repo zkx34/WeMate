@@ -14,9 +14,11 @@ import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.Util.StringUtil;
 import com.zkx.weipo.app.Util.Tools;
 import com.zkx.weipo.app.app.WeiboApplication;
+import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Administrator on 2015/9/12.
@@ -143,6 +145,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }else {
             viewHolder.insideContent.setVisibility(View.GONE);
         }
+    }
+
+    public void refresh(List<Status> newStatus){
+        testDatas.statusList.addAll(newStatus);
+        this.notifyDataSetChanged();
     }
 
     @Override

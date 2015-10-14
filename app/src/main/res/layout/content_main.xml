@@ -6,28 +6,37 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         >
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/id_RecyclerView"
-            android:background="@color/main_white"
-            android:layout_marginTop="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
-    <android.support.design.widget.AppBarLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-
-        <android.support.v7.widget.Toolbar
-                android:id="@+id/id_Toolbar"
+        
+        <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/main_light"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                android:elevation="4dp"
-                app:layout_scrollFlags="scroll|enterAlways"
-                />
-    </android.support.design.widget.AppBarLayout>
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                >
+
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/id_RecyclerView"
+                android:background="@color/main_white"
+                android:layout_marginTop="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.AppBarLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <android.support.v7.widget.Toolbar
+                        android:id="@+id/id_Toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/main_light"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                        android:elevation="4dp"
+                        app:layout_scrollFlags="scroll|enterAlways"
+                        />
+        </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>
