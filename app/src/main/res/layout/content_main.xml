@@ -2,11 +2,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/id_CoordinatorLayout"
-        android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         >
-        
+
         <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefreshLayout"
                 android:layout_width="match_parent"
@@ -33,8 +32,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:background="@color/main_light"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                         android:elevation="4dp"
                         app:layout_scrollFlags="scroll|enterAlways"
                         />

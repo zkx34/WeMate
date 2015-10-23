@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,17 +30,17 @@ import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static Boolean isRefreshing=false;
-    private LinearLayoutManager layoutManage;
+    private LinearLayoutManager mLayoutManage;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private RecyclerView mRecyclerView;
     private StatusList testDatas;
     private StatusList mStatusLists;
-    private SwipeRefreshLayout refreshLayout;
+    private SwipeRefreshLayout mRefreshLayout;
     /** 当前 Token 信息 */
     private Oauth2AccessToken mAccessToken;
     /** 用户信息接口 */
@@ -48,31 +49,19 @@ public class MainActivity extends AppCompatActivity{
     private StatusesAPI mStatusesAPI;
     private MyRecyclerViewAdapter mAdapter;
     private long maxId=0;
-
-
+    private long sinceId=0;
     private void initData(){
         testDatas=new StatusList();
     }
 
     private void initViews(){
 
-        refreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                /*maxId=-1;
-                if (!isRefreshing){
-                    getStatus();
-                    refreshLayout.setRefreshing(isRefreshing);
-                }else {
-                    isRefreshing=false;
-                }*/
-            }
-        });
+        mRefreshLayout =(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(this);
+        mRefreshLayout.setColorSchemeResources(R.color.red, R.color.orange, R.color.yellow, R.color.green);
 
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
-
         mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
         ActionBarDrawerToggle mActionBarDrawerToggle=new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
         mActionBarDrawerToggle.syncState();
@@ -84,9 +73,11 @@ public class MainActivity extends AppCompatActivity{
         onNavigationViewMenuItemSelected(mNavigationView);
 
         mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-        layoutManage=new LinearLayoutManager(MainActivity.this);
-        mRecyclerView.setLayoutManager(layoutManage);
+        mLayoutManage =new LinearLayoutManager(MainActivity.this);
+        mRecyclerView.setLayoutManager(mLayoutManage);
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
     }
 
     @Override
@@ -242,11 +233,6 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void loadMore()
-    {
-        getStatus();
-    }
-
     private RequestListener mListener=new RequestListener(){
         @Override
         public void onComplete(String s) {
@@ -272,4 +258,38 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
     };
+    /**
+     * 加载更多微博
+     */
+    public void loadMore()
+    {
+        getStatus();
+    }
+    /**
+     * 下拉刷新
+     */
+    @Override
+    public void onRefresh() {
+        mStatusesAPI.friendsTimeline(0L, 0L, 20, 1, false, 0, false, new RequestListener() {
+            @Override
+            public void onComplete(String s) {
+                if (!TextUtils.isEmpty(s)){
+                    if (s.startsWith("{\"statuses\"")){
+                        mStatusLists=StatusList.parse(s);
+                        if (mStatusLists != null && mStatusLists.total_number > 0) {
+                            testDatas=mStatusLists;
+                            initAdapter();
+                            mRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onWeiboException(WeiboException e) {
+                ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }
