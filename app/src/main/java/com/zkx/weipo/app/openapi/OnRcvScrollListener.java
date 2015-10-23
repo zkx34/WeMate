@@ -4,7 +4,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 
 /**
  * Created by Administrator on 2015/10/14.
@@ -93,14 +92,14 @@ public class OnRcvScrollListener extends RecyclerView.OnScrollListener implement
         int totalItemCount = layoutManager.getItemCount();
         if ((visibleItemCount > 0 && currentScrollState == RecyclerView.SCROLL_STATE_IDLE &&
                 (lastVisibleItemPosition) >= totalItemCount - 1)) {
-            Log.d(TAG, "is loading more");
+            //Log.d(TAG, "is loading more");
             onBottom();
         }
     }
 
     @Override
     public void onBottom() {
-        Log.d(TAG, "is onBottom");
+        //Log.d(TAG, "is onBottom");
     }
 
     private int findMax(int[] lastPositions) {

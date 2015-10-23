@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +21,7 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.Adapter.MyRecyclerViewAdapter;
 import com.zkx.weipo.app.Util.AccessTokenKeeper;
+import com.zkx.weipo.app.Util.LogUtil;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.openapi.OnRcvScrollListener;
 import com.zkx.weipo.app.openapi.StatusesAPI;
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity{
             public void onBottom() {
                 super.onBottom();
                 if (!isRefreshing){
-                    Log.d("TAG", "loading new data");
+                    LogUtil.d("TAG", "loading new data");
                 }
             }
         });
