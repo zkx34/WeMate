@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+import com.zkx.weipo.app.app.WeiboApplication;
 
 /**
  * Created by Administrator on 2015/10/14.
@@ -19,6 +20,8 @@ public class AppStart extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.start);
+        WeiboApplication.getInstance();
+        WeiboApplication.addActivity(this);
         ImageView imageView=(ImageView)findViewById(R.id.start_img);
         //渐变展示启动屏
         AlphaAnimation aa = new AlphaAnimation(0.0f,1.0f);

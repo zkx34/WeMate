@@ -2,21 +2,14 @@
     <string name="app_name">App</string>
 
     <string name="more">更多...</string>
-    <string name="toolbar_title">New Demo</string>
     <string name="action_settings">settings</string>
     <string name="open">打开</string>
     <string name="close">关闭</string>
-    <string name="header_author_name">zkx</string>
-    <string name="header_author_url">sunjiajia.com</string>
-    <string name="plusone">+1</string>
     <string name="item_clicked">item clicked！</string>
     <string name="item_longclicked">item long clicked！</string>
     <string name="atMe">\&#064;我的</string>
     <string name="comments">评论</string>
     <string name="personalMessage">私信</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="weibosdk_demo_token_to_string_format_1">Token：%1$s \n有效期：%2$s</string>
-    <string name="hello_world">Hello world!</string>
     <string name="weibosdk_demo_toast_auth_canceled">取消登录</string>
     <string name="login">登录</string>
     <string name="regist">注册</string>
@@ -32,4 +25,5 @@
     <string name="com_hint">说点什么好呢</string>
     <string name="com_title">评论给Ta</string>
     <string name="comment">评论</string>
+    <string name="exit">退出</string>
 </resources>

@@ -14,6 +14,7 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.zkx.weipo.app.Util.AccessTokenKeeper;
 import com.zkx.weipo.app.api.Constants;
+import com.zkx.weipo.app.app.WeiboApplication;
 
 /**
  * Created by Administrator on 2015/9/15.
@@ -32,10 +33,14 @@ public class LoginActivity extends AppCompatActivity {
 
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
             finish();
+        }else {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
+            initLoginView();
+
+            WeiboApplication.getInstance();
+            WeiboApplication.addActivity(this);
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        initLoginView();
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.zkx.weipo.app.app.WeiboApplication;
 
 /**
  * Created by Administrator on 2015/9/14.
@@ -19,6 +20,9 @@ public class RegistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view_regist);
+
+        WeiboApplication.getInstance();
+        WeiboApplication.addActivity(this);
         mWebview=(WebView)findViewById(R.id.web_view);
         Intent intent=getIntent();
         String url=intent.getStringExtra("url");

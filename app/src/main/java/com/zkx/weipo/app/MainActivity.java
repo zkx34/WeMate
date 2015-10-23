@@ -21,8 +21,8 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.Adapter.MyRecyclerViewAdapter;
 import com.zkx.weipo.app.Util.AccessTokenKeeper;
-import com.zkx.weipo.app.Util.LogUtil;
 import com.zkx.weipo.app.api.Constants;
+import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.OnRcvScrollListener;
 import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity{
     private UsersAPI mUsersAPI;
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
+    private MyRecyclerViewAdapter mAdapter;
+    private long maxId=0;
+
 
     private void initData(){
         testDatas=new StatusList();
@@ -57,9 +60,13 @@ public class MainActivity extends AppCompatActivity{
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getStatus();
-                refreshLayout.setRefreshing(isRefreshing);
-                Toast.makeText(MainActivity.this,"加载完毕",Toast.LENGTH_SHORT).show();
+                /*maxId=-1;
+                if (!isRefreshing){
+                    getStatus();
+                    refreshLayout.setRefreshing(isRefreshing);
+                }else {
+                    isRefreshing=false;
+                }*/
             }
         });
 
@@ -95,6 +102,9 @@ public class MainActivity extends AppCompatActivity{
         //getUserInfo();
         getStatus();
         initData();
+
+        WeiboApplication.getInstance();
+        WeiboApplication.addActivity(this);
     }
 
     @Override
@@ -112,8 +122,10 @@ public class MainActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_exit) {
+
+            WeiboApplication.getInstance();
+            WeiboApplication.appExit(this);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -149,30 +161,12 @@ public class MainActivity extends AppCompatActivity{
     }*/
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, 0L, 10, 1, false, 0, false, new RequestListener() {
-            @Override
-            public void onComplete(String s) {
-                if (!TextUtils.isEmpty(s)){
-                    if (s.startsWith("{\"statuses\"")){
-                        mStatusLists=StatusList.parse(s);
-                        if (mStatusLists != null && mStatusLists.total_number > 0) {
-                            testDatas=mStatusLists;
-                            initAdapter();
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onWeiboException(WeiboException e) {
-                ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+        mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, mListener);
     }
 
     private void initAdapter(){
 
-        final MyRecyclerViewAdapter mAdapter=new MyRecyclerViewAdapter(testDatas);
+        mAdapter=new MyRecyclerViewAdapter(testDatas);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
@@ -180,7 +174,10 @@ public class MainActivity extends AppCompatActivity{
             public void onBottom() {
                 super.onBottom();
                 if (!isRefreshing){
-                    LogUtil.d("TAG", "loading new data");
+                    loadMore();
+                    isRefreshing=true;
+                }else {
+                    isRefreshing=false;
                 }
             }
         });
@@ -245,15 +242,27 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    /*private RequestListener mListener=new RequestListener(){
+    public void loadMore()
+    {
+        getStatus();
+    }
+
+    private RequestListener mListener=new RequestListener(){
         @Override
         public void onComplete(String s) {
             if (!TextUtils.isEmpty(s)){
-                User user=User.parse(s);
-                if (user!=null){
-                    mToolbar.setTitle(user.screen_name);
-                    TextView view=(TextView)findViewById(R.id.u_ID);
-                    view.setText(user.screen_name);
+                if (s.startsWith("{\"statuses\"")){
+                    mStatusLists=StatusList.parse(s);
+                    if (mStatusLists != null && mStatusLists.total_number > 0) {
+                        testDatas=mStatusLists;
+                        //Long.parseLong(status.get(status.size() -1).getMid())-1;
+                        maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                        if (mAdapter==null){
+                            initAdapter();
+                        }else {
+                            mAdapter.refresh(testDatas.statusList);
+                        }
+                    }
                 }
             }
         }
@@ -262,5 +271,5 @@ public class MainActivity extends AppCompatActivity{
             ErrorInfo info = ErrorInfo.parse(e.getMessage());
             Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
-    };*/
+    };
 }
