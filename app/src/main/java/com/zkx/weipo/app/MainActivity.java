@@ -29,6 +29,9 @@ import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
+import com.zkx.weipo.app.sroll.BottomTrackListener;
+import com.zkx.weipo.app.sroll.TopDecoration;
+import com.zkx.weipo.app.sroll.TopTrackListener;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private StatusesAPI mStatusesAPI;
     private MyRecyclerViewAdapter mAdapter;
     private long maxId=0;
-    private long sinceId=0;
+
     private void initData(){
         testDatas=new StatusList();
     }
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mRefreshLayout =(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeResources(R.color.red, R.color.orange, R.color.yellow, R.color.green);
+        mRefreshLayout.setProgressViewEndTarget(false,220);
 
         mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
@@ -77,7 +81,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mRecyclerView.setLayoutManager(mLayoutManage);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        mRecyclerView.addItemDecoration(new TopDecoration(findViewById(R.id.id_Toolbar)));
+        mRecyclerView.addOnScrollListener(new TopTrackListener(findViewById(R.id.id_Toolbar)));
+        mRecyclerView.addOnScrollListener(new BottomTrackListener(findViewById(R.id.floatbutton)));
     }
 
     @Override
@@ -93,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         //getUserInfo();
         getStatus();
         initData();
-
         WeiboApplication.getInstance();
         WeiboApplication.addActivity(this);
     }

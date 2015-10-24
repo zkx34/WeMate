@@ -18,16 +18,19 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="ERROR" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.zkx.weipo.app" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee5e4cb0-2465-4575-a104-6d25352b2c05" name="Default" comment="添加了滑动到底端加载更多微博">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/LoginActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/LoginActivity.java" />
+    <list default="true" id="ee5e4cb0-2465-4575-a104-6d25352b2c05" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/message_add_background_highlighted.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/BottomTrackListener.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/TopDecoration.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/TopTrackListener.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/AppStart.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/AppStart.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Weipo.iws" />
@@ -69,32 +72,18 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.0722022">
-              <caret line="155" column="5" selection-start-line="155" selection-start-column="5" selection-end-line="155" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.55495495">
+              <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding>
-                <element signature="e#2691#2704#0" expanded="true" />
-                <element signature="e#2705#2719#0" expanded="true" />
                 <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onNavigationViewMenuItemSelected#0;class#MainActivity#0" expanded="false" />
                 <element signature="method#onKeyDown#0;class#MainActivity#0" expanded="false" />
-                <element signature="e#5824#5825#0" expanded="true" />
-                <element signature="e#5914#5915#0" expanded="true" />
-                <element signature="e#6092#6424#0" expanded="true" />
-                <element signature="e#6423#6424#0" expanded="true" />
-                <element signature="class#6471:9339" expanded="false" />
-                <element signature="e#7661#7682#0" expanded="true" />
-                <element signature="e#7723#7742#0" expanded="true" />
-                <element signature="e#7744#7766#0" expanded="true" />
-                <element signature="e#7768#8194#0" expanded="true" />
-                <element signature="e#8193#8194#0" expanded="true" />
-                <element signature="e#8420#8438#0" expanded="true" />
-                <element signature="e#8479#8496#0" expanded="true" />
-                <element signature="e#8498#8520#0" expanded="true" />
-                <element signature="e#8522#8948#0" expanded="true" />
-                <element signature="e#8947#8948#0" expanded="true" />
-                <element signature="e#10529#10530#0" expanded="true" />
-                <element signature="e#10556#10557#0" expanded="true" />
+                <element signature="e#6289#6290#0" expanded="true" />
+                <element signature="e#6379#6380#0" expanded="true" />
+                <element signature="method#initAdapter#0;class#MainActivity#0" expanded="false" />
+                <element signature="class#6936:9804" expanded="false" />
+                <element signature="docComment;method#onRefresh#0;class#MainActivity#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1420,10 +1409,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/legacy/TrendsAPI.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/models/StatusList.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/saveInfo.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/models/Status.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/Tools.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/TestData.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/corners_bg.xml" />
@@ -1463,13 +1448,17 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/card_view.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/AppStart.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/RegistActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/app/WeiboApplication.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/LoginActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/recycler_header.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/Adapter/MyRecyclerViewAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/TopDecoration.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/TopTrackListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/BottomTrackListener.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/AppStart.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java" />
       </list>
     </option>
@@ -1517,7 +1506,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -1621,75 +1609,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Weipo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Weipo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Weipo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Weipo" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Adapter" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1713,6 +1637,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -2106,7 +2031,9 @@
       <workItem from="1444912625633" duration="815000" />
       <workItem from="1444918504748" duration="38000" />
       <workItem from="1445591563003" duration="6848000" />
-      <workItem from="1445600872588" duration="9383000" />
+      <workItem from="1445600872588" duration="9435000" />
+      <workItem from="1445665380831" duration="596000" />
+      <workItem from="1445677235140" duration="5198000" />
     </task>
     <task id="LOCAL-00001" summary="授权、注册测试通过.">
       <created>1442238900862</created>
@@ -2204,11 +2131,17 @@
       <option name="project" value="LOCAL" />
       <updated>1445598154085</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="完善了刷新">
+      <created>1445610306586</created>
+      <option name="number" value="00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1445610306586</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="167320000" />
+    <option name="totallyTimeSpent" value="173166000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -2226,9 +2159,9 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3193658" sideWeight="0.49357602" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33408833" sideWeight="0.4914347" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33295584" sideWeight="0.4914347" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18201284" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18201284" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33748585" sideWeight="0.506424" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32842582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2302,7 +2235,9 @@
     <MESSAGE value="完善了启动动画" />
     <MESSAGE value="稍完善了" />
     <MESSAGE value="添加了滑动到底端加载更多微博" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加了滑动到底端加载更多微博" />
+    <MESSAGE value="完善了刷新" />
+    <MESSAGE value="改善了toolbar隐藏方式" />
+    <option name="LAST_COMMIT_MESSAGE" value="改善了toolbar隐藏方式" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2315,88 +2250,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="250" column="17" selection-start-line="250" selection-start-column="17" selection-end-line="250" selection-end-column="17" />
-          <folding>
-            <element signature="e#2691#2704#0" expanded="true" />
-            <element signature="e#2705#2719#0" expanded="true" />
-            <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onNavigationViewMenuItemSelected#0;class#MainActivity#0" expanded="false" />
-            <element signature="method#onKeyDown#0;class#MainActivity#0" expanded="false" />
-            <element signature="e#5824#5825#0" expanded="true" />
-            <element signature="e#5914#5915#0" expanded="true" />
-            <element signature="e#6092#6424#0" expanded="true" />
-            <element signature="e#6423#6424#0" expanded="true" />
-            <element signature="class#6471:9339" expanded="false" />
-            <element signature="e#7661#7682#0" expanded="true" />
-            <element signature="e#7723#7742#0" expanded="true" />
-            <element signature="e#7744#7766#0" expanded="true" />
-            <element signature="e#7768#8194#0" expanded="true" />
-            <element signature="e#8193#8194#0" expanded="true" />
-            <element signature="e#8420#8438#0" expanded="true" />
-            <element signature="e#8479#8496#0" expanded="true" />
-            <element signature="e#8498#8520#0" expanded="true" />
-            <element signature="e#8522#8948#0" expanded="true" />
-            <element signature="e#8947#8948#0" expanded="true" />
-            <element signature="e#10529#10530#0" expanded="true" />
-            <element signature="e#10556#10557#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/models/OffsetGeo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="32" column="13" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/models/MusicInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/models/IParseable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18374558">
-          <caret line="20" column="17" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/下载/新浪微博Android开发视频教程32源码/myweibo/src/weibo4android/WeiboResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.8492346">
-          <caret line="25" column="2" selection-start-line="25" selection-start-column="2" selection-end-line="25" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/openapi/models/Comment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36749116">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/app/libs/weiboSDKCore_3.1.2.jar!/com/sina/weibo/sdk/exception/WeiboException.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31862745">
-          <caret line="13" column="30" selection-start-line="13" selection-start-column="30" selection-end-line="13" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/下载/新浪微博Android开发视频教程32源码/myweibo/src/weibo4android/Emotion.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2422,13 +2275,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.1755006">
           <caret line="50" column="71" selection-start-line="50" selection-start-column="71" selection-end-line="50" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/emotions.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-22.326086">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -2513,17 +2359,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/start.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.942857">
-          <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6666667">
@@ -2542,7 +2377,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.6225749">
           <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2592,19 +2426,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/AppStart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49469966">
-          <caret line="23" column="43" selection-start-line="21" selection-start-column="39" selection-end-line="23" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/WeiboDetail.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16489989">
           <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2612,7 +2437,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.59363955">
           <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2634,14 +2458,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8574794">
-          <caret line="78" column="0" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2651,14 +2467,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/app/WeiboApplication.java">
@@ -2669,25 +2485,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21965317">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#571#611#0" expanded="true" />
-            <element signature="e#972#1012#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://D:/下载/新浪微博Android开发视频教程32源码/myweibo/src/com/droidstouch/iweibo/logic/MainService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3537906">
           <caret line="303" column="20" selection-start-line="303" selection-start-column="20" selection-end-line="303" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2695,18 +2496,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="3.4530685">
           <caret line="199" column="18" selection-start-line="199" selection-start-column="18" selection-end-line="199" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/Adapter/MyRecyclerViewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33212996">
-          <caret line="156" column="0" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
-          <folding>
-            <element signature="method#onBindViewHolder#0;class#MyRecyclerViewAdapter#0" expanded="false" />
-            <element signature="e#6284#6285#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2734,34 +2523,165 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7567568">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/r/debug/com/zkx/weipo/app/R.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35361215">
+          <caret line="1025" column="14" selection-start-line="1025" selection-start-column="14" selection-end-line="1025" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/TopDecoration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49469966">
+          <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#330#331#0" expanded="false" />
+            <element signature="e#364#365#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/TopTrackListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.2320378">
+          <caret line="18" column="12" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/sroll/BottomTrackListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36277974">
+          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2488#2489#0" expanded="false" />
+            <element signature="e#2559#2560#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/下载/ScrollTrack-master/ScrollTrack/app/src/main/res/layout/layout_rv_item.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16489989">
+          <caret line="5" column="33" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/content_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7248157">
+          <caret line="43" column="14" selection-start-line="43" selection-start-column="14" selection-end-line="43" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="62" column="65" selection-start-line="61" selection-start-column="8" selection-end-line="62" selection-end-column="65" />
+          <folding>
+            <element signature="e#2261#2436#0" expanded="true" />
+            <element signature="e#2435#2436#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/下载/ScrollTrack-master/ScrollTrack/app/src/main/res/layout/activity_main.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.1603603">
+          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/Adapter/MyRecyclerViewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35315314">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="e#1636#1637#0" expanded="true" />
+            <element signature="e#1696#1697#0" expanded="true" />
+            <element signature="e#2483#2756#0" expanded="true" />
+            <element signature="e#2755#2756#0" expanded="true" />
+            <element signature="e#2812#3082#0" expanded="true" />
+            <element signature="e#3081#3082#0" expanded="true" />
+            <element signature="e#3141#3460#0" expanded="true" />
+            <element signature="e#3459#3460#0" expanded="true" />
+            <element signature="e#3517#3793#0" expanded="true" />
+            <element signature="e#3792#3793#0" expanded="true" />
+            <element signature="e#3851#4128#0" expanded="true" />
+            <element signature="e#4127#4128#0" expanded="true" />
+            <element signature="e#4183#4457#0" expanded="true" />
+            <element signature="e#4456#4457#0" expanded="true" />
+            <element signature="e#6216#6217#0" expanded="true" />
+            <element signature="e#6284#6285#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/AppStart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19787987">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <element signature="e#1883#1884#0" expanded="true" />
+            <element signature="e#1927#1928#0" expanded="true" />
+            <element signature="e#2549#2600#0" expanded="true" />
+            <element signature="e#3102#3144#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/start.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32307693">
+          <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/emotions.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-24.064865">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.0722022">
-          <caret line="155" column="5" selection-start-line="155" selection-start-column="5" selection-end-line="155" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.55495495">
+          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
           <folding>
-            <element signature="e#2691#2704#0" expanded="true" />
-            <element signature="e#2705#2719#0" expanded="true" />
             <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onOptionsItemSelected#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onNavigationViewMenuItemSelected#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onKeyDown#0;class#MainActivity#0" expanded="false" />
-            <element signature="e#5824#5825#0" expanded="true" />
-            <element signature="e#5914#5915#0" expanded="true" />
-            <element signature="e#6092#6424#0" expanded="true" />
-            <element signature="e#6423#6424#0" expanded="true" />
-            <element signature="class#6471:9339" expanded="false" />
-            <element signature="e#7661#7682#0" expanded="true" />
-            <element signature="e#7723#7742#0" expanded="true" />
-            <element signature="e#7744#7766#0" expanded="true" />
-            <element signature="e#7768#8194#0" expanded="true" />
-            <element signature="e#8193#8194#0" expanded="true" />
-            <element signature="e#8420#8438#0" expanded="true" />
-            <element signature="e#8479#8496#0" expanded="true" />
-            <element signature="e#8498#8520#0" expanded="true" />
-            <element signature="e#8522#8948#0" expanded="true" />
-            <element signature="e#8947#8948#0" expanded="true" />
-            <element signature="e#10529#10530#0" expanded="true" />
-            <element signature="e#10556#10557#0" expanded="true" />
+            <element signature="e#6289#6290#0" expanded="true" />
+            <element signature="e#6379#6380#0" expanded="true" />
+            <element signature="method#initAdapter#0;class#MainActivity#0" expanded="false" />
+            <element signature="class#6936:9804" expanded="false" />
+            <element signature="docComment;method#onRefresh#0;class#MainActivity#0" expanded="false" />
           </folding>
         </state>
       </provider>
