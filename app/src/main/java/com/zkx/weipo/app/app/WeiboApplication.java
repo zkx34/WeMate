@@ -24,7 +24,6 @@ public class WeiboApplication extends Application {
         IMAGE_CACHE.initData(context,"weibo");
     }
 
-
     private static WeiboApplication instance;
 
     /**
@@ -39,7 +38,6 @@ public class WeiboApplication extends Application {
         return instance;
 
     }
-
 
     public static void addActivity(Activity activity)
     {

@@ -1,5 +1,6 @@
 package com.zkx.weipo.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -53,6 +54,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private MyRecyclerViewAdapter mAdapter;
     private long maxId=0;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initViews();
+        // 获取当前已保存过的 Token
+        mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        // 获取用户信息接口
+        mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
+        mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
+        //getUserInfo();
+        getStatus();
+        initData();
+        WeiboApplication.getInstance();
+        WeiboApplication.addActivity(this);
+    }
+
     private void initData(){
         testDatas=new StatusList();
     }
@@ -86,45 +104,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mRecyclerView.addOnScrollListener(new BottomTrackListener(findViewById(R.id.floatbutton)));
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initViews();
-        // 获取当前已保存过的 Token
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
-        // 获取用户信息接口
-        mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
-        mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
-        //getUserInfo();
-        getStatus();
-        initData();
-        WeiboApplication.getInstance();
-        WeiboApplication.addActivity(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_exit) {
-
-            WeiboApplication.getInstance();
-            WeiboApplication.appExit(this);
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    /* private void getUserInfo(){
+         if (mAccessToken != null && mAccessToken.isSessionValid()) {
+             long uid = Long.parseLong(mAccessToken.getUid());
+             mUsersAPI.show(uid, mListener);
+         }
+     }*/
 
     private void onNavigationViewMenuItemSelected(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -140,29 +125,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_BACK){
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode,event);
-    }
-
-   /* private void getUserInfo(){
-        if (mAccessToken != null && mAccessToken.isSessionValid()) {
-            long uid = Long.parseLong(mAccessToken.getUid());
-            mUsersAPI.show(uid, mListener);
-        }
-    }*/
-
     private void getStatus(){
         mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, mListener);
     }
 
     private void initAdapter(){
 
-        mAdapter=new MyRecyclerViewAdapter(testDatas);
+        mAdapter=new MyRecyclerViewAdapter(MainActivity.this,testDatas);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
@@ -170,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             public void onBottom() {
                 super.onBottom();
                 if (!isRefreshing){
+                    Toast.makeText(MainActivity.this,"加载更多微博",Toast.LENGTH_SHORT).show();
                     loadMore();
                     isRefreshing=true;
                 }else {
@@ -184,12 +154,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 switch (view.getId()) {
 
                     case R.id.id_CardView:
-                        Toast.makeText(MainActivity.this, position + " 卡片被点击",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.content_img:
-                        Toast.makeText(MainActivity.this, position + " 图片被点击",
-                                Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this,WeiboDetail.class));
                         break;
                     default:
                         break;
@@ -247,11 +212,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if (mStatusLists != null && mStatusLists.total_number > 0) {
                         testDatas=mStatusLists;
                         //Long.parseLong(status.get(status.size() -1).getMid())-1;
-                        maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         if (mAdapter==null){
                             initAdapter();
+                            maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         }else {
                             mAdapter.refresh(testDatas.statusList);
+                            maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         }
                     }
                 }
@@ -263,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
         }
     };
+
     /**
      * 加载更多微博
      */
@@ -270,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     {
         getStatus();
     }
+
     /**
      * 下拉刷新
      */
@@ -297,4 +265,37 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_exit) {
+
+            WeiboApplication.getInstance();
+            WeiboApplication.appExit(this);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
+    }
+
 }

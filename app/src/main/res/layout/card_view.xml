@@ -72,15 +72,24 @@
                         android:textSize="16sp"
                         android:layout_marginTop="16dp"
                         android:textColor="#000000"/>
-
-                <ImageView
-                        android:id="@+id/content_img"
-                        android:layout_width="wrap_content"
+                <RelativeLayout
+                        android:id="@+id/rl4"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/surprise_picturebutton"
-                        android:visibility="gone"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"/>
+                        android:paddingRight="25dp"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" >
+                    <com.zkx.weipo.app.view.MyGridView
+                            android:id="@+id/gv_images"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:horizontalSpacing="4dp"
+                            android:numColumns="3"
+                            android:stretchMode="columnWidth"
+                            android:verticalSpacing="4dp"
+                            />
+                </RelativeLayout>
+
             </LinearLayout>
 
             <!--转发信息-->
@@ -100,12 +109,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"/>
-                <ImageView
-                        android:id="@+id/retweeted_img"
-                        android:layout_width="wrap_content"
+                <RelativeLayout
+                        android:id="@+id/rl5"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/surprise_picturebutton"
-                        android:layout_marginTop="8dp"/>
+                        android:paddingRight="25dp"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" >
+                    <com.zkx.weipo.app.view.MyGridView
+                            android:id="@+id/re_images"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:horizontalSpacing="4dp"
+                            android:numColumns="3"
+                            android:stretchMode="columnWidth"
+                            android:verticalSpacing="4dp"
+                            />
+                </RelativeLayout>
             </LinearLayout>
 
         </LinearLayout>

@@ -1,22 +1,23 @@
 package com.zkx.weipo.app.Adapter;
 
+import android.app.Activity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.Util.StringUtil;
+import com.zkx.weipo.app.Util.SysUtils;
 import com.zkx.weipo.app.Util.Tools;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
+import com.zkx.weipo.app.view.MyGridView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,10 +27,14 @@ import java.util.List;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
     StatusList testDatas;
+    private Activity context;
+    private TestGridViewAdapter nearByInfoImgsAdapter;
+    private int wh;
 
-
-    public MyRecyclerViewAdapter(StatusList testDatas) {
+    public MyRecyclerViewAdapter(Activity context,StatusList testDatas) {
         this.testDatas = testDatas;
+        this.context = context;
+        this.wh=(SysUtils.getScreenWidth(context)- SysUtils.Dp2Px(context, 99))/3;
     }
 
     public interface OnItemClickLitener
@@ -63,19 +68,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         viewHolder.name.setText(testDatas.statusList.get(i).user.name);
         viewHolder.time.setText(Tools.getTimeStr(Tools.strToDate(testDatas.statusList.get(i).created_at), new Date()));
         viewHolder.source.setText("来自:"+testDatas.statusList.get(i).getTextSource());
-        //SimpleImageLoader.showImg(viewHolder.userhead, testDatas.statusList.get(i).user.profile_image_url);
         WeiboApplication.IMAGE_CACHE.get(testDatas.statusList.get(i).user.profile_image_url, viewHolder.userhead);
 
         if (mOnItemClickLitener!=null){
-
-            viewHolder.content_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos=viewHolder.getLayoutPosition();
-                    mOnItemClickLitener.onItemClick(viewHolder.content_img,pos);
-                }
-            });
-
 
             viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,11 +116,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
         //判断微博中是否有图片
         if (!StringUtil.isEmpty(testDatas.statusList.get(i).thumbnail_pic)){
-            viewHolder.content_img.setVisibility(View.VISIBLE);
-            //SimpleImageLoader.showImg(viewHolder.content_img,testDatas.statusList.get(i).thumbnail_pic);
-            WeiboApplication.IMAGE_CACHE.get(testDatas.statusList.get(i).thumbnail_pic,viewHolder.content_img);
+            ArrayList<String> list=testDatas.statusList.get(i).pic_urls;
+            viewHolder.rl4.setVisibility(View.VISIBLE);
+            initInfoImages(viewHolder.gv_images,list);
         }else {
-            viewHolder.content_img.setVisibility(View.GONE);
+            viewHolder.rl4.setVisibility(View.GONE);
         }
 
         //转发内容是否为空
@@ -136,11 +131,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     ":"+testDatas.statusList.get(i).retweeted_status.text)));
             //转发图片是否有图片
             if (!StringUtil.isEmpty(testDatas.statusList.get(i).retweeted_status.thumbnail_pic)){
-                viewHolder.retweeted_img.setVisibility(View.VISIBLE);
-                //SimpleImageLoader.showImg(viewHolder.retweeted_img,testDatas.statusList.get(i).retweeted_status.thumbnail_pic);
-                WeiboApplication.IMAGE_CACHE.get(testDatas.statusList.get(i).retweeted_status.thumbnail_pic,viewHolder.retweeted_img);
+                ArrayList<String> list=testDatas.statusList.get(i).retweeted_status.pic_urls;
+                viewHolder.rl5.setVisibility(View.VISIBLE);
+                initInfoImages(viewHolder.re_images,list);
             }else {
-                viewHolder.retweeted_img.setVisibility(View.GONE);
+                viewHolder.rl5.setVisibility(View.GONE);
             }
         }else {
             viewHolder.insideContent.setVisibility(View.GONE);
@@ -159,6 +154,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public class ViewHolder extends RecyclerView.ViewHolder  {
 
+        RelativeLayout rl4;
+        RelativeLayout rl5;
         LinearLayout insideContent;
         CardView cardView;
         TextView content;
@@ -167,14 +164,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         TextView source;
         TextView retweeted_detail;
         ImageView userhead;
-        ImageView content_img;
-        ImageView retweeted_img;
         Button btn_repeat;
         Button btn_comment;
-
+        MyGridView gv_images;
+        MyGridView re_images;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            rl4=(RelativeLayout)itemView.findViewById(R.id.rl4);
+            rl5=(RelativeLayout)itemView.findViewById(R.id.rl5);
             cardView=(CardView)itemView.findViewById(R.id.id_CardView);
             content=(TextView)itemView.findViewById(R.id.id_content);
             userhead=(ImageView)itemView.findViewById(R.id.user_headimg);
@@ -183,10 +181,51 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             source=(TextView)itemView.findViewById(R.id.id_source);
             insideContent =(LinearLayout)itemView.findViewById(R.id.inside_content);
             retweeted_detail=(TextView)itemView.findViewById(R.id.id_retweeted_detail);
-            content_img=(ImageView)itemView.findViewById(R.id.content_img);
-            retweeted_img=(ImageView)itemView.findViewById(R.id.retweeted_img);
             btn_repeat=(Button)itemView.findViewById(R.id.btn_repeat);
             btn_comment=(Button)itemView.findViewById(R.id.btn_comment);
+            gv_images=(MyGridView)itemView.findViewById(R.id.gv_images);
+            re_images=(MyGridView)itemView.findViewById(R.id.re_images);
         }
     }
+
+    public void initInfoImages(MyGridView gv_images,final ArrayList<String> list){
+        if(list!=null&&!list.equals("")){
+            int w=0;
+            switch (list.size()) {
+                case 1:
+                    w=wh;
+                    gv_images.setNumColumns(1);
+                    break;
+                case 2:
+                case 4:
+                    w=2*wh+SysUtils.Dp2Px(context, 2);
+                    gv_images.setNumColumns(2);
+                    break;
+                case 3:
+                case 5:
+                case 6:
+                    w=wh*3+SysUtils.Dp2Px(context, 2)*2;
+                    gv_images.setNumColumns(3);
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    w=wh*3+SysUtils.Dp2Px(context, 2)*2;
+                    gv_images.setNumColumns(3);
+                    break;
+            }
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            gv_images.setLayoutParams(lp);
+            nearByInfoImgsAdapter=new TestGridViewAdapter(context, list);
+            gv_images.setAdapter(nearByInfoImgsAdapter);
+            gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+                    Toast.makeText(context, "点击了第"+(arg2+1)+"张图片", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+    }
+
 }
