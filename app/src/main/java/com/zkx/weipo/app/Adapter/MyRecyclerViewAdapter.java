@@ -28,7 +28,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     StatusList testDatas;
     private Activity context;
-    private TestGridViewAdapter nearByInfoImgsAdapter;
     private int wh;
 
     public MyRecyclerViewAdapter(Activity context,StatusList testDatas) {
@@ -39,8 +38,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     public interface OnItemClickLitener
     {
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view , int position);
+        void onItemClick(View view, int position,long id);
+        void onItemLongClick(View view , int position,long id);
     }
 
     private OnItemClickLitener mOnItemClickLitener;
@@ -76,7 +75,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 @Override
                 public void onClick(View v) {
                     int pos=viewHolder.getLayoutPosition();
-                    mOnItemClickLitener.onItemClick(viewHolder.cardView,pos);
+                    long id=getId(pos);
+                    mOnItemClickLitener.onItemClick(viewHolder.cardView,pos,id);
                 }
             });
 
@@ -84,7 +84,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 @Override
                 public boolean onLongClick(View v) {
                     int pos=viewHolder.getLayoutPosition();
-                    mOnItemClickLitener.onItemLongClick(viewHolder.cardView,pos);
+                    long id=getId(pos);
+                    mOnItemClickLitener.onItemLongClick(viewHolder.cardView,pos,id);
                     return false;
                 }
             });
@@ -93,7 +94,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 @Override
                 public void onClick(View v) {
                     int pos=viewHolder.getLayoutPosition();
-                    mOnItemClickLitener.onItemLongClick(viewHolder.btn_repeat,pos);
+                    long id=getId(pos);
+                    mOnItemClickLitener.onItemLongClick(viewHolder.btn_repeat,pos,id);
                 }
             });
 
@@ -101,7 +103,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 @Override
                 public void onClick(View v) {
                     int pos=viewHolder.getLayoutPosition();
-                    mOnItemClickLitener.onItemLongClick(viewHolder.btn_comment,pos);
+                    long id=getId(pos);
+                    mOnItemClickLitener.onItemLongClick(viewHolder.btn_comment,pos,id);
                 }
             });
 
@@ -109,7 +112,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 @Override
                 public void onClick(View v) {
                     int pos=viewHolder.getLayoutPosition();
-                    mOnItemClickLitener.onItemLongClick(viewHolder.userhead,pos);
+                    long id=getId(pos);
+                    mOnItemClickLitener.onItemLongClick(viewHolder.userhead,pos,id);
                 }
             });
         }
@@ -147,6 +151,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         this.notifyDataSetChanged();
     }
 
+    public long getId(int position){
+        return Long.parseLong((testDatas.statusList.get(position).id));
+    }
+
     @Override
     public int getItemCount() {
         return testDatas==null?0:testDatas.statusList.size();
@@ -163,7 +171,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         TextView time;
         TextView source;
         TextView retweeted_detail;
-        ImageView userhead;
+        de.hdodenhof.circleimageview.CircleImageView userhead;
         Button btn_repeat;
         Button btn_comment;
         MyGridView gv_images;
@@ -175,7 +183,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             rl5=(RelativeLayout)itemView.findViewById(R.id.rl5);
             cardView=(CardView)itemView.findViewById(R.id.id_CardView);
             content=(TextView)itemView.findViewById(R.id.id_content);
-            userhead=(ImageView)itemView.findViewById(R.id.user_headimg);
+            userhead=(de.hdodenhof.circleimageview.CircleImageView)itemView.findViewById(R.id.user_headimg);
             name=(TextView)itemView.findViewById(R.id.id_name);
             time=(TextView)itemView.findViewById(R.id.id_time);
             source=(TextView)itemView.findViewById(R.id.id_source);
@@ -216,7 +224,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             }
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
             gv_images.setLayoutParams(lp);
-            nearByInfoImgsAdapter=new TestGridViewAdapter(context, list);
+            TestGridViewAdapter nearByInfoImgsAdapter = new TestGridViewAdapter(context, list);
             gv_images.setAdapter(nearByInfoImgsAdapter);
             gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

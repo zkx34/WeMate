@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">App</string>
-
+    <string name="app_name">WeMate</string>
+    <string name="share">分享</string>
+    <string name="collect">收藏</string>
     <string name="more">更多...</string>
     <string name="action_settings">settings</string>
     <string name="open">打开</string>
@@ -17,8 +18,8 @@
     <string name="weibosdk_demo_toast_auth_failed">登录失败</string>
     <string name="regist_address">https://passport.sina.cn/signup/signup</string>
     <string name="logout">退出当前帐号</string>
-    <string name="repeat_title">转发微博</string>
-    <string name="repeat">转发</string>
+    <string name="retweet_title">转发微博</string>
+    <string name="retweet">转发</string>
     <string name="cancle">取消</string>
     <string name="input_hint">说说分享心得</string>
     <string name="input_prefill"></string>

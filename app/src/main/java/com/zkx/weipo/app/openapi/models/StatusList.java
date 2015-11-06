@@ -41,7 +41,7 @@ public class StatusList {
     public String next_cursor;
     public int total_number;
     public Object[] advertises;
-    
+
     public static StatusList parse(String jsonString) {
         if (TextUtils.isEmpty(jsonString)) {
             return null;

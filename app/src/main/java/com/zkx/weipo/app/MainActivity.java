@@ -37,16 +37,11 @@ import com.zkx.weipo.app.sroll.TopTrackListener;
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static Boolean isRefreshing=false;
-    private LinearLayoutManager mLayoutManage;
     private DrawerLayout mDrawerLayout;
-    private Toolbar mToolbar;
-    private NavigationView mNavigationView;
     private RecyclerView mRecyclerView;
     private StatusList testDatas;
     private StatusList mStatusLists;
     private SwipeRefreshLayout mRefreshLayout;
-    /** 当前 Token 信息 */
-    private Oauth2AccessToken mAccessToken;
     /** 用户信息接口 */
     private UsersAPI mUsersAPI;
     /** 用于获取微博信息流等操作的API */
@@ -60,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
         initViews();
         // 获取当前已保存过的 Token
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        /* 当前 Token 信息 */
+        Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(this);
         // 获取用户信息接口
         mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
         mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
@@ -82,20 +78,20 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mRefreshLayout.setColorSchemeResources(R.color.red, R.color.orange, R.color.yellow, R.color.green);
         mRefreshLayout.setProgressViewEndTarget(false,220);
 
-        mToolbar=(Toolbar)findViewById(R.id.id_Toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
         mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
-        ActionBarDrawerToggle mActionBarDrawerToggle=new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar,R.string.open,R.string.close);
+        ActionBarDrawerToggle mActionBarDrawerToggle=new ActionBarDrawerToggle(this,mDrawerLayout, mToolbar,R.string.open,R.string.close);
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        mNavigationView=(NavigationView)findViewById(R.id.id_NavigationView);
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.id_NavigationView);
         mNavigationView.inflateHeaderView(R.layout.navi_header);
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
 
         mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-        mLayoutManage =new LinearLayoutManager(MainActivity.this);
+        LinearLayoutManager mLayoutManage = new LinearLayoutManager(MainActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManage);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -150,11 +146,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         mAdapter.setOnItemClickLitener(new MyRecyclerViewAdapter.OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, final int position) {
+            public void onItemClick(View view, int position, long id) {
                 switch (view.getId()) {
 
                     case R.id.id_CardView:
-                        startActivity(new Intent(MainActivity.this,WeiboDetail.class));
+                        Intent intent=new Intent(MainActivity.this,WeiboDetail.class);
+                        intent.putExtra("id",id);
+                        startActivity(intent);
                         break;
                     default:
                         break;
@@ -162,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
+            public void onItemLongClick(View view, int position, long id) {
                 switch (view.getId()) {
                     case R.id.id_CardView:
                         Toast.makeText(MainActivity.this, position + " 卡片被长点击",
@@ -170,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         break;
                     case R.id.btn_repeat:
                         new MaterialDialog.Builder(MainActivity.this)
-                                .title(R.string.repeat_title)
+                                .title(R.string.retweet_title)
                                 .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
                                     @Override
                                     public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
