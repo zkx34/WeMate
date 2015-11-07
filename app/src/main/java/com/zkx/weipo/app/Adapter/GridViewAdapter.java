@@ -1,4 +1,4 @@
-package com.zkx.weipo.app.Adapter;
+package com.zkx.weipo.app.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -8,20 +8,20 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.zkx.weipo.app.R;
-import com.zkx.weipo.app.Util.SysUtils;
+import com.zkx.weipo.app.util.SysUtils;
 import com.zkx.weipo.app.app.WeiboApplication;
 import net.tsz.afinal.FinalBitmap;
 
 import java.util.ArrayList;
 
-public class TestGridViewAdapter extends BaseAdapter {
+public class GridViewAdapter extends BaseAdapter {
 
 	Activity context;
 	ArrayList<String> list;
 	private FinalBitmap finalImageLoader;
 	private int wh;
 
-	public TestGridViewAdapter(Activity context,ArrayList<String> data) {
+	public GridViewAdapter(Activity context, ArrayList<String> data) {
 		this.context=context;
 		this.wh=(SysUtils.getScreenWidth(context)-SysUtils.Dp2Px(context, 99))/3;
 		this.list=data;

@@ -15,7 +15,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.zkx.weipo.app.Util.AccessTokenKeeper;
+import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 
@@ -24,7 +24,6 @@ import com.zkx.weipo.app.app.WeiboApplication;
  */
 public class AppStart extends Activity {
 
-    private AuthInfo mAuthInfo;
     private Oauth2AccessToken mAccessToken;
     private SsoHandler mSsoHandler;
 
@@ -34,8 +33,8 @@ public class AppStart extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.start);
-        mAuthInfo=new AuthInfo(this, Constants.APP_KEY,Constants.REDIRECT_URL,Constants.SCOPE);
-        mSsoHandler=new SsoHandler(AppStart.this,mAuthInfo);
+        AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
+        mSsoHandler=new SsoHandler(AppStart.this, mAuthInfo);
         WeiboApplication.getInstance();
         WeiboApplication.addActivity(this);
         ImageView imageView=(ImageView)findViewById(R.id.start_img);

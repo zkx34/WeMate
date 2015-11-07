@@ -1,4 +1,4 @@
-package com.zkx.weipo.app.Util;
+package com.zkx.weipo.app.util;
 
 import android.app.Activity;
 import android.content.Context;

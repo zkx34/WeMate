@@ -21,8 +21,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.zkx.weipo.app.Adapter.MyRecyclerViewAdapter;
-import com.zkx.weipo.app.Util.AccessTokenKeeper;
+import com.zkx.weipo.app.adapter.HomePageViewAdapter;
+import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.OnRcvScrollListener;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private UsersAPI mUsersAPI;
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
-    private MyRecyclerViewAdapter mAdapter;
+    private HomePageViewAdapter mAdapter;
     private long maxId=0;
 
     @Override
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initAdapter(){
 
-        mAdapter=new MyRecyclerViewAdapter(MainActivity.this,testDatas);
+        mAdapter=new HomePageViewAdapter(MainActivity.this,testDatas);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
-        mAdapter.setOnItemClickLitener(new MyRecyclerViewAdapter.OnItemClickLitener() {
+        mAdapter.setOnItemClickLitener(new HomePageViewAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position, long id) {
                 switch (view.getId()) {

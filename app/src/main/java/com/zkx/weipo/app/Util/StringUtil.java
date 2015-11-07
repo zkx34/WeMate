@@ -1,4 +1,4 @@
-package com.zkx.weipo.app.Util;
+package com.zkx.weipo.app.util;
 
 /**
  * Created by Administrator on 2015/10/5.

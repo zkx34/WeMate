@@ -22,10 +22,12 @@
 
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/id_RecyclerView"
+                android:scrollbars="vertical"
                 android:background="@color/main_white"
                 android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+        />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

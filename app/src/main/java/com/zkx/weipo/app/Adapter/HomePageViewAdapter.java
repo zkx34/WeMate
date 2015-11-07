@@ -1,4 +1,4 @@
-package com.zkx.weipo.app.Adapter;
+package com.zkx.weipo.app.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.CardView;
@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.zkx.weipo.app.R;
-import com.zkx.weipo.app.Util.StringUtil;
-import com.zkx.weipo.app.Util.SysUtils;
-import com.zkx.weipo.app.Util.Tools;
+import com.zkx.weipo.app.util.StringUtil;
+import com.zkx.weipo.app.util.SysUtils;
+import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
@@ -24,13 +24,13 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/9/12.
  */
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
+public class HomePageViewAdapter extends RecyclerView.Adapter<HomePageViewAdapter.ViewHolder> {
 
     StatusList testDatas;
-    private Activity context;
-    private int wh;
+    private static Activity context;
+    private static int wh;
 
-    public MyRecyclerViewAdapter(Activity context,StatusList testDatas) {
+    public HomePageViewAdapter(Activity context, StatusList testDatas) {
         this.testDatas = testDatas;
         this.context = context;
         this.wh=(SysUtils.getScreenWidth(context)- SysUtils.Dp2Px(context, 99))/3;
@@ -196,7 +196,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         }
     }
 
-    public void initInfoImages(MyGridView gv_images,final ArrayList<String> list){
+    public static void initInfoImages(MyGridView gv_images, final ArrayList<String> list){
         if(list!=null&&!list.equals("")){
             int w=0;
             switch (list.size()) {
@@ -224,7 +224,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             }
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
             gv_images.setLayoutParams(lp);
-            TestGridViewAdapter nearByInfoImgsAdapter = new TestGridViewAdapter(context, list);
+            GridViewAdapter nearByInfoImgsAdapter = new GridViewAdapter(context, list);
             gv_images.setAdapter(nearByInfoImgsAdapter);
             gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

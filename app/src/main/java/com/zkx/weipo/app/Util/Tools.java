@@ -1,4 +1,4 @@
-package com.zkx.weipo.app.Util;
+package com.zkx.weipo.app.util;
 
 import android.graphics.Color;
 
@@ -158,8 +158,11 @@ public class Tools  {
             return time / 60 + "分钟前";
         } else if (time >= 3600 && time < 3600 * 24) {
             return time / 3600 + "小时前";
-        } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        } else if (time >= 3600 * 24 && time < 3600 * 24 *365){
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+            return sdf.format(oldTime);
+        }else {
+            SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
             return sdf.format(oldTime);
         }
     }

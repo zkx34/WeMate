@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zkx.weipo.app.Util;
+package com.zkx.weipo.app.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
