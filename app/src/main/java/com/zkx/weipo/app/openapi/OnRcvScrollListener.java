@@ -18,28 +18,14 @@ public class OnRcvScrollListener extends RecyclerView.OnScrollListener implement
         STAGGERED_GRID
     }
 
-    /**
-     * layoutManager的类型（枚举）
-     */
     protected LAYOUT_MANAGER_TYPE layoutManagerType;
 
-    /**
-     * 最后一个的位置
-     */
     private int[] lastPositions;
 
-    /**
-     * 最后一个可见的item的位置
-     */
     private int lastVisibleItemPosition;
-/*    *//**
-     * 是否正在加载
-     *//*
-    private boolean isLoadingMore = false;*/
 
-    /**
-     * 当前滑动的状态
-     */
+    private boolean isLoadingMore = false;
+
     private int currentScrollState = 0;
 
     @Override

@@ -13,14 +13,14 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.adapter.HomePageViewAdapter;
-import com.zkx.weipo.app.util.AccessTokenKeeper;
-import com.zkx.weipo.app.util.StringUtil;
-import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
+import com.zkx.weipo.app.util.AccessTokenKeeper;
+import com.zkx.weipo.app.util.StringUtil;
+import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.view.MyGridView;
 
 import java.util.ArrayList;
@@ -122,6 +122,7 @@ public class WeiboDetail extends AppCompatActivity {
 
             }
         });
+
     }
 
     @Override
