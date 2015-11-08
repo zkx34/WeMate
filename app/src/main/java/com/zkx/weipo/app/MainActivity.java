@@ -22,6 +22,7 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.adapter.HomePageViewAdapter;
+import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private UsersAPI mUsersAPI;
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
+    private FavoritesAPI mFavoritesAPI;
     private HomePageViewAdapter mAdapter;
     private long maxId=0;
 
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         // 获取用户信息接口
         mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
         mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
+        mFavoritesAPI =new FavoritesAPI(this,Constants.APP_KEY,mAccessToken);
         //getUserInfo();
         getStatus();
         initData();
@@ -122,7 +125,32 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, mListener);
+        mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, new RequestListener(){
+            @Override
+            public void onComplete(String s) {
+                if (!TextUtils.isEmpty(s)){
+                    if (s.startsWith("{\"statuses\"")){
+                        mStatusLists=StatusList.parse(s);
+                        if (mStatusLists != null && mStatusLists.total_number > 0) {
+                            testDatas=mStatusLists;
+                            //Long.parseLong(status.get(status.size() -1).getMid())-1;
+                            if (mAdapter==null){
+                                initAdapter();
+                                maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                            }else {
+                                mAdapter.refresh(testDatas.statusList);
+                                maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onWeiboException(WeiboException e) {
+                ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void initAdapter(){
@@ -150,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 switch (view.getId()) {
 
                     case R.id.id_CardView:
-                        Intent intent=new Intent(MainActivity.this,WeiboDetail.class);
+                        Intent intent=new Intent(MainActivity.this,WeiboDetail_2.class);
                         intent.putExtra("id",id);
                         startActivity(intent);
                         break;
@@ -160,11 +188,42 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             @Override
-            public void onItemLongClick(View view, int position, long id) {
+            public void onItemLongClick(View view, int position, final long id) {
                 switch (view.getId()) {
                     case R.id.id_CardView:
-                        Toast.makeText(MainActivity.this, position + " 卡片被长点击",
-                                Toast.LENGTH_SHORT).show();
+                        new MaterialDialog.Builder(MainActivity.this)
+                                .items(R.array.defualt_)
+                                .itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence) {
+                                        switch (i){
+                                            case 0:
+                                                Toast.makeText(MainActivity.this, "0",
+                                                        Toast.LENGTH_SHORT).show();
+                                                break;
+                                            case 1:
+                                                Toast.makeText(MainActivity.this, "1",
+                                                        Toast.LENGTH_SHORT).show();
+                                                break;
+                                            case 2:
+                                                mFavoritesAPI.create(id, new RequestListener() {
+                                                    @Override
+                                                    public void onComplete(String s) {
+                                                        Toast.makeText(MainActivity.this, "收藏成功",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    @Override
+                                                    public void onWeiboException(WeiboException e) {
+                                                        ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                                                        Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                                break;
+                                        }
+                                    }
+                                })
+                                .show();
                         break;
                     case R.id.btn_repeat:
                         new MaterialDialog.Builder(MainActivity.this)
@@ -200,33 +259,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
     }
-
-    private RequestListener mListener=new RequestListener(){
-        @Override
-        public void onComplete(String s) {
-            if (!TextUtils.isEmpty(s)){
-                if (s.startsWith("{\"statuses\"")){
-                    mStatusLists=StatusList.parse(s);
-                    if (mStatusLists != null && mStatusLists.total_number > 0) {
-                        testDatas=mStatusLists;
-                        //Long.parseLong(status.get(status.size() -1).getMid())-1;
-                        if (mAdapter==null){
-                            initAdapter();
-                            maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
-                        }else {
-                            mAdapter.refresh(testDatas.statusList);
-                            maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
-                        }
-                    }
-                }
-            }
-        }
-        @Override
-        public void onWeiboException(WeiboException e) {
-            ErrorInfo info = ErrorInfo.parse(e.getMessage());
-            Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
-        }
-    };
 
     /**
      * 加载更多微博
