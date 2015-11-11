@@ -24,7 +24,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".WeiboDetail"/>
-        <activity android:name=".WeiboDetail_2"/>
     </application>
 
 </manifest>
