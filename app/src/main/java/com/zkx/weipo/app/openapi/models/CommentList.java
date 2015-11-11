@@ -16,13 +16,13 @@
 
 package com.zkx.weipo.app.openapi.models;
 
-import java.util.ArrayList;
-
+import android.text.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.TextUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 评论列表结构体。
@@ -33,7 +33,7 @@ import android.text.TextUtils;
 public class CommentList {
 
     /** 微博列表 */
-    public ArrayList<Comment> commentList;
+    public List<Comment> commentList;
     public String previous_cursor;
     public String next_cursor;
     public int total_number;

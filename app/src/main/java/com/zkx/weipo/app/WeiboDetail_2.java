@@ -75,8 +75,8 @@ public class WeiboDetail_2 extends AppCompatActivity {
     }
 
     private void initAdapter(){
-        mAdapter= new DetailPageViewAdapter(mStatusLists );
-        mRecyclerView.setAdapter(mAdapter);
+        //mAdapter= new DetailPageViewAdapter(mStatusLists );
+        //mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 switch (view.getId()) {
 
                     case R.id.id_CardView:
-                        Intent intent=new Intent(MainActivity.this,WeiboDetail_2.class);
+                        Intent intent=new Intent(MainActivity.this,WeiboDetail.class);
                         intent.putExtra("id",id);
                         startActivity(intent);
                         break;

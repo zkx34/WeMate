@@ -2,6 +2,8 @@ package com.zkx.weipo.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
@@ -12,10 +14,13 @@ import android.widget.*;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
+import com.zkx.weipo.app.adapter.DetailPageViewAdapter;
 import com.zkx.weipo.app.adapter.HomePageViewAdapter;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
+import com.zkx.weipo.app.openapi.CommentsAPI;
 import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
+import com.zkx.weipo.app.openapi.models.CommentList;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
@@ -31,12 +36,17 @@ import java.util.Date;
  */
 public class WeiboDetail extends AppCompatActivity {
 
+    private DetailPageViewAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private StatusList mStatusLists;
+    private CommentList mCommentList;
     private void initView(){
         //获取微博ID
         long id=getIntent().getLongExtra("id",0);
         Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(this);
         // 获取用户信息接口
         StatusesAPI mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
+        CommentsAPI mCommentsAPI=new CommentsAPI(this,Constants.APP_KEY,mAccessToken);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(mToolbar);
@@ -61,13 +71,17 @@ public class WeiboDetail extends AppCompatActivity {
         final MyGridView de_images2=(MyGridView)findViewById(R.id.de_images2);
         final Button de_repeat=(Button)findViewById(R.id.de_repeat);
         final Button de_comment=(Button)findViewById(R.id.de_comment);
+        mRecyclerView= (RecyclerView) findViewById(R.id.de_RView);
+        LinearLayoutManager mLayoutManage = new LinearLayoutManager(WeiboDetail.this);
+        mRecyclerView.setLayoutManager(mLayoutManage);
+        mRecyclerView.setHasFixedSize(true);
 
         mStatusesAPI.friendsTimeline(0, id, 1, 1, false, 0, false, new RequestListener() {
             @Override
             public void onComplete(String s) {
                 if (!TextUtils.isEmpty(s)){
 
-                    StatusList mStatusLists = StatusList.parse(s);
+                    mStatusLists = StatusList.parse(s);
                     de_name.setText(mStatusLists.statusList.get(0).user.name);
                     de_content.setText(Html.fromHtml(Tools.atBlue(mStatusLists.statusList.get(0).text)));
                     WeiboApplication.IMAGE_CACHE.get(mStatusLists.statusList.get(0).user.profile_image_url,profile);
@@ -99,6 +113,28 @@ public class WeiboDetail extends AppCompatActivity {
                         }
                     }else {
                         de_retweet_content.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onWeiboException(WeiboException e) {
+                ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                Toast.makeText(WeiboDetail.this, info.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mCommentsAPI.show(id, 0, 0, 50, 1, 0, new RequestListener() {
+            @Override
+            public void onComplete(String s) {
+                if (!TextUtils.isEmpty(s)){
+                    mCommentList=CommentList.parse(s);
+                    if (mCommentList.commentList.size()>0&&mCommentList.commentList!=null){
+
+                        mAdapter= new DetailPageViewAdapter(mCommentList);
+                        mRecyclerView.setAdapter(mAdapter);
+                        mRecyclerView.addItemDecoration(new DividerItemDecoration(WeiboDetail.this,
+                                DividerItemDecoration.VERTICAL_LIST));
                     }
                 }
             }
