@@ -7,40 +7,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.zkx.weipo.app.adapter.HomePageViewAdapter;
-import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
-import com.zkx.weipo.app.util.AccessTokenKeeper;
+import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
-import com.zkx.weipo.app.openapi.OnRcvScrollListener;
 import com.zkx.weipo.app.openapi.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
+import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
-import com.zkx.weipo.app.sroll.BottomTrackListener;
-import com.zkx.weipo.app.sroll.TopDecoration;
-import com.zkx.weipo.app.sroll.TopTrackListener;
+import com.zkx.weipo.app.util.AccessTokenKeeper;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static Boolean isRefreshing=false;
     private DrawerLayout mDrawerLayout;
-    private RecyclerView mRecyclerView;
-    private StatusList testDatas;
     private StatusList mStatusLists;
     private SwipeRefreshLayout mRefreshLayout;
     /** 用户信息接口 */
@@ -48,7 +39,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
     private FavoritesAPI mFavoritesAPI;
-    private HomePageViewAdapter mAdapter;
+    private ListView mListView;
+    private HomePageListAdapater mAdapter;
     private long maxId=0;
 
     @Override
@@ -63,15 +55,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
         mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
         mFavoritesAPI =new FavoritesAPI(this,Constants.APP_KEY,mAccessToken);
-        //getUserInfo();
         getStatus();
-        initData();
         WeiboApplication.getInstance();
         WeiboApplication.addActivity(this);
-    }
-
-    private void initData(){
-        testDatas=new StatusList();
     }
 
     private void initViews(){
@@ -93,22 +79,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
 
-        mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
+        mListView=(ListView)findViewById(R.id.home_listview);
+        mListView.setDivider(null);
+        /*mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
         LinearLayoutManager mLayoutManage = new LinearLayoutManager(MainActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManage);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new TopDecoration(findViewById(R.id.id_Toolbar)));
         mRecyclerView.addOnScrollListener(new TopTrackListener(findViewById(R.id.id_Toolbar)));
-        mRecyclerView.addOnScrollListener(new BottomTrackListener(findViewById(R.id.floatbutton)));
-    }
+        mRecyclerView.addOnScrollListener(new BottomTrackListener(findViewById(R.id.floatbutton)));*/
 
-    /* private void getUserInfo(){
-         if (mAccessToken != null && mAccessToken.isSessionValid()) {
-             long uid = Long.parseLong(mAccessToken.getUid());
-             mUsersAPI.show(uid, mListener);
-         }
-     }*/
+    }
 
     private void onNavigationViewMenuItemSelected(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -132,13 +114,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if (s.startsWith("{\"statuses\"")){
                         mStatusLists=StatusList.parse(s);
                         if (mStatusLists != null && mStatusLists.total_number > 0) {
-                            testDatas=mStatusLists;
                             //Long.parseLong(status.get(status.size() -1).getMid())-1;
                             if (mAdapter==null){
                                 initAdapter();
                                 maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                             }else {
-                                mAdapter.refresh(testDatas.statusList);
+                                mAdapter.refresh(mStatusLists.statusList);
                                 maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                             }
                         }
@@ -155,28 +136,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initAdapter(){
 
-        mAdapter=new HomePageViewAdapter(MainActivity.this,testDatas);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter=new HomePageListAdapater(mStatusLists,MainActivity.this);
+        mListView.setAdapter(mAdapter);
 
-        mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
-            @Override
-            public void onBottom() {
-                super.onBottom();
-                if (!isRefreshing){
-                    Toast.makeText(MainActivity.this,"加载更多微博",Toast.LENGTH_SHORT).show();
-                    loadMore();
-                    isRefreshing=true;
-                }else {
-                    isRefreshing=false;
-                }
-            }
-        });
-
-        mAdapter.setOnItemClickLitener(new HomePageViewAdapter.OnItemClickLitener() {
+        mAdapter.setOnItemClickLitener(new HomePageListAdapater.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position, long id) {
                 switch (view.getId()) {
-
                     case R.id.id_CardView:
                         Intent intent=new Intent(MainActivity.this,WeiboDetail.class);
                         intent.putExtra("id",id);
@@ -189,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public void onItemLongClick(View view, int position, final long id) {
-                switch (view.getId()) {
+                switch (view.getId()){
                     case R.id.id_CardView:
                         new MaterialDialog.Builder(MainActivity.this)
                                 .items(R.array.defualt_)
@@ -258,6 +224,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
             }
         });
+        /*
+        mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
+            @Override
+            public void onBottom() {
+                super.onBottom();
+                if (!isRefreshing){
+                    Toast.makeText(MainActivity.this,"加载更多微博",Toast.LENGTH_SHORT).show();
+                    loadMore();
+                    isRefreshing=true;
+                }else {
+                    isRefreshing=false;
+                }
+            }
+        });
+
+        */
     }
 
     /**
@@ -280,7 +262,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if (s.startsWith("{\"statuses\"")){
                         mStatusLists=StatusList.parse(s);
                         if (mStatusLists != null && mStatusLists.total_number > 0) {
-                            testDatas=mStatusLists;
                             initAdapter();
                             mRefreshLayout.setRefreshing(false);
                         }

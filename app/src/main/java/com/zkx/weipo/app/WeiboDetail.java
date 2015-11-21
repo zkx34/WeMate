@@ -2,8 +2,6 @@ package com.zkx.weipo.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
@@ -14,8 +12,8 @@ import android.widget.*;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.zkx.weipo.app.adapter.DetailPageViewAdapter;
-import com.zkx.weipo.app.adapter.HomePageViewAdapter;
+import com.zkx.weipo.app.adapter.DetailPageListViewAdapter;
+import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.CommentsAPI;
@@ -27,6 +25,7 @@ import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.util.StringUtil;
 import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.view.MyGridView;
+import com.zkx.weipo.app.view.MyListView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +35,11 @@ import java.util.Date;
  */
 public class WeiboDetail extends AppCompatActivity {
 
-    private DetailPageViewAdapter mAdapter;
-    private RecyclerView mRecyclerView;
+    private DetailPageListViewAdapter mAdapter;
+    private MyListView mListView;
     private StatusList mStatusLists;
     private CommentList mCommentList;
+    private ScrollView mSv;
     private void initView(){
         //获取微博ID
         long id=getIntent().getLongExtra("id",0);
@@ -69,12 +69,9 @@ public class WeiboDetail extends AppCompatActivity {
         final LinearLayout de_retweet_content=(LinearLayout)findViewById(R.id.de_retweet_content);
         final RelativeLayout de_rl5=(RelativeLayout)findViewById(R.id.de_rl5);
         final MyGridView de_images2=(MyGridView)findViewById(R.id.de_images2);
-        final Button de_repeat=(Button)findViewById(R.id.de_repeat);
-        final Button de_comment=(Button)findViewById(R.id.de_comment);
-        mRecyclerView= (RecyclerView) findViewById(R.id.de_RView);
-        LinearLayoutManager mLayoutManage = new LinearLayoutManager(WeiboDetail.this);
-        mRecyclerView.setLayoutManager(mLayoutManage);
-        mRecyclerView.setHasFixedSize(true);
+        mSv=(ScrollView)findViewById(R.id.de_sv);
+        mSv.smoothScrollTo(0,0);
+        mListView=(MyListView)findViewById(R.id.de_listview);
 
         mStatusesAPI.friendsTimeline(0, id, 1, 1, false, 0, false, new RequestListener() {
             @Override
@@ -92,7 +89,7 @@ public class WeiboDetail extends AppCompatActivity {
                     if (!StringUtil.isEmpty(mStatusLists.statusList.get(0).thumbnail_pic)){
                         ArrayList<String> list=mStatusLists.statusList.get(0).pic_urls;
                         de_r14.setVisibility(View.VISIBLE);
-                        HomePageViewAdapter.initInfoImages(de_images1,list);
+                        HomePageListAdapater.initInfoImages(de_images1,list);
                     }else {
                         de_r14.setVisibility(View.GONE);
                     }
@@ -107,7 +104,7 @@ public class WeiboDetail extends AppCompatActivity {
                         if (!StringUtil.isEmpty(mStatusLists.statusList.get(0).retweeted_status.thumbnail_pic)){
                             ArrayList<String> list=mStatusLists.statusList.get(0).retweeted_status.pic_urls;
                             de_rl5.setVisibility(View.VISIBLE);
-                            HomePageViewAdapter.initInfoImages(de_images2,list);
+                            HomePageListAdapater.initInfoImages(de_images2,list);
                         }else {
                             de_rl5.setVisibility(View.GONE);
                         }
@@ -124,17 +121,14 @@ public class WeiboDetail extends AppCompatActivity {
             }
         });
 
-        mCommentsAPI.show(id, 0, 0, 50, 1, 0, new RequestListener() {
+        mCommentsAPI.show(id, 0, 0, 20, 1, 0, new RequestListener() {
             @Override
             public void onComplete(String s) {
                 if (!TextUtils.isEmpty(s)){
                     mCommentList=CommentList.parse(s);
-                    if (mCommentList.commentList.size()>0&&mCommentList.commentList!=null){
-
-                        mAdapter= new DetailPageViewAdapter(mCommentList);
-                        mRecyclerView.setAdapter(mAdapter);
-                        mRecyclerView.addItemDecoration(new DividerItemDecoration(WeiboDetail.this,
-                                DividerItemDecoration.VERTICAL_LIST));
+                    if (mCommentList != null) {
+                        mAdapter = new DetailPageListViewAdapter(WeiboDetail.this, mCommentList);
+                        mListView.setAdapter(mAdapter);
                     }
                 }
             }
@@ -143,19 +137,6 @@ public class WeiboDetail extends AppCompatActivity {
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
                 Toast.makeText(WeiboDetail.this, info.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        de_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        de_repeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 
