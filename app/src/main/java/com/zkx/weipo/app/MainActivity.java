@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -28,9 +27,11 @@ import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
+import com.zkx.weipo.app.view.MyListView;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    private boolean isLoadMore=false;
     private DrawerLayout mDrawerLayout;
     private StatusList mStatusLists;
     private SwipeRefreshLayout mRefreshLayout;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
     private FavoritesAPI mFavoritesAPI;
-    private ListView mListView;
+    private MyListView mListView;
     private HomePageListAdapater mAdapter;
     private long maxId=0;
 
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
 
-        mListView=(ListView)findViewById(R.id.home_listview);
+        mListView=(MyListView)findViewById(R.id.home_listview);
         mListView.setDivider(null);
         /*mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
         LinearLayoutManager mLayoutManage = new LinearLayoutManager(MainActivity.this);
@@ -107,23 +108,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, new RequestListener(){
+        mStatusesAPI.friendsTimeline(0L, maxId, 50, 1, false, 0, false, new RequestListener(){
             @Override
             public void onComplete(String s) {
-                if (!TextUtils.isEmpty(s)){
-                    if (s.startsWith("{\"statuses\"")){
-                        mStatusLists=StatusList.parse(s);
-                        if (mStatusLists != null && mStatusLists.total_number > 0) {
-                            //Long.parseLong(status.get(status.size() -1).getMid())-1;
-                            if (mAdapter==null){
-                                initAdapter();
-                                maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
-                            }else {
-                                mAdapter.refresh(mStatusLists.statusList);
-                                maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
-                            }
-                        }
+                mStatusLists=StatusList.parse(s);
+                if (mStatusLists.statusList != null && mStatusLists.total_number > 0) {
+                    //Long.parseLong(status.get(status.size() -1).getMid())-1;
+                    if (mAdapter==null){
+                        initAdapter();
+                        maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                    }else {
+                        mListView.hideFooterView();
+                        mAdapter.refresh(mStatusLists.statusList);
+                        maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                     }
+                }else {
+                    //加载完150条微博后
+                    Toast.makeText(MainActivity.this,"sfsdfsd",Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
@@ -135,10 +136,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void initAdapter(){
-
+        mListView.initFooterView();
         mAdapter=new HomePageListAdapater(mStatusLists,MainActivity.this);
         mListView.setAdapter(mAdapter);
-
+        mListView.setOnBottomListener(new MyListView.OnBottomListener() {
+            @Override
+            public void onBottom() {
+                mListView.showFooterView();
+                if (!isLoadMore){
+                    loadMore();
+                    isLoadMore=true;
+                }else {
+                    isLoadMore=false;
+                }
+            }
+        });
         mAdapter.setOnItemClickLitener(new HomePageListAdapater.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position, long id) {
@@ -224,22 +236,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
             }
         });
-        /*
-        mRecyclerView.setOnScrollListener(new OnRcvScrollListener(){
-            @Override
-            public void onBottom() {
-                super.onBottom();
-                if (!isRefreshing){
-                    Toast.makeText(MainActivity.this,"加载更多微博",Toast.LENGTH_SHORT).show();
-                    loadMore();
-                    isRefreshing=true;
-                }else {
-                    isRefreshing=false;
-                }
-            }
-        });
-
-        */
     }
 
     /**
