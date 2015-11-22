@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Comment;
@@ -62,7 +63,7 @@ public class DetailPageListViewAdapter extends BaseAdapter {
 
         if (mComments!=null){
             holder.tv_username.setText(mComments.get(position).user.name);
-            WeiboApplication.IMAGE_CACHE.get(mComments.get(position).user.profile_image_url,holder.user_profile);
+            ImageLoader.getInstance().displayImage(mComments.get(position).user.profile_image_url,holder.user_profile, WeiboApplication.options);
             holder.tv_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mComments.get(position).created_at), new Date()));
             holder.de_detail.setText(mComments.get(position).text);
         }

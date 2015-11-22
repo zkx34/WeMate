@@ -3,8 +3,11 @@ package com.zkx.weipo.app.app;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import cn.trinea.android.common.service.impl.ImageCache;
-import cn.trinea.android.common.util.CacheManager;
+import android.graphics.Bitmap;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.zkx.weipo.app.R;
 
 import java.util.ArrayList;
 
@@ -14,14 +17,20 @@ import java.util.ArrayList;
 public class WeiboApplication extends Application {
 
     public static Context context;
-    public static final ImageCache IMAGE_CACHE= CacheManager.getImageCache();
     private static ArrayList<Activity> appActivities = new ArrayList<Activity>();
+    public static final DisplayImageOptions options=new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.avatar_default_small)
+            .cacheInMemory(true)
+            .cacheOnDisk(false)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .build();
 
     @Override
     public void onCreate() {
         super.onCreate();
         context=this.getApplicationContext();
-        IMAGE_CACHE.initData(context,"weibo");
+        ImageLoaderConfiguration configuration=ImageLoaderConfiguration.createDefault(this);
+        ImageLoader.getInstance().init(configuration);
     }
 
     private static WeiboApplication instance;
@@ -59,8 +68,6 @@ public class WeiboApplication extends Application {
 
     public static void appExit(Context context)
     {
-        IMAGE_CACHE.saveDataToDb(context,"weibo");
-
         //Finish 所有的Activity
         for (Activity activity : appActivities)
         {

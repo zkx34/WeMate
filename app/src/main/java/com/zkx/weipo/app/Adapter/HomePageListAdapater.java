@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Status;
@@ -121,7 +122,7 @@ public class HomePageListAdapater extends BaseAdapter {
         holder.name.setText(mStatuslist.get(i).user.name);
         holder.time.setText(Tools.getTimeStr(Tools.strToDate(mStatuslist.get(i).created_at), new Date()));
         holder.source.setText("来自:"+mStatuslist.get(i).getTextSource());
-        WeiboApplication.IMAGE_CACHE.get(mStatuslist.get(i).user.profile_image_url, holder.userhead);
+        ImageLoader.getInstance().displayImage(mStatuslist.get(i).user.profile_image_url, holder.userhead, WeiboApplication.options);
 
         //判断微博中是否有图片
         if (!StringUtil.isEmpty(mStatuslist.get(i).thumbnail_pic)){

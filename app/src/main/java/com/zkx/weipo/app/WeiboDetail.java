@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -81,7 +82,7 @@ public class WeiboDetail extends AppCompatActivity {
                     mStatusLists = StatusList.parse(s);
                     de_name.setText(mStatusLists.statusList.get(0).user.name);
                     de_content.setText(Html.fromHtml(Tools.atBlue(mStatusLists.statusList.get(0).text)));
-                    WeiboApplication.IMAGE_CACHE.get(mStatusLists.statusList.get(0).user.profile_image_url,profile);
+                    ImageLoader.getInstance().displayImage(mStatusLists.statusList.get(0).user.profile_image_url,profile);
                     de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mStatusLists.statusList.get(0).created_at), new Date()));
                     de_source.setText("来自:"+mStatusLists.statusList.get(0).getTextSource());
 

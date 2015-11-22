@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.util.SysUtils;
-import com.zkx.weipo.app.app.WeiboApplication;
 import net.tsz.afinal.FinalBitmap;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class GridViewAdapter extends BaseAdapter {
 			holder= (Holder) view.getTag();
 		}*/
 		//finalImageLoader.display(holder.imageView, list.get(position));
-		WeiboApplication.IMAGE_CACHE.get(list.get(position),holder.imageView);
+		ImageLoader.getInstance().displayImage(list.get(position),holder.imageView);
 		return view;
 	}
 

@@ -27,7 +27,7 @@ import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
-import com.zkx.weipo.app.view.MyListView;
+import com.zkx.weipo.app.view.HomePage_ListView;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
     private FavoritesAPI mFavoritesAPI;
-    private MyListView mListView;
+    private HomePage_ListView mListView;
     private HomePageListAdapater mAdapter;
     private long maxId=0;
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
 
-        mListView=(MyListView)findViewById(R.id.home_listview);
+        mListView=(HomePage_ListView)findViewById(R.id.home_listview);
         mListView.setDivider(null);
         /*mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
         LinearLayoutManager mLayoutManage = new LinearLayoutManager(MainActivity.this);
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, maxId, 50, 1, false, 0, false, new RequestListener(){
+        mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, new RequestListener(){
             @Override
             public void onComplete(String s) {
                 mStatusLists=StatusList.parse(s);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mListView.initFooterView();
         mAdapter=new HomePageListAdapater(mStatusLists,MainActivity.this);
         mListView.setAdapter(mAdapter);
-        mListView.setOnBottomListener(new MyListView.OnBottomListener() {
+        mListView.setOnBottomListener(new HomePage_ListView.OnBottomListener() {
             @Override
             public void onBottom() {
                 mListView.showFooterView();
