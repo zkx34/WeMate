@@ -5,14 +5,38 @@
         android:orientation="horizontal"
         android:gravity="center"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:visibility="gone">
-    <ProgressBar
-            android:layout_width="wrap_content"
+>
+    <LinearLayout
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"/>
-    <TextView
-            android:id="@+id/load_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/more"/>
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:gravity="center">
+        <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"/>
+        <TextView
+                android:id="@+id/load_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/more"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/done"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_margin="8dp">
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/done"
+                android:gravity="center"
+                android:textSize="24sp"/>
+    </LinearLayout>
 </LinearLayout>

@@ -22,6 +22,7 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
     private final boolean pauseOnScroll=true;
     private final boolean pauseOnFling=true;
 
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
@@ -60,14 +61,14 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
         addFooterView(footerView);
     }
 
-    public void showFooterView(){
+   /* public void showFooterView(){
         footerView.setVisibility(VISIBLE);
     }
 
     public void hideFooterView(){
         footerView.setVisibility(GONE);
     }
-
+*/
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState){
@@ -89,7 +90,7 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
             // 判断是否滚动到底部
             if (view.getLastVisiblePosition() == view.getCount() - 1) {
                 //加载更多功能的代码
-                showFooterView();
+               // showFooterView();
                 listener.onBottom();
             }
         }

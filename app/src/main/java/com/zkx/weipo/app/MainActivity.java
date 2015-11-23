@@ -9,10 +9,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -42,7 +41,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private FavoritesAPI mFavoritesAPI;
     private HomePage_ListView mListView;
     private HomePageListAdapater mAdapter;
-    private long maxId=0;
+    private long statusMaxId =0;
+    private View header;
+    private LinearLayout loading;
+    private LinearLayout done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initViews(){
 
+        header=new View(MainActivity.this);
+        header.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)getResources().getDimension(R.dimen.abc_action_bar_default_height_material)));
+
         mRefreshLayout =(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setColorSchemeResources(R.color.red, R.color.orange, R.color.yellow, R.color.green);
@@ -81,6 +86,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         onNavigationViewMenuItemSelected(mNavigationView);
         mListView=(HomePage_ListView)findViewById(R.id.home_listview);
         mListView.setDivider(null);
+        mListView.initFooterView();
+        mListView.addHeaderView(header);
+        mListView.setOnBottomListener(new HomePage_ListView.OnBottomListener() {
+            @Override
+            public void onBottom() {
+                //mListView.showFooterView();
+                loading.setVisibility(View.VISIBLE);
+                if (!isLoadMore){
+                    loadMore();
+                    isLoadMore=true;
+                }else {
+                    isLoadMore=false;
+                }
+            }
+        });
+        loading=(LinearLayout)findViewById(R.id.loading);
+        done=(LinearLayout)findViewById(R.id.done);
     }
 
     private void onNavigationViewMenuItemSelected(NavigationView navigationView){
@@ -98,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, maxId, 20, 1, false, 0, false, new RequestListener(){
+        mStatusesAPI.friendsTimeline(0L, statusMaxId, 20, 1, false, 0, false, new RequestListener(){
             @Override
             public void onComplete(String s) {
                 mStatusLists=StatusList.parse(s);
@@ -106,15 +128,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     //Long.parseLong(status.get(status.size() -1).getMid())-1;
                     if (mAdapter==null){
                         initAdapter();
-                        maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                        statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                     }else {
-                        mListView.hideFooterView();
+                        //mListView.hideFooterView();
+                        loading.setVisibility(View.GONE);
                         mAdapter.refresh(mStatusLists.statusList);
-                        maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                        statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                     }
                 }else {
                     //加载完150条微博后
-                    Toast.makeText(MainActivity.this,"sfsdfsd",Toast.LENGTH_SHORT).show();
+                    loading.setVisibility(View.GONE);
+                    done.setVisibility(View.VISIBLE);
                 }
             }
             @Override
@@ -126,21 +150,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void initAdapter(){
-        mListView.initFooterView();
+
         mAdapter=new HomePageListAdapater(mStatusLists,MainActivity.this);
         mListView.setAdapter(mAdapter);
-        mListView.setOnBottomListener(new HomePage_ListView.OnBottomListener() {
-            @Override
-            public void onBottom() {
-                mListView.showFooterView();
-                if (!isLoadMore){
-                    loadMore();
-                    isLoadMore=true;
-                }else {
-                    isLoadMore=false;
-                }
-            }
-        });
         mAdapter.setOnItemClickLitener(new HomePageListAdapater.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position, long id) {
@@ -248,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if (s.startsWith("{\"statuses\"")){
                         mStatusLists=StatusList.parse(s);
                         if (mStatusLists != null && mStatusLists.total_number > 0) {
-                            maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                            statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                             initAdapter();
                             mRefreshLayout.setRefreshing(false);
                         }
