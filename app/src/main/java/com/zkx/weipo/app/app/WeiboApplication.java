@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.zkx.weipo.app.R;
 
 import java.util.ArrayList;
 
@@ -18,10 +17,17 @@ public class WeiboApplication extends Application {
 
     public static Context context;
     private static ArrayList<Activity> appActivities = new ArrayList<Activity>();
+
     public static final DisplayImageOptions options=new DisplayImageOptions.Builder()
-            .showImageOnLoading(R.drawable.avatar_default_small)
             .cacheInMemory(true)
-            .cacheOnDisk(false)
+            .cacheOnDisk(true)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .build();
+
+    public static final DisplayImageOptions options2=new DisplayImageOptions.Builder()
+            .delayBeforeLoading(200)
+            .cacheInMemory(true)
+            .cacheOnDisk(true)
             .bitmapConfig(Bitmap.Config.RGB_565)
             .build();
 

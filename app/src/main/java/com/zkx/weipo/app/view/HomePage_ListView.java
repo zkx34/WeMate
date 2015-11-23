@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
 
 /**
@@ -17,6 +18,9 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
     private Context context;
     private int firstVisibleitem;
     private OnBottomListener listener;
+    private ImageLoader imageLoader;
+    private final boolean pauseOnScroll=true;
+    private final boolean pauseOnFling=true;
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -44,6 +48,7 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
     }
 
     public void initListView(){
+        imageLoader=ImageLoader.getInstance();
         setOnScrollListener(this);
         setFooterDividersEnabled(false);
     }
@@ -65,6 +70,20 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+        switch (scrollState){
+            case 0:
+                this.imageLoader.resume();
+                break;
+            case 1:
+                if(pauseOnScroll) {
+                    this.imageLoader.pause();
+                }
+                break;
+            case 2:
+                if(pauseOnFling) {
+                    this.imageLoader.pause();
+                }
+        }
         // 当不滚动时
         if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
             // 判断是否滚动到底部

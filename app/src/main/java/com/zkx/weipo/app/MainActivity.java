@@ -79,18 +79,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mNavigationView.inflateHeaderView(R.layout.navi_header);
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
-
         mListView=(HomePage_ListView)findViewById(R.id.home_listview);
         mListView.setDivider(null);
-        /*mRecyclerView=(RecyclerView)findViewById(R.id.id_RecyclerView);
-        LinearLayoutManager mLayoutManage = new LinearLayoutManager(MainActivity.this);
-        mRecyclerView.setLayoutManager(mLayoutManage);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new TopDecoration(findViewById(R.id.id_Toolbar)));
-        mRecyclerView.addOnScrollListener(new TopTrackListener(findViewById(R.id.id_Toolbar)));
-        mRecyclerView.addOnScrollListener(new BottomTrackListener(findViewById(R.id.floatbutton)));*/
-
     }
 
     private void onNavigationViewMenuItemSelected(NavigationView navigationView){
@@ -258,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if (s.startsWith("{\"statuses\"")){
                         mStatusLists=StatusList.parse(s);
                         if (mStatusLists != null && mStatusLists.total_number > 0) {
+                            maxId=Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                             initAdapter();
                             mRefreshLayout.setRefreshing(false);
                         }

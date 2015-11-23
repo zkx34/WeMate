@@ -9,8 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
+import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.util.SysUtils;
-import net.tsz.afinal.FinalBitmap;
 
 import java.util.ArrayList;
 
@@ -18,15 +18,12 @@ public class GridViewAdapter extends BaseAdapter {
 
 	Activity context;
 	ArrayList<String> list;
-	private FinalBitmap finalImageLoader;
 	private int wh;
 
 	public GridViewAdapter(Activity context, ArrayList<String> data) {
 		this.context=context;
 		this.wh=(SysUtils.getScreenWidth(context)-SysUtils.Dp2Px(context, 99))/3;
 		this.list=data;
-		//this.finalImageLoader=FinalBitmap.create(context);
-		//this.finalImageLoader.configLoadingImage(R.drawable.surprise_picturebutton);//默认显示图片
 	}
 
 	@Override
@@ -63,18 +60,7 @@ public class GridViewAdapter extends BaseAdapter {
 		} else {
 			holder = (Holder) view.getTag();
 		}
-		// _Holder.btn_gv_item.setText(mLists.get(position));
-		/*Holder holder;
-		if (view==null) {
-			view=LayoutInflater.from(context).inflate(R.layout.item_gridview, null);
-			holder=new Holder();
-			holder.imageView=(ImageView) view.findViewById(R.id.imageView);
-			view.setTag(holder);
-		}else {
-			holder= (Holder) view.getTag();
-		}*/
-		//finalImageLoader.display(holder.imageView, list.get(position));
-		ImageLoader.getInstance().displayImage(list.get(position),holder.imageView);
+		ImageLoader.getInstance().displayImage(list.get(position),holder.imageView, WeiboApplication.options2);
 		return view;
 	}
 

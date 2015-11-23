@@ -25,18 +25,4 @@
                 android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/floatbutton"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:src="@drawable/message_add_background_highlighted"
-            app:backgroundTint="?attr/colorPrimary"
-            app:rippleColor="#33728dff"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            app:borderWidth="0dp"
-            android:layout_margin="4dp"
-    />
-
 </FrameLayout>
