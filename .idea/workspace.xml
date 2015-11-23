@@ -39,13 +39,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee5e4cb0-2465-4575-a104-6d25352b2c05" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/core_0_8_3_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/footerview_done.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/view/HomePage_ListView.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/zkx/weipo/app/view/HomePage_ListView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/content_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/footerview_loadmore.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/footerview_loadmore.xml" />
     </list>
     <ignored path="Weipo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -2379,7 +2373,7 @@
       <workItem from="1448163923369" duration="551000" />
       <workItem from="1448189526730" duration="13590000" />
       <workItem from="1448245307037" duration="5756000" />
-      <workItem from="1448279791783" duration="3061000" />
+      <workItem from="1448279791783" duration="3081000" />
     </task>
     <task id="LOCAL-00001" summary="授权、注册测试通过.">
       <created>1442238900862</created>
@@ -2555,11 +2549,17 @@
       <option name="project" value="LOCAL" />
       <updated>1448251047862</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="稍改善了">
+      <created>1448282904661</created>
+      <option name="number" value="00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1448282904661</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="270644000" />
+    <option name="totallyTimeSpent" value="270664000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2673,7 +2673,8 @@
     <MESSAGE value="ListView支持上滑刷新" />
     <MESSAGE value="更换了ImageLoader为UIL" />
     <MESSAGE value="稍改善了图片加载" />
-    <option name="LAST_COMMIT_MESSAGE" value="稍改善了图片加载" />
+    <MESSAGE value="稍改善了" />
+    <option name="LAST_COMMIT_MESSAGE" value="稍改善了" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
