@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -24,17 +25,11 @@ public class WeiboApplication extends Application {
             .bitmapConfig(Bitmap.Config.RGB_565)
             .build();
 
-    public static final DisplayImageOptions options2=new DisplayImageOptions.Builder()
-            .delayBeforeLoading(200)
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .bitmapConfig(Bitmap.Config.RGB_565)
-            .build();
-
     @Override
     public void onCreate() {
         super.onCreate();
         context=this.getApplicationContext();
+        Fresco.initialize(context);
         ImageLoaderConfiguration configuration=ImageLoaderConfiguration.createDefault(this);
         ImageLoader.getInstance().init(configuration);
     }

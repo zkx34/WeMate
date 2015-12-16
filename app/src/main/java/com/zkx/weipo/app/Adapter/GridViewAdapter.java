@@ -1,15 +1,14 @@
 package com.zkx.weipo.app.adapter;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.zkx.weipo.app.R;
-import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.util.SysUtils;
 
 import java.util.ArrayList;
@@ -55,17 +54,19 @@ public class GridViewAdapter extends BaseAdapter {
 			params.width=wh;
 			params.height=wh;
 			view.setLayoutParams(params);
-			holder.imageView = (ImageView) view.findViewById(R.id.imageView);
+			holder.imageView = (SimpleDraweeView) view.findViewById(R.id.imageView);
 			view.setTag(holder);
 		} else {
 			holder = (Holder) view.getTag();
 		}
-		ImageLoader.getInstance().displayImage(list.get(position),holder.imageView, WeiboApplication.options2);
+		SimpleDraweeView draweeView = holder.imageView;
+		Uri uri=Uri.parse(list.get(position));
+		draweeView.setImageURI(uri);
 		return view;
 	}
 
 	class Holder{
-		ImageView imageView;
+		SimpleDraweeView imageView;
 	}
 
 }

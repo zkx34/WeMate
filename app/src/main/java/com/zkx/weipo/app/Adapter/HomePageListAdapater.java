@@ -1,6 +1,7 @@
 package com.zkx.weipo.app.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.zkx.weipo.app.ImagePagerActivity;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Status;
@@ -228,10 +230,17 @@ public class HomePageListAdapater extends BaseAdapter {
             gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                    Toast.makeText(context, "点击了第"+(arg2+1)+"张图片", Toast.LENGTH_LONG).show();
+                    imageBrower(arg2,Tools.getOriginalPicUrls(list));
                 }
             });
         }
+    }
 
+    protected static void imageBrower(int position, ArrayList<String> urls2) {
+        Intent intent = new Intent(context, ImagePagerActivity.class);
+        // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+        context.startActivity(intent);
     }
 }

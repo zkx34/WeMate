@@ -3,6 +3,7 @@ package com.zkx.weipo.app.util;
 import android.graphics.Color;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -10,6 +11,21 @@ import java.util.Locale;
  * Created by Administrator on 2015/9/19.
  */
 public class Tools  {
+
+    //将缩略图地址转为高清地址
+    public static ArrayList<String> getOriginalPicUrls(ArrayList<String> arrayList){
+
+        ArrayList<String> arrayList2 = new ArrayList<String>();
+
+        for (int i=0;i<arrayList.size();i++){
+            String[] heightArray = (String[]) arrayList.toArray(new String[0]);
+            String s2=heightArray[i].substring(32);
+            StringBuffer stringBuffer=new StringBuffer("http://ww4.sinaimg.cn/large/");
+            stringBuffer.append(s2);
+            arrayList2.add(String.valueOf(stringBuffer));
+        }
+        return arrayList2;
+    }
 
 
     // 将微博的日期字符串转换为Date对象
