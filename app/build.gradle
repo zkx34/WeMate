@@ -49,5 +49,6 @@ android {
         compile 'com.android.support:recyclerview-v7:22.2.0'
         compile 'com.github.afollestad:material-dialogs:0.7.6.0'
         compile 'de.hdodenhof:circleimageview:2.0.0'
+        compile 'com.facebook.fresco:fresco:0.6.0+'
     }
 }

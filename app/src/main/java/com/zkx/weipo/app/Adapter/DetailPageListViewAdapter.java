@@ -46,6 +46,11 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         return Long.parseLong(mComments.get(position).id);
     }
 
+    public void refresh(List<Comment> comments){
+        mComments.addAll(comments);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v;

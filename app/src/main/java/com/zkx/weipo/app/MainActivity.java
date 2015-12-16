@@ -20,7 +20,7 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
-import com.zkx.weipo.app.openapi.StatusesAPI;
+import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private HomePage_ListView mListView;
     private HomePageListAdapater mAdapter;
     private long statusMaxId =0;
-    private View header;
     private LinearLayout loading;
     private LinearLayout done;
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initViews(){
 
-        header=new View(MainActivity.this);
+        View header = new View(MainActivity.this);
         header.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)getResources().getDimension(R.dimen.abc_action_bar_default_height_material)));
 
         mRefreshLayout =(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void getStatus(){
-        mStatusesAPI.friendsTimeline(0L, statusMaxId, 20, 1, false, 0, false, new RequestListener(){
+        mStatusesAPI.homeTimeline(0L, statusMaxId, 20, 1, false, 0, false, new RequestListener(){
             @Override
             public void onComplete(String s) {
                 mStatusLists=StatusList.parse(s);
@@ -253,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
      */
     @Override
     public void onRefresh() {
-        mStatusesAPI.friendsTimeline(0L, 0L, 20, 1, false, 0, false, new RequestListener() {
+        mStatusesAPI.homeTimeline(0L, 0L, 20, 1, false, 0, false, new RequestListener() {
             @Override
             public void onComplete(String s) {
                 if (!TextUtils.isEmpty(s)){

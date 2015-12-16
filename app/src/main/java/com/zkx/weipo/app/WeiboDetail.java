@@ -40,7 +40,7 @@ public class WeiboDetail extends AppCompatActivity {
     private MyListView mListView;
     private StatusList mStatusLists;
     private CommentList mCommentList;
-    private ScrollView mSv;
+
     private void initView(){
         //获取微博ID
         long id=getIntent().getLongExtra("id",0);
@@ -70,7 +70,7 @@ public class WeiboDetail extends AppCompatActivity {
         final LinearLayout de_retweet_content=(LinearLayout)findViewById(R.id.de_retweet_content);
         final RelativeLayout de_rl5=(RelativeLayout)findViewById(R.id.de_rl5);
         final MyGridView de_images2=(MyGridView)findViewById(R.id.de_images2);
-        mSv=(ScrollView)findViewById(R.id.de_sv);
+        ScrollView mSv = (ScrollView) findViewById(R.id.de_sv);
         mSv.smoothScrollTo(0,0);
         mListView=(MyListView)findViewById(R.id.de_listview);
 
