@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -21,6 +23,8 @@ public class ImageDetailFragment extends Fragment {
     private String mImageUrl;
     private SimpleDraweeView my_image_view;
     private PhotoViewAttacher mAttacher;
+    private ProgressBar progressBar;
+
 
     public static ImageDetailFragment newInstance(String imageUrl) {
         final ImageDetailFragment f = new ImageDetailFragment();
@@ -43,7 +47,6 @@ public class ImageDetailFragment extends Fragment {
         final View v = inflater.inflate(R.layout.image_detail_fragment, container, false);
         my_image_view = (SimpleDraweeView) v.findViewById(R.id.my_image_view);
         mAttacher = new PhotoViewAttacher(my_image_view);
-
         mAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
 
             @Override
@@ -51,7 +54,7 @@ public class ImageDetailFragment extends Fragment {
                 getActivity().finish();
             }
         });
-
+        progressBar=(ProgressBar)v.findViewById(R.id.img_detail_progressbar);
         return v;
     }
 
@@ -59,13 +62,19 @@ public class ImageDetailFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ImageLoader.getInstance().displayImage(mImageUrl, my_image_view, new SimpleImageLoadingListener() {
+        DisplayImageOptions options=new DisplayImageOptions.Builder()
+                .cacheOnDisk(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+
+        ImageLoader.getInstance().displayImage(mImageUrl, my_image_view, options, new ImageLoadingListener() {
             @Override
-            public void onLoadingStarted(String imageUri, View view) {
+            public void onLoadingStarted(String s, View view) {
+
             }
 
             @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
                 String message = null;
                 switch (failReason.getType()) {
                     case IO_ERROR:
@@ -85,12 +94,20 @@ public class ImageDetailFragment extends Fragment {
                         break;
                 }
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                progressBar.setVisibility(View.GONE);
                 mAttacher.update();
             }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+
         });
     }
 

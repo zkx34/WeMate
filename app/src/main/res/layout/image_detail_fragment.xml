@@ -4,10 +4,19 @@
              android:layout_height="match_parent"
              xmlns:fresco="http://schemas.android.com/apk/res-auto">
 
+    <ProgressBar
+            android:id="@+id/img_detail_progressbar"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="0"
+            android:visibility="visible"
+    />
+
     <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/my_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            fresco:placeholderImage="@drawable/surprise_picturebutton"
     />
 </FrameLayout>

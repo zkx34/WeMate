@@ -80,7 +80,7 @@ public class WeiboDetail extends AppCompatActivity {
                 if (!TextUtils.isEmpty(s)){
 
                     mStatusLists = StatusList.parse(s);
-                    de_name.setText(mStatusLists.statusList.get(0).user.name);
+                    de_name.setText(mStatusLists != null ? mStatusLists.statusList.get(0).user.name : null);
                     de_content.setText(Html.fromHtml(Tools.atBlue(mStatusLists.statusList.get(0).text)));
                     ImageLoader.getInstance().displayImage(mStatusLists.statusList.get(0).user.profile_image_url,profile);
                     de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mStatusLists.statusList.get(0).created_at), new Date()));
@@ -96,8 +96,7 @@ public class WeiboDetail extends AppCompatActivity {
                     }
 
                     //转发内容是否为空
-                    if (mStatusLists.statusList.get(0).retweeted_status!=null
-                            &&mStatusLists.statusList.get(0).retweeted_status.user!=null){
+                    if (mStatusLists.statusList.get(0).retweeted_status!=null){
                         de_retweet_content.setVisibility(View.VISIBLE);
                         de_retweet_detail.setText(Html.fromHtml(Tools.atBlue("@"+mStatusLists.statusList.get(0).retweeted_status.user.name+
                                 ":"+mStatusLists.statusList.get(0).retweeted_status.text)));
