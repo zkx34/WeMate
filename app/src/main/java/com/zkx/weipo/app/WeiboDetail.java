@@ -51,7 +51,7 @@ public class WeiboDetail extends AppCompatActivity {
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.toolbar_leftarrow);
+        mToolbar.setNavigationIcon(R.mipmap.ic_back_dark);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +118,7 @@ public class WeiboDetail extends AppCompatActivity {
             @Override
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(WeiboDetail.this, info.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(WeiboDetail.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -137,7 +137,7 @@ public class WeiboDetail extends AppCompatActivity {
             @Override
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(WeiboDetail.this, info.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(WeiboDetail.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
             }
         });
 

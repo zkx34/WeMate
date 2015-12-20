@@ -6,4 +6,10 @@
           android:title="@string/exit"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item
+        android:id="@+id/new_weibo"
+        android:title="写微博"
+        android:icon="@mipmap/ic_create_dark"
+        android:orderInCategory="90"
+        app:showAsAction="ifRoom"/>
 </menu>

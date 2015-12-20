@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onComplete(String s) {
                 mStatusLists=StatusList.parse(s);
-                if (mStatusLists.statusList != null && mStatusLists.total_number > 0) {
+                if ((mStatusLists != null ? mStatusLists.statusList : null) != null && mStatusLists.total_number > 0) {
                     //Long.parseLong(status.get(status.size() -1).getMid())-1;
                     if (mAdapter==null){
                         initAdapter();
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -239,6 +239,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode){
+            case 1:
+                onRefresh();
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     /**
      * 加载更多微博
      */
@@ -270,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onWeiboException(WeiboException e) {
                 ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(MainActivity.this, info.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -290,10 +302,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_exit) {
-
-            WeiboApplication.getInstance();
-            WeiboApplication.appExit(this);
+        switch (id){
+            case R.id.action_exit:
+                WeiboApplication.getInstance();
+                WeiboApplication.appExit(this);
+                break;
+            case R.id.new_weibo:
+                startActivityForResult(new Intent(MainActivity.this,NewWeibo.class),0);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

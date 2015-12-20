@@ -44,6 +44,7 @@ public class HomePageListAdapater extends BaseAdapter {
 
     private static class ViewHolder{
 
+        ImageView verified;
         RelativeLayout rl4;
         RelativeLayout rl5;
         LinearLayout insideContent;
@@ -119,12 +120,33 @@ public class HomePageListAdapater extends BaseAdapter {
         holder.btn_comment=(Button)v.findViewById(R.id.btn_comment);
         holder.gv_images=(MyGridView)v.findViewById(R.id.gv_images);
         holder.re_images=(MyGridView)v.findViewById(R.id.re_images);
-
+        holder.verified=(ImageView)v.findViewById(R.id.verified);
         holder.content.setText(Html.fromHtml(Tools.atBlue(mStatuslist.get(i).text)));
         holder.name.setText(mStatuslist.get(i).user.name);
         holder.time.setText(Tools.getTimeStr(Tools.strToDate(mStatuslist.get(i).created_at), new Date()));
         holder.source.setText("来自:"+mStatuslist.get(i).getTextSource());
-        ImageLoader.getInstance().displayImage(mStatuslist.get(i).user.profile_image_url, holder.userhead, WeiboApplication.options);
+        ImageLoader.getInstance().displayImage(mStatuslist.get(i).user.avatar_large, holder.userhead, WeiboApplication.options);
+
+        //判断用户是否认证
+        if (mStatuslist.get(i).user.verified){
+            switch (mStatuslist.get(i).user.verified_type){
+                case 0:
+                    holder.verified.setImageResource(R.mipmap.avatar_vip);
+                    holder.verified.setVisibility(View.VISIBLE);
+                    break;
+                case -1:
+                    holder.verified.setVisibility(View.GONE);
+                    break;
+                default:
+                    holder.verified.setImageResource(R.mipmap.avatar_enterprise_vip);
+                    holder.verified.setVisibility(View.VISIBLE);
+            }
+        }else if (mStatuslist.get(i).user.verified_type==200 || mStatuslist.get(i).user.verified_type==220){
+            holder.verified.setImageResource(R.mipmap.avatar_grassroot);
+            holder.verified.setVisibility(View.VISIBLE);
+        }else {
+            holder.verified.setVisibility(View.GONE);
+        }
 
         //判断微博中是否有图片
         if (!StringUtil.isEmpty(mStatuslist.get(i).thumbnail_pic)){

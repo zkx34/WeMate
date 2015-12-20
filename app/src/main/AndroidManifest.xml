@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".WeiboDetail"/>
         <activity android:name=".ImagePagerActivity"/>
+        <activity android:name=".NewWeibo"/>
     </application>
 
 </manifest>

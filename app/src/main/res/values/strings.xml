@@ -23,10 +23,13 @@
     <string name="retweet">转发</string>
     <string name="cancle">取消</string>
     <string name="input_hint">说说分享心得</string>
-    <string name="input_prefill"></string>
     <string name="com_hint">说点什么好呢</string>
     <string name="com_title">评论给Ta</string>
     <string name="comment">评论</string>
     <string name="exit">退出</string>
     <string name="done">加载完毕</string>
+    <string name="total">140/140</string>
+    <string name="alert">微博内容为空或字数超过限制！</string>
+    <string name="success_new">发布成功</string>
+    <string name="input_prefill"/>
 </resources>

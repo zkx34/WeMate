@@ -20,7 +20,6 @@
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="name"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="4dp"
                 android:textSize="14sp"
@@ -29,7 +28,6 @@
                 android:id="@+id/tv_createdAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="19:00"
                 android:textSize="12sp"
                 android:layout_alignParentTop="true"
                 android:layout_alignEnd="@+id/de_detail"/>
@@ -37,7 +35,6 @@
                 android:id="@+id/de_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="详情"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:textColor="#000000"
