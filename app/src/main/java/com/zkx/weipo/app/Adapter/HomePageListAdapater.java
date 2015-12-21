@@ -3,7 +3,6 @@ package com.zkx.weipo.app.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +104,7 @@ public class HomePageListAdapater extends BaseAdapter {
             v=convertView;
         }
         final ViewHolder holder=new ViewHolder();
+        Status list=mStatuslist.get(i);
 
         holder.rl4=(RelativeLayout)v.findViewById(R.id.rl4);
         holder.rl5=(RelativeLayout)v.findViewById(R.id.rl5);
@@ -121,15 +121,17 @@ public class HomePageListAdapater extends BaseAdapter {
         holder.gv_images=(MyGridView)v.findViewById(R.id.gv_images);
         holder.re_images=(MyGridView)v.findViewById(R.id.re_images);
         holder.verified=(ImageView)v.findViewById(R.id.verified);
-        holder.content.setText(Html.fromHtml(Tools.atBlue(mStatuslist.get(i).text)));
-        holder.name.setText(mStatuslist.get(i).user.name);
-        holder.time.setText(Tools.getTimeStr(Tools.strToDate(mStatuslist.get(i).created_at), new Date()));
-        holder.source.setText("来自:"+mStatuslist.get(i).getTextSource());
-        ImageLoader.getInstance().displayImage(mStatuslist.get(i).user.avatar_large, holder.userhead, WeiboApplication.options);
+
+        holder.content.setText(
+                Tools.getContent(context,list.text,holder.content));
+        holder.name.setText(list.user.name);
+        holder.time.setText(Tools.getTimeStr(Tools.strToDate(list.created_at), new Date()));
+        holder.source.setText("来自:"+list.getTextSource());
+        ImageLoader.getInstance().displayImage(list.user.avatar_large, holder.userhead, WeiboApplication.options);
 
         //判断用户是否认证
-        if (mStatuslist.get(i).user.verified){
-            switch (mStatuslist.get(i).user.verified_type){
+        if (list.user.verified){
+            switch (list.user.verified_type){
                 case 0:
                     holder.verified.setImageResource(R.mipmap.avatar_vip);
                     holder.verified.setVisibility(View.VISIBLE);
@@ -141,7 +143,7 @@ public class HomePageListAdapater extends BaseAdapter {
                     holder.verified.setImageResource(R.mipmap.avatar_enterprise_vip);
                     holder.verified.setVisibility(View.VISIBLE);
             }
-        }else if (mStatuslist.get(i).user.verified_type==200 || mStatuslist.get(i).user.verified_type==220){
+        }else if (list.user.verified_type==200 || list.user.verified_type==220){
             holder.verified.setImageResource(R.mipmap.avatar_grassroot);
             holder.verified.setVisibility(View.VISIBLE);
         }else {
@@ -149,28 +151,36 @@ public class HomePageListAdapater extends BaseAdapter {
         }
 
         //判断微博中是否有图片
-        if (!StringUtil.isEmpty(mStatuslist.get(i).thumbnail_pic)){
-            ArrayList<String> list=mStatuslist.get(i).pic_urls;
+        if (!StringUtil.isEmpty(list.thumbnail_pic)){
+            ArrayList<String> list1=list.pic_urls;
             holder.rl4.setVisibility(View.VISIBLE);
-            initInfoImages(holder.gv_images,list);
+            initInfoImages(holder.gv_images,list1);
         }else {
             holder.rl4.setVisibility(View.GONE);
         }
 
         //转发内容是否为空
-        if (mStatuslist.get(i).retweeted_status!=null
-                &&mStatuslist.get(i).retweeted_status.user!=null){
+        if (list.retweeted_status!=null
+                &&list.retweeted_status.user!=null){
             holder.insideContent.setVisibility(View.VISIBLE);
-            holder.retweeted_detail.setText(Html.fromHtml(Tools.atBlue("@"+mStatuslist.get(i).retweeted_status.user.name+
-                    ":"+mStatuslist.get(i).retweeted_status.text)));
+            holder.retweeted_detail.setText(
+                    Tools.getContent(context,"@"+list.retweeted_status.user.name+
+                            ":"+list.retweeted_status.text,holder.retweeted_detail));
+            //holder.retweeted_detail.setText(Html.fromHtml(Tools.atBlue("@"+list.retweeted_status.user.name+
+            //        ":"+list.retweeted_status.text)));
             //转发图片是否有图片
-            if (!StringUtil.isEmpty(mStatuslist.get(i).retweeted_status.thumbnail_pic)){
-                ArrayList<String> list=mStatuslist.get(i).retweeted_status.pic_urls;
+            if (!StringUtil.isEmpty(list.retweeted_status.thumbnail_pic)){
+                ArrayList<String> list2=list.retweeted_status.pic_urls;
                 holder.rl5.setVisibility(View.VISIBLE);
-                initInfoImages(holder.re_images,list);
+                initInfoImages(holder.re_images,list2);
             }else {
                 holder.rl5.setVisibility(View.GONE);
             }
+        }else
+        if (list.retweeted_status!=null && list.retweeted_status.user==null){
+            holder.rl5.setVisibility(View.GONE);
+            holder.insideContent.setVisibility(View.VISIBLE);
+            holder.retweeted_detail.setText(R.string.retweed_error);
         }else {
             holder.insideContent.setVisibility(View.GONE);
         }

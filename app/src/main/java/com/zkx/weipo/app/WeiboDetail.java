@@ -3,7 +3,6 @@ package com.zkx.weipo.app;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,7 +73,7 @@ public class WeiboDetail extends AppCompatActivity {
         mListView=(MyListView)findViewById(R.id.de_listview);
 
         de_name.setText(list.user.name);
-        de_content.setText(Html.fromHtml(Tools.atBlue(list.text)));
+        de_content.setText(Tools.getContent(this,list.text,de_content));
         ImageLoader.getInstance().displayImage(list.user.avatar_large,profile);
         de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(list.created_at), new Date()));
         de_source.setText("来自:"+list.getTextSource());
@@ -112,8 +111,8 @@ public class WeiboDetail extends AppCompatActivity {
         //转发内容是否为空
         if (list.retweeted_status!=null && list.retweeted_status.user!=null){
             de_retweet_content.setVisibility(View.VISIBLE);
-            de_retweet_detail.setText(Html.fromHtml(Tools.atBlue("@"+list.retweeted_status.user.name+
-                    ":"+list.retweeted_status.text)));
+            de_retweet_detail.setText(Tools.getContent(this,"@"+list.retweeted_status.user.name+
+                    ":"+list.retweeted_status.text,de_retweet_detail));
             //转发图片是否有图片
             if (!StringUtil.isEmpty(list.retweeted_status.thumbnail_pic)){
                 ArrayList<String> list2=list.retweeted_status.pic_urls;
