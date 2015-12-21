@@ -20,10 +20,11 @@ import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
-import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.UsersAPI;
 import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
+import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
+import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.view.HomePage_ListView;
@@ -157,7 +158,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             public void onItemClick(View view, int position, long id) {
                 switch (view.getId()) {
                     case R.id.id_CardView:
+                        Status list= (Status) mAdapter.getItem(position);
                         Intent intent=new Intent(MainActivity.this,WeiboDetail.class);
+                        intent.putExtra("sta", list);
                         intent.putExtra("id",id);
                         startActivity(intent);
                         break;

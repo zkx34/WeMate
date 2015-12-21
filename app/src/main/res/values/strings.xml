@@ -32,4 +32,5 @@
     <string name="alert">微博内容为空或字数超过限制！</string>
     <string name="success_new">发布成功</string>
     <string name="input_prefill"/>
+    <string name="retweed_error">抱歉，该微博已被作者删除。</string>
 </resources>

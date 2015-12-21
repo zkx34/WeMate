@@ -18,10 +18,9 @@ import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.CommentsAPI;
-import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.models.CommentList;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
-import com.zkx.weipo.app.openapi.models.StatusList;
+import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.util.StringUtil;
 import com.zkx.weipo.app.util.Tools;
@@ -38,15 +37,14 @@ public class WeiboDetail extends AppCompatActivity {
 
     private DetailPageListViewAdapter mAdapter;
     private MyListView mListView;
-    private StatusList mStatusLists;
     private CommentList mCommentList;
 
     private void initView(){
         //获取微博ID
         long id=getIntent().getLongExtra("id",0);
+        final Status list=(Status)getIntent().getSerializableExtra("sta");
         Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(this);
         // 获取用户信息接口
-        StatusesAPI mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
         CommentsAPI mCommentsAPI=new CommentsAPI(this,Constants.APP_KEY,mAccessToken);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.detail_toolbar);
@@ -70,56 +68,67 @@ public class WeiboDetail extends AppCompatActivity {
         final LinearLayout de_retweet_content=(LinearLayout)findViewById(R.id.de_retweet_content);
         final RelativeLayout de_rl5=(RelativeLayout)findViewById(R.id.de_rl5);
         final MyGridView de_images2=(MyGridView)findViewById(R.id.de_images2);
+        final ImageView de_verified=(ImageView)findViewById(R.id.de_verified);
         ScrollView mSv = (ScrollView) findViewById(R.id.de_sv);
         mSv.smoothScrollTo(0,0);
         mListView=(MyListView)findViewById(R.id.de_listview);
 
-        mStatusesAPI.friendsTimeline(0, id, 1, 1, false, 0, false, new RequestListener() {
-            @Override
-            public void onComplete(String s) {
-                if (!TextUtils.isEmpty(s)){
+        de_name.setText(list.user.name);
+        de_content.setText(Html.fromHtml(Tools.atBlue(list.text)));
+        ImageLoader.getInstance().displayImage(list.user.avatar_large,profile);
+        de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(list.created_at), new Date()));
+        de_source.setText("来自:"+list.getTextSource());
 
-                    mStatusLists = StatusList.parse(s);
-                    de_name.setText(mStatusLists != null ? mStatusLists.statusList.get(0).user.name : null);
-                    de_content.setText(Html.fromHtml(Tools.atBlue(mStatusLists.statusList.get(0).text)));
-                    ImageLoader.getInstance().displayImage(mStatusLists.statusList.get(0).user.profile_image_url,profile);
-                    de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mStatusLists.statusList.get(0).created_at), new Date()));
-                    de_source.setText("来自:"+mStatusLists.statusList.get(0).getTextSource());
-
-                    //判断微博中是否有图片
-                    if (!StringUtil.isEmpty(mStatusLists.statusList.get(0).thumbnail_pic)){
-                        ArrayList<String> list=mStatusLists.statusList.get(0).pic_urls;
-                        de_r14.setVisibility(View.VISIBLE);
-                        HomePageListAdapater.initInfoImages(de_images1,list);
-                    }else {
-                        de_r14.setVisibility(View.GONE);
-                    }
-
-                    //转发内容是否为空
-                    if (mStatusLists.statusList.get(0).retweeted_status!=null){
-                        de_retweet_content.setVisibility(View.VISIBLE);
-                        de_retweet_detail.setText(Html.fromHtml(Tools.atBlue("@"+mStatusLists.statusList.get(0).retweeted_status.user.name+
-                                ":"+mStatusLists.statusList.get(0).retweeted_status.text)));
-                        //转发图片是否有图片
-                        if (!StringUtil.isEmpty(mStatusLists.statusList.get(0).retweeted_status.thumbnail_pic)){
-                            ArrayList<String> list=mStatusLists.statusList.get(0).retweeted_status.pic_urls;
-                            de_rl5.setVisibility(View.VISIBLE);
-                            HomePageListAdapater.initInfoImages(de_images2,list);
-                        }else {
-                            de_rl5.setVisibility(View.GONE);
-                        }
-                    }else {
-                        de_retweet_content.setVisibility(View.GONE);
-                    }
-                }
+        //判断用户是否认证
+        if (list.user.verified){
+            switch (list.user.verified_type){
+                case 0:
+                    de_verified.setImageResource(R.mipmap.avatar_vip);
+                    de_verified.setVisibility(View.VISIBLE);
+                    break;
+                case -1:
+                    de_verified.setVisibility(View.GONE);
+                    break;
+                default:
+                    de_verified.setImageResource(R.mipmap.avatar_enterprise_vip);
+                    de_verified.setVisibility(View.VISIBLE);
             }
+        }else if (list.user.verified_type==200 || list.user.verified_type==220){
+            de_verified.setImageResource(R.mipmap.avatar_grassroot);
+            de_verified.setVisibility(View.VISIBLE);
+        }else {
+            de_verified.setVisibility(View.GONE);
+        }
 
-            @Override
-            public void onWeiboException(WeiboException e) {
-                ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(WeiboDetail.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
+        //判断微博中是否有图片
+        if (!StringUtil.isEmpty(list.thumbnail_pic)){
+            ArrayList<String> list2=list.pic_urls;
+            de_r14.setVisibility(View.VISIBLE);
+            HomePageListAdapater.initInfoImages(de_images1,list2);
+        }else {
+            de_r14.setVisibility(View.GONE);
+        }
+
+        //转发内容是否为空
+        if (list.retweeted_status!=null && list.retweeted_status.user!=null){
+            de_retweet_content.setVisibility(View.VISIBLE);
+            de_retweet_detail.setText(Html.fromHtml(Tools.atBlue("@"+list.retweeted_status.user.name+
+                    ":"+list.retweeted_status.text)));
+            //转发图片是否有图片
+            if (!StringUtil.isEmpty(list.retweeted_status.thumbnail_pic)){
+                ArrayList<String> list2=list.retweeted_status.pic_urls;
+                de_rl5.setVisibility(View.VISIBLE);
+                HomePageListAdapater.initInfoImages(de_images2,list2);
+            }else {
+                de_rl5.setVisibility(View.GONE);
             }
-        });
+        }else
+        if (list.retweeted_status!=null && list.retweeted_status.user==null){
+            de_retweet_content.setVisibility(View.VISIBLE);
+            de_retweet_detail.setText(R.string.retweed_error);
+        }else {
+            de_retweet_content.setVisibility(View.GONE);
+        }
 
         mCommentsAPI.show(id, 0, 0, 20, 1, 0, new RequestListener() {
             @Override
