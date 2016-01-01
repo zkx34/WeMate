@@ -26,6 +26,14 @@
         <activity android:name=".WeiboDetail"/>
         <activity android:name=".ImagePagerActivity"/>
         <activity android:name=".NewWeibo"/>
+        <!-- 调用新浪原生SDK，需要注册的activity -->
+        <activity
+                android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+                android:configChanges="keyboardHidden|orientation"
+                android:windowSoftInputMode="adjustResize"
+                android:exported="false" >
+        </activity>
+
     </application>
 
 </manifest>

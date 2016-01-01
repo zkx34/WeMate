@@ -166,8 +166,6 @@ public class HomePageListAdapater extends BaseAdapter {
             holder.retweeted_detail.setText(
                     Tools.getContent(context,"@"+list.retweeted_status.user.name+
                             ":"+list.retweeted_status.text,holder.retweeted_detail));
-            //holder.retweeted_detail.setText(Html.fromHtml(Tools.atBlue("@"+list.retweeted_status.user.name+
-            //        ":"+list.retweeted_status.text)));
             //转发图片是否有图片
             if (!StringUtil.isEmpty(list.retweeted_status.thumbnail_pic)){
                 ArrayList<String> list2=list.retweeted_status.pic_urls;

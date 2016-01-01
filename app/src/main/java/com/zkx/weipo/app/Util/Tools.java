@@ -3,7 +3,6 @@ package com.zkx.weipo.app.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -78,7 +77,7 @@ public class Tools  {
                     // 获取字符的大小
                     //int size = (int) textView.getTextSize();
                     // 压缩Bitmap
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 64, 64, true);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 32, 32, true);
                     // 设置表情
                     ImageSpan imageSpan = new ImageSpan(context, bitmap);
                     spannableString.setSpan(imageSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -130,123 +129,6 @@ public class Tools  {
         }
         return result;
 
-    }
-
-    public static String atBlue(String s) {
-
-        StringBuilder sb = new StringBuilder();
-        int commonTextColor = Color.BLACK;
-        int signColor = Color.BLUE;
-
-        int state = 1;
-        String str = "";
-        for (int i = 0; i < s.length(); i++) {
-            switch (state) {
-                case 1: // 普通字符状态
-                    // 遇到@
-                    if (s.charAt(i) == '@') {
-                        state = 2;
-                        str += s.charAt(i);
-                    }
-                    // 遇到#
-                    else if (s.charAt(i) == '#') {
-                        str += s.charAt(i);
-                        state = 3;
-                    }
-                    // 添加普通字符
-                    else {
-                        if (commonTextColor == Color.BLACK)
-                            sb.append(s.charAt(i));
-                        else
-                            sb.append("<font color='" + commonTextColor + "'>"
-                                    + s.charAt(i) + "</font>");
-                    }
-                    break;
-                case 2: // 处理遇到@的情况
-                    // 处理@后面的普通字符
-                    if (Character.isJavaIdentifierPart(s.charAt(i))) {
-                        str += s.charAt(i);
-                    }
-
-                    else {
-                        // 如果只有一个@，作为普通字符处理
-                        if ("@".equals(str)) {
-                            sb.append(str);
-                        }
-                        // 将@及后面的普通字符变成蓝色
-                        else {
-                            sb.append(setTextColor(str, String.valueOf(signColor)));
-                        }
-                        // @后面有#的情况，首先应将#添加到str里，这个值可能会变成蓝色，也可以作为普通字符，要看后面还有没有#了
-                        if (s.charAt(i) == '#') {
-
-                            str = String.valueOf(s.charAt(i));
-                            state = 3;
-                        }
-                        // @后面还有个@的情况，和#类似
-                        else if (s.charAt(i) == '@') {
-                            str = String.valueOf(s.charAt(i));
-                            state = 2;
-                        }
-                        // @后面有除了@、#的其他特殊字符。需要将这个字符作为普通字符处理
-                        else {
-                            if (commonTextColor == Color.BLACK)
-                                sb.append(s.charAt(i));
-                            else
-                                sb.append("<font color='" + commonTextColor + "'>"
-                                        + s.charAt(i) + "</font>");
-                            state = 1;
-                            str = "";
-                        }
-                    }
-                    break;
-                case 3: // 处理遇到#的情况
-                    // 前面已经遇到一个#了，这里处理结束的#
-                    if (s.charAt(i) == '#') {
-                        str += s.charAt(i);
-                        sb.append(setTextColor(str, String.valueOf(signColor)));
-                        str = "";
-                        state = 1;
-
-                    }
-                    // 如果#后面有@，那么看一下后面是否还有#，如果没有#，前面的#作废，按遇到@处理
-                    else if (s.charAt(i) == '@') {
-                        if (s.substring(i).indexOf("#") < 0) {
-                            sb.append(str);
-                            str = String.valueOf(s.charAt(i));
-                            state = 2;
-
-                        } else {
-                            str += s.charAt(i);
-                        }
-                    }
-                    // 处理#...#之间的普通字符
-                    else {
-                        str += s.charAt(i);
-                    }
-                    break;
-            }
-
-        }
-        if (state == 1 || state == 3) {
-            sb.append(str);
-        } else if (state == 2) {
-            if ("@".equals(str)) {
-                sb.append(str);
-            } else {
-                sb.append(setTextColor(str, String.valueOf(signColor)));
-            }
-
-        }
-
-        return sb.toString();
-
-    }
-
-    public static String setTextColor(String s, String color) {
-        String result = "<font color='" + color + "'>" + s + "</font>";
-
-        return result;
     }
 
     public static String getTimeStr(Date oldTime, Date currentDate) {

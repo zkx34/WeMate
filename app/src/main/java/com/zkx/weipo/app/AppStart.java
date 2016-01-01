@@ -63,6 +63,8 @@ public class AppStart extends Activity {
             mAccessToken= Oauth2AccessToken.parseAccessToken(bundle);
             if (mAccessToken.isSessionValid()){
                 AccessTokenKeeper.writeAccessToken(AppStart.this, mAccessToken);
+                startActivity(new Intent(AppStart.this,MainActivity.class));
+                finish();
             }else {
                 String code=bundle.getString("code");
                 String message=getString(R.string.weibosdk_demo_toast_auth_failed);

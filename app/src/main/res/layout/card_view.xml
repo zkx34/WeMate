@@ -171,18 +171,20 @@
                 <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="14dp"
                 >
                     <Button
-                            android:layout_width="wrap_content"
+                            android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/btn_repeat"
                             android:background="@android:color/transparent"
                             android:text="@string/retweet"
                             android:textColor="@color/main_light"
+                            android:layout_marginRight="8dp"
                             android:layout_alignParentTop="true"
                             android:layout_toStartOf="@+id/btn_comment"/>
                     <Button
-                            android:layout_width="wrap_content"
+                            android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:id="@+id/btn_comment"
                             android:background="@android:color/transparent"
