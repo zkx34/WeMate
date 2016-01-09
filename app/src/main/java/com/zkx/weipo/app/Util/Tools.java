@@ -77,7 +77,7 @@ public class Tools  {
                     // 获取字符的大小
                     //int size = (int) textView.getTextSize();
                     // 压缩Bitmap
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 32, 32, true);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 48, 48 , true);
                     // 设置表情
                     ImageSpan imageSpan = new ImageSpan(context, bitmap);
                     spannableString.setSpan(imageSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
