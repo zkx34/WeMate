@@ -79,25 +79,7 @@ public class WeiboDetail extends AppCompatActivity {
         de_source.setText("来自:"+list.getTextSource());
 
         //判断用户是否认证
-        if (list.user.verified){
-            switch (list.user.verified_type){
-                case 0:
-                    de_verified.setImageResource(R.mipmap.avatar_vip);
-                    de_verified.setVisibility(View.VISIBLE);
-                    break;
-                case -1:
-                    de_verified.setVisibility(View.GONE);
-                    break;
-                default:
-                    de_verified.setImageResource(R.mipmap.avatar_enterprise_vip);
-                    de_verified.setVisibility(View.VISIBLE);
-            }
-        }else if (list.user.verified_type==200 || list.user.verified_type==220){
-            de_verified.setImageResource(R.mipmap.avatar_grassroot);
-            de_verified.setVisibility(View.VISIBLE);
-        }else {
-            de_verified.setVisibility(View.GONE);
-        }
+        Tools.checkVerified(list.user,de_verified);
 
         //判断微博中是否有图片
         if (!StringUtil.isEmpty(list.thumbnail_pic)){

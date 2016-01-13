@@ -70,6 +70,10 @@ public class NewWeibo extends AppCompatActivity {
         });
     }
 
+    /**
+     * 自动获取焦点并弹出输入法
+     * @param hasFocus
+     */
     private void onFocusChanged(boolean hasFocus){
         final Boolean isFocus=hasFocus;
         (new Handler()).postDelayed(new Runnable() {

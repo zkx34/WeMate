@@ -10,10 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.*;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -21,13 +20,20 @@ import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.UsersAPI;
+import com.zkx.weipo.app.openapi.legacy.AccountAPI;
 import com.zkx.weipo.app.openapi.legacy.FavoritesAPI;
 import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
+import com.zkx.weipo.app.openapi.models.User;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
+import com.zkx.weipo.app.util.LogUtil;
+import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.view.HomePage_ListView;
+import de.hdodenhof.circleimageview.CircleImageView;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -37,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private SwipeRefreshLayout mRefreshLayout;
     /** 用户信息接口 */
     private UsersAPI mUsersAPI;
+    private User mUser;
+    private AccountAPI mAccountAPI;
     /** 用于获取微博信息流等操作的API */
     private StatusesAPI mStatusesAPI;
     private FavoritesAPI mFavoritesAPI;
@@ -45,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private long statusMaxId =0;
     private LinearLayout loading;
     private LinearLayout done;
+    private CircleImageView mUserProfile;
+    private TextView mUserName;
+    private TextView mUserDesc;
+    private ImageView mVerified;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
         mStatusesAPI = new StatusesAPI(this, Constants.APP_KEY, mAccessToken);
         mFavoritesAPI =new FavoritesAPI(this,Constants.APP_KEY,mAccessToken);
+        mAccountAPI=new AccountAPI(this,Constants.APP_KEY,mAccessToken);
         getStatus();
+        getUid();
         WeiboApplication.getInstance();
         WeiboApplication.addActivity(this);
     }
@@ -103,6 +118,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
         loading=(LinearLayout)findViewById(R.id.loading);
         done=(LinearLayout)findViewById(R.id.done);
+        mUserProfile=(CircleImageView)findViewById(R.id.user_head_large);
+        mUserName=(TextView)findViewById(R.id.user_name);
+        mUserDesc=(TextView)findViewById(R.id.user_description);
+        mVerified=(ImageView)findViewById(R.id.user_verified);
+
+        mUserProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,"用户头像被点击",Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void onNavigationViewMenuItemSelected(NavigationView navigationView){
@@ -157,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onItemClick(View view, int position, long id) {
                 switch (view.getId()) {
+                    case R.id.id_content:
                     case R.id.id_CardView:
                         Status list= (Status) mAdapter.getItem(position);
                         Intent intent=new Intent(MainActivity.this,WeiboDetail.class);
@@ -164,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         intent.putExtra("id",id);
                         startActivity(intent);
                         break;
+                    case R.id.id_retweeted_detail:
+                        Toast.makeText(MainActivity.this, "5454545454540",
+                                Toast.LENGTH_SHORT).show();
                     default:
                         break;
                 }
@@ -238,6 +269,43 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     default:
                         break;
                 }
+            }
+        });
+    }
+
+    private void getUid(){
+        mAccountAPI.getUid(new RequestListener() {
+            @Override
+            public void onComplete(String s) {
+                try {
+                    JSONObject jsonObject=new JSONObject(s);
+                    long uid =jsonObject.getLong("uid");
+                    mUsersAPI.show(uid, new RequestListener() {
+                        @Override
+                        public void onComplete(String s) {
+                            mUser=User.parse(s);
+                            if (mUser!=null){
+                                ImageLoader.getInstance().displayImage(mUser.avatar_large,mUserProfile,WeiboApplication.options);
+                                mUserName.setText(mUser.name);
+                                mUserDesc.setText(mUser.description);
+                                Tools.checkVerified(mUser,mVerified);
+                            }
+                        }
+                        @Override
+                        public void onWeiboException(WeiboException e) {
+                            ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                            LogUtil.d("ErrorInfo", info != null ? info.toString() : null);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onWeiboException(WeiboException e) {
+                ErrorInfo info = ErrorInfo.parse(e.getMessage());
+                Toast.makeText(MainActivity.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
             }
         });
     }

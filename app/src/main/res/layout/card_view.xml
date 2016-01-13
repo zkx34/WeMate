@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                    <TextView
+                    <com.zkx.weipo.app.util.ContentTextView
                             android:id="@+id/id_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         android:showDividers="beginning"
                         android:divider="@drawable/divider"
                 >
-                    <TextView
+                    <com.zkx.weipo.app.util.ContentTextView
                             android:layout_marginTop="8dp"
                             android:id="@+id/id_retweeted_detail"
                             android:layout_width="match_parent"

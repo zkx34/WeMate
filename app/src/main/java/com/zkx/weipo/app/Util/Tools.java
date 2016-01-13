@@ -9,8 +9,11 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.zkx.weipo.app.R;
+import com.zkx.weipo.app.openapi.models.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +27,13 @@ import java.util.regex.Pattern;
  */
 public class Tools  {
 
+    /**
+     * 识别文字中的@用户、话题、网址等内容
+     * @param context
+     * @param source
+     * @param textView
+     * @return
+     */
     public static SpannableString getContent(final Context context, String source, TextView textView){
         SpannableString spannableString=new SpannableString(source);
 
@@ -100,7 +110,11 @@ public class Tools  {
         return spannableString;
     }
 
-    //将缩略图地址转为高清地址
+    /**
+     * 将缩略图地址转为高清地址
+     * @param arrayList
+     * @return
+     */
     public static ArrayList<String> getOriginalPicUrls(ArrayList<String> arrayList){
 
         ArrayList<String> arrayList2 = new ArrayList<String>();
@@ -115,7 +129,11 @@ public class Tools  {
         return arrayList2;
     }
 
-    // 将微博的日期字符串转换为Date对象
+    /**
+     * 将微博的日期字符串转换为Date对象
+     * @param str
+     * @return
+     */
     public static Date strToDate(String str) {
         // sample：Tue May 31 17:46:55 +0800 2011
         // E：周 MMM：字符串形式的月，如果只有两个M，表示数值形式的月 Z表示时区（＋0800）
@@ -131,10 +149,20 @@ public class Tools  {
 
     }
 
+    /**
+     * 获取微博发布日期
+     * @param oldTime
+     * @param currentDate
+     * @return
+     */
     public static String getTimeStr(Date oldTime, Date currentDate) {
         long time1 = currentDate.getTime();
 
         long time2 = oldTime.getTime();
+
+        long year1=currentDate.getYear();
+
+        long year2=oldTime.getYear();
 
         long time = (time1 - time2) / 1000;
 
@@ -144,12 +172,39 @@ public class Tools  {
             return time / 60 + "分钟前";
         } else if (time >= 3600 && time < 3600 * 24) {
             return time / 3600 + "小时前";
-        } else if (time >= 3600 * 24 && time < 3600 * 24 *365){
-            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        } else if (time >= 3600 * 24 && time < 3600 * 24 *365 && year1==year2){
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
             return sdf.format(oldTime);
+        }else{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.format(oldTime);
+        }
+    }
+
+    /**
+     * 检查用户是否被认证
+     * @param user
+     * @param view
+     */
+    public static void checkVerified(User user, ImageView view){
+        if (user.verified){
+            switch (user.verified_type){
+                case 0:
+                    view.setImageResource(R.mipmap.avatar_vip);
+                    view.setVisibility(View.VISIBLE);
+                    break;
+                case -1:
+                    view.setVisibility(View.GONE);
+                    break;
+                default:
+                    view.setImageResource(R.mipmap.avatar_enterprise_vip);
+                    view.setVisibility(View.VISIBLE);
+            }
+        }else if (user.verified_type==200 || user.verified_type==220){
+            view.setImageResource(R.mipmap.avatar_grassroot);
+            view.setVisibility(View.VISIBLE);
         }else {
-            SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
-            return sdf.format(oldTime);
+            view.setVisibility(View.GONE);
         }
     }
 }
