@@ -70,7 +70,7 @@ public class DetailPageListViewAdapter extends BaseAdapter {
             holder.tv_username.setText(mComments.get(position).user.name);
             ImageLoader.getInstance().displayImage(mComments.get(position).user.profile_image_url,holder.user_profile, WeiboApplication.options);
             holder.tv_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mComments.get(position).created_at), new Date()));
-            holder.de_detail.setText(mComments.get(position).text);
+            holder.de_detail.setText(Tools.getContent(context,mComments.get(position).text,holder.de_detail));
         }
         return v;
     }

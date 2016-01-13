@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private TextView mUserDesc;
     private ImageView mVerified;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,8 +192,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         startActivity(intent);
                         break;
                     case R.id.id_retweeted_detail:
-                        Toast.makeText(MainActivity.this, "5454545454540",
-                                Toast.LENGTH_SHORT).show();
+                        Status list1=(Status)mAdapter.getRetweetedItem(position);
+                        Intent intent1=new Intent(MainActivity.this,WeiboDetail.class);
+                        intent1.putExtra("sta",list1);
+                        intent1.putExtra("id",id);
+                        startActivity(intent1);
+                        break;
                     default:
                         break;
                 }

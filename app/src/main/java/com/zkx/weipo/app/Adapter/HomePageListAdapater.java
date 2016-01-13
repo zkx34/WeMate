@@ -26,13 +26,11 @@ import java.util.List;
 public class HomePageListAdapater extends BaseAdapter {
 
     private List<Status> mStatuslist;
-    private StatusList statusList;
     private LayoutInflater mInflater;
     private static Activity context;
     private static int wh;
 
     public HomePageListAdapater(StatusList mStatuslist, Activity context) {
-        this.statusList=mStatuslist;
         this.mStatuslist = mStatuslist.statusList;
         mInflater= LayoutInflater.from(context);
         HomePageListAdapater.context = context;
@@ -76,6 +74,14 @@ public class HomePageListAdapater extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return Long.parseLong((mStatuslist.get(position).id));
+    }
+
+    public Object getRetweetedItem(int position){
+        return mStatuslist.get(position).retweeted_status==null?null:mStatuslist.get(position).retweeted_status;
+    }
+
+    public long getRetweetedItemId(int position){
+        return mStatuslist.get(position).retweeted_status==null?null:Long.parseLong((mStatuslist.get(position).retweeted_status.id));
     }
 
     public interface OnItemClickLitener
@@ -176,7 +182,7 @@ public class HomePageListAdapater extends BaseAdapter {
         holder.retweeted_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id=getItemId(i);
+                long id=getRetweetedItemId(i);
                 mOnItemClickLitener.onItemClick(holder.retweeted_detail,i,id);
             }
         });

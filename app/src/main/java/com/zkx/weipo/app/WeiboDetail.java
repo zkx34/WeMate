@@ -74,7 +74,7 @@ public class WeiboDetail extends AppCompatActivity {
 
         de_name.setText(list.user.name);
         de_content.setText(Tools.getContent(this,list.text,de_content));
-        ImageLoader.getInstance().displayImage(list.user.avatar_large,profile);
+        ImageLoader.getInstance().displayImage(list.user.avatar_large,profile,WeiboApplication.options);
         de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(list.created_at), new Date()));
         de_source.setText("来自:"+list.getTextSource());
 
