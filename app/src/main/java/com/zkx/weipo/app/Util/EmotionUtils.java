@@ -69,6 +69,16 @@ public class EmotionUtils implements Serializable {
         emojiMap.put("[猪头]", R.drawable.d_zhutou);
         emojiMap.put("[熊猫]", R.drawable.d_xiongmao);
         emojiMap.put("[兔子]", R.drawable.d_tuzi);
+        emojiMap.put("[good]",R.drawable.good);
+        emojiMap.put("[赞]",R.drawable.zan);
+        emojiMap.put("[挤眼]",R.drawable.zy_org);
+        emojiMap.put("[心]",R.drawable.xin);
+        emojiMap.put("[耶]",R.drawable.ye);
+        emojiMap.put("[作揖]",R.drawable.zuoji);
+        emojiMap.put("[发红包]",R.drawable.fhb);
+        emojiMap.put("[月亮]",R.drawable.yl);
+        emojiMap.put("[草泥马]",R.drawable.cnm);
+
     }
 
     public static int getImgByName(String imgName) {

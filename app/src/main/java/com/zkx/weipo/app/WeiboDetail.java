@@ -37,6 +37,10 @@ public class WeiboDetail extends AppCompatActivity {
     private DetailPageListViewAdapter mAdapter;
     private MyListView mListView;
     private CommentList mCommentList;
+    private TextView txt_retweet;
+    private TextView txt_comment;
+    private CommentsAPI mCommentsAPI;
+
 
     private void initView(){
         //获取微博ID
@@ -56,6 +60,9 @@ public class WeiboDetail extends AppCompatActivity {
             }
         });
 
+        txt_retweet=(TextView)findViewById(R.id.txt_retweet);
+        txt_comment=(TextView)findViewById(R.id.txt_comment);
+
         final de.hdodenhof.circleimageview.CircleImageView profile=(de.hdodenhof.circleimageview.CircleImageView)findViewById(R.id.de_profile);
         final TextView de_name=(TextView)findViewById(R.id.de_name);
         final TextView de_content=(TextView)findViewById(R.id.de_content);
@@ -68,9 +75,9 @@ public class WeiboDetail extends AppCompatActivity {
         final RelativeLayout de_rl5=(RelativeLayout)findViewById(R.id.de_rl5);
         final MyGridView de_images2=(MyGridView)findViewById(R.id.de_images2);
         final ImageView de_verified=(ImageView)findViewById(R.id.de_verified);
+        mListView=(MyListView)findViewById(R.id.de_list);
         ScrollView mSv = (ScrollView) findViewById(R.id.de_sv);
         mSv.smoothScrollTo(0,0);
-        mListView=(MyListView)findViewById(R.id.de_listview);
 
         de_name.setText(list.user.name);
         de_content.setText(Tools.getContent(this,list.text,de_content));
@@ -117,7 +124,7 @@ public class WeiboDetail extends AppCompatActivity {
                 if (!TextUtils.isEmpty(s)){
                     mCommentList=CommentList.parse(s);
                     if (mCommentList != null) {
-                        mAdapter = new DetailPageListViewAdapter(WeiboDetail.this, mCommentList);
+                        mAdapter = new DetailPageListViewAdapter(WeiboDetail.this, mCommentList.commentList);
                         mListView.setAdapter(mAdapter);
                     }
                 }
@@ -139,6 +146,7 @@ public class WeiboDetail extends AppCompatActivity {
         WeiboApplication.getInstance();
         WeiboApplication.addActivity(this);
         initView();
+        txt_comment.performClick();
     }
 
     @Override

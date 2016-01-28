@@ -207,4 +207,6 @@ public class Tools  {
             view.setVisibility(View.GONE);
         }
     }
+
+
 }

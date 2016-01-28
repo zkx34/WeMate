@@ -71,6 +71,7 @@
                                 android:id="@+id/id_time"
                                 android:layout_below="@id/id_name"
                                 android:layout_alignStart="@id/id_name"
+                                android:layout_marginTop="2dp"
                                 android:textSize="14sp"/>
                     </RelativeLayout>
 

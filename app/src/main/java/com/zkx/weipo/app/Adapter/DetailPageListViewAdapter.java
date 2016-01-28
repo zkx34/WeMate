@@ -10,7 +10,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Comment;
-import com.zkx.weipo.app.openapi.models.CommentList;
 import com.zkx.weipo.app.util.Tools;
 
 import java.util.Date;
@@ -25,10 +24,11 @@ public class DetailPageListViewAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context context;
 
-    public DetailPageListViewAdapter(Context context,CommentList commentList) {
+    public DetailPageListViewAdapter(Context context,List<Comment> commentList) {
         this.context=context;
-        this.mComments = commentList.commentList;
-        mInflater=LayoutInflater.from(context);
+        this.mComments = commentList;
+        mInflater=(LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
