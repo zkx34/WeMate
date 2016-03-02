@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"用户头像被点击",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this,user_main_page.class));
             }
         });
 
@@ -266,8 +266,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                 .show();
                         break;
                     case R.id.user_headimg:
-                        Toast.makeText(MainActivity.this, position + " 用户头像被点击",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"无法查看其他用户信息",Toast.LENGTH_SHORT).show();
+                        /*Intent intent=new Intent(MainActivity.this,user_main_page.class);
+                        intent.putExtra("screen_name",
+                                mAdapter.getScreenName(position));
+                        startActivity(intent);*/
                         break;
                     default:
                         break;
@@ -379,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         return super.onKeyDown(keyCode,event);
     }
 
-    public RequestListener mListener=new RequestListener() {
+    private RequestListener mListener=new RequestListener() {
         @Override
         public void onComplete(String s) {
             switch (TYPE){

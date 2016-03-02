@@ -29,4 +29,8 @@
     <string name="success_new">发布成功</string>
     <string name="retweed_error">抱歉，该微博已被作者删除。</string>
     <string name="input_prefill"/>
+    <string name="title_activity_user_main_page">用户主页</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

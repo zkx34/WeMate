@@ -84,6 +84,10 @@ public class HomePageListAdapater extends BaseAdapter {
         return mStatuslist.get(position).retweeted_status==null?null:Long.parseLong((mStatuslist.get(position).retweeted_status.id));
     }
 
+    public String getScreenName(int position){
+        return mStatuslist.get(position).user.screen_name;
+    }
+
     public interface OnItemClickLitener
     {
         void onItemClick(View view, int position,long id);
