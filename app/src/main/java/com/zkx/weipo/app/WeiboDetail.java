@@ -22,9 +22,7 @@ import com.zkx.weipo.app.openapi.CommentsAPI;
 import com.zkx.weipo.app.openapi.models.CommentList;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
 import com.zkx.weipo.app.openapi.models.Status;
-import com.zkx.weipo.app.util.AccessTokenKeeper;
-import com.zkx.weipo.app.util.StringUtil;
-import com.zkx.weipo.app.util.Tools;
+import com.zkx.weipo.app.util.*;
 import com.zkx.weipo.app.view.MyGridView;
 
 import java.util.ArrayList;
@@ -82,6 +80,7 @@ public class WeiboDetail extends AppCompatActivity {
 
         de_name.setText(list.user.name);
         de_content.setText(Tools.getContent(this,list.text,de_content));
+        de_content.setMovementMethod(CustomLinkMovementMethod.getInstance());
         ImageLoader.getInstance().displayImage(list.user.avatar_large,profile,WeiboApplication.options);
         de_createdAt.setText(Tools.getTimeStr(Tools.strToDate(list.created_at), new Date()));
         de_source.setText("来自:"+list.getTextSource());

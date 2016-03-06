@@ -11,6 +11,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Comment;
+import com.zkx.weipo.app.util.ContentTextView;
+import com.zkx.weipo.app.util.CustomLinkMovementMethod;
 import com.zkx.weipo.app.util.Tools;
 
 import java.util.Date;
@@ -78,13 +80,14 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         holder.user_profile=(de.hdodenhof.circleimageview.CircleImageView)v.findViewById(R.id.user_profile);
         holder.tv_username=(TextView)v.findViewById(R.id.tv_username);
         holder.tv_createdAt=(TextView)v.findViewById(R.id.tv_createdAt);
-        holder.de_detail=(TextView)v.findViewById(R.id.de_detail);
+        holder.de_detail=(ContentTextView)v.findViewById(R.id.de_detail);
         holder.cardview_item=(CardView)v.findViewById(R.id.cardview_item);
         if (mComments!=null){
             holder.tv_username.setText(mComments.get(position).user.name);
             ImageLoader.getInstance().displayImage(mComments.get(position).user.profile_image_url,holder.user_profile, WeiboApplication.options);
             holder.tv_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mComments.get(position).created_at), new Date()));
             holder.de_detail.setText(Tools.getContent(context,mComments.get(position).text,holder.de_detail));
+            holder.de_detail.setMovementMethod(CustomLinkMovementMethod.getInstance());
         }
 
         holder.cardview_item.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +130,7 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         de.hdodenhof.circleimageview.CircleImageView user_profile;
         TextView tv_username;
         TextView tv_createdAt;
-        TextView de_detail;
+        ContentTextView de_detail;
         CardView cardview_item;
     }
 }
