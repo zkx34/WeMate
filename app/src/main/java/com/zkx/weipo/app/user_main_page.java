@@ -49,6 +49,7 @@ public class user_main_page extends AppCompatActivity {
     }
 
     private void getStatus(){
+        //String name=getIntent().getStringExtra("name");
         mStatusesAPI.userTimeline(0, statusMaxId, 50, 1, false, 0, false, new RequestListener() {
             @Override
             public void onComplete(String s) {
@@ -58,18 +59,13 @@ public class user_main_page extends AppCompatActivity {
                     if (mAdapter==null){
                         initAdapter();
                         Toast.makeText(user_main_page.this,"加载",Toast.LENGTH_SHORT).show();
-                        statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+//                        statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                     }else {
-                        //mListView.hideFooterView();
-                        //loading.setVisibility(View.GONE);
                         mAdapter.refresh(mStatusLists.statusList);
-                        statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+        //                statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                     }
                 }else {
                     Toast.makeText(user_main_page.this,"加载失败",Toast.LENGTH_SHORT).show();
-                    //加载完150条微博后
-                   // loading.setVisibility(View.GONE);
-                   // done.setVisibility(View.VISIBLE);
                 }
             }
 

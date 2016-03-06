@@ -132,7 +132,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,user_main_page.class));
+                String name=mAdapter.getScreenName(0);
+                Intent intent=new Intent(MainActivity.this,user_main_page.class);
+                //intent.putExtra("name",name);
+                startActivity(intent);
             }
         });
 
@@ -404,7 +407,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 case 3:
                     mStatusLists=StatusList.parse(s);
                     if ((mStatusLists != null ? mStatusLists.statusList : null) != null && mStatusLists.total_number > 0) {
-                        //Long.parseLong(status.get(status.size() -1).getMid())-1;
                         if (mAdapter==null){
                             initAdapter();
                             statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
