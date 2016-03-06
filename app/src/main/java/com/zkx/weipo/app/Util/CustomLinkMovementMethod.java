@@ -50,7 +50,6 @@ public class CustomLinkMovementMethod extends LinkMovementMethod {
                 if(widget instanceof ContentTextView){
                     ((ContentTextView)widget).linkHit = true;
                 }
-
                 return true;
             } else {
                 Selection.removeSelection(buffer);

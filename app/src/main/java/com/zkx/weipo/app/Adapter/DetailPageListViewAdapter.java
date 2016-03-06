@@ -1,6 +1,7 @@
 package com.zkx.weipo.app.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class DetailPageListViewAdapter extends BaseAdapter {
     private List<Comment> mComments;
     private LayoutInflater mInflater;
     private Context context;
+    private OnItemClickLitener mOnItemClickLitener;
 
     public DetailPageListViewAdapter(Context context,List<Comment> commentList) {
         this.context=context;
@@ -51,8 +53,20 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public interface OnItemClickLitener
+    {
+        void onItemClick(View view, int position,long id);
+        void onItemLongClick(View view , int position,long id);
+    }
+
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
+    {
+        this.mOnItemClickLitener = mOnItemClickLitener;
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View v;
         if (convertView==null){
             v=mInflater.inflate(R.layout.item_detail,null);
@@ -60,18 +74,52 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         else {
             v=convertView;
         }
-        ViewHolder holder=new ViewHolder();
+        final ViewHolder holder=new ViewHolder();
         holder.user_profile=(de.hdodenhof.circleimageview.CircleImageView)v.findViewById(R.id.user_profile);
         holder.tv_username=(TextView)v.findViewById(R.id.tv_username);
         holder.tv_createdAt=(TextView)v.findViewById(R.id.tv_createdAt);
         holder.de_detail=(TextView)v.findViewById(R.id.de_detail);
-
+        holder.cardview_item=(CardView)v.findViewById(R.id.cardview_item);
         if (mComments!=null){
             holder.tv_username.setText(mComments.get(position).user.name);
             ImageLoader.getInstance().displayImage(mComments.get(position).user.profile_image_url,holder.user_profile, WeiboApplication.options);
             holder.tv_createdAt.setText(Tools.getTimeStr(Tools.strToDate(mComments.get(position).created_at), new Date()));
             holder.de_detail.setText(Tools.getContent(context,mComments.get(position).text,holder.de_detail));
         }
+
+        holder.cardview_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long id=getItemId(position);
+                mOnItemClickLitener.onItemClick(holder.cardview_item,position,id);
+            }
+        });
+
+        holder.cardview_item.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                long id=getItemId(position);
+                mOnItemClickLitener.onItemLongClick(holder.cardview_item,position,id);
+                return false;
+            }
+        });
+
+        holder.de_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long id=getItemId(position);
+                mOnItemClickLitener.onItemClick(holder.de_detail,position,id);
+            }
+        });
+
+        holder.user_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long id=getItemId(position);
+                mOnItemClickLitener.onItemClick(holder.user_profile,position,id);
+            }
+        });
+
         return v;
     }
 
@@ -80,5 +128,6 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         TextView tv_username;
         TextView tv_createdAt;
         TextView de_detail;
+        CardView cardview_item;
     }
 }

@@ -16,7 +16,6 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
 
     private View footerView=null;
     private Context context;
-    private int firstVisibleitem;
     private OnBottomListener listener;
     private ImageLoader imageLoader;
     private final boolean pauseOnScroll=true;
@@ -98,7 +97,6 @@ public class HomePage_ListView extends ListView implements AbsListView.OnScrollL
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        this.firstVisibleitem=firstVisibleItem;
     }
 
     public void setOnBottomListener(OnBottomListener listener){

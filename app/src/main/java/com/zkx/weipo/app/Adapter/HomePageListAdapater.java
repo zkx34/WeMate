@@ -106,7 +106,7 @@ public class HomePageListAdapater extends BaseAdapter {
 
         View v;
         if (convertView==null){
-            v=mInflater.inflate(R.layout.card_view,null);
+            v=mInflater.inflate(R.layout.card_view_main,null);
         }
         else {
             v=convertView;
