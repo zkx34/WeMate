@@ -34,7 +34,11 @@ import java.util.regex.Pattern;
  * Created by Administrator on 2015/9/19.
  */
 public class Tools  {
-
+    /**
+     * 判断字符串是否为空
+     * @param s
+     * @return
+     */
     public static boolean isEmpty(String s){
         return null==s||"".equals(s);
     }
@@ -219,6 +223,13 @@ public class Tools  {
         }
     }
 
+    /**
+     * 九宫格图片查看
+     * @param context 上下文
+     * @param wh 屏幕宽度
+     * @param gv_images Gridview
+     * @param list 图片网络地址
+     */
     public static void initInfoImages(final Activity context, int wh, MyGridView gv_images, final ArrayList<String> list){
         if(list!=null&&!list.equals("")){
             int w=0;
@@ -262,15 +273,31 @@ public class Tools  {
         }
     }
 
+    /**
+     * 计算每行的单个图片宽度
+     * @param context
+     * @return
+     */
     public static int getWidth(Activity context){
         return (getScreenWidth(context)- Dp2Px(context, 99))/3;
     }
 
+    /**
+     * DP转为PX
+     * @param context
+     * @param dp
+     * @return
+     */
     public static int Dp2Px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
+    /**
+     * 获取屏幕宽度
+     * @param activity
+     * @return
+     */
     @SuppressWarnings("deprecation")
     public static int getScreenWidth(Activity activity){
         int width;

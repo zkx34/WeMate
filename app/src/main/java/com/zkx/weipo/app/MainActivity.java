@@ -411,7 +411,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                             initAdapter();
                             statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         }else {
-                            //mListView.hideFooterView();
                             loading.setVisibility(View.GONE);
                             mAdapter.refresh(mStatusLists.statusList);
                             statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;

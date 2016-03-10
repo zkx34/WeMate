@@ -36,9 +36,11 @@ public class WeiboDetail extends AppCompatActivity {
     private ListView mListView;
     private CommentList mCommentList;
     private Button retweet;
-    private TextView txt_comment;
+    private TextView load_more;
     private CommentsAPI mCommentsAPI;
     private long id;
+    private long MAX_ID=0;
+    private LinearLayout done;
 
     private void bindView(){
         //获取微博ID
@@ -53,20 +55,20 @@ public class WeiboDetail extends AppCompatActivity {
                 finish();
             }
         });
-
         mListView=(ListView) findViewById(R.id.de_list);
         LayoutInflater inflater=(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View Header=inflater.inflate(R.layout.card_view_detail,null);
+        View Footer=View.inflate(this,R.layout.footer,null);
         mListView.addHeaderView(Header);
+        mListView.addFooterView(Footer,null,true);
         mListView.setAdapter(null);
         retweet=(Button) Header.findViewById(R.id.de_repeat);
-        txt_comment=(TextView)Header.findViewById(R.id.txt_comment);
-
+        load_more=(TextView)Footer.findViewById(R.id.load_more);
+        done=(LinearLayout)Footer.findViewById(R.id.done);
+        Footer.setOnClickListener(new loadMoreOnClickListener());
         retweet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(WeiboDetail.this, "点击头像短", Toast.LENGTH_LONG).show();
-            }
+            public void onClick(View v) {Toast.makeText(WeiboDetail.this, "点击头像短", Toast.LENGTH_LONG).show();}
         });
 
         final de.hdodenhof.circleimageview.CircleImageView profile=(de.hdodenhof.circleimageview.CircleImageView)Header.findViewById(R.id.de_profile);
@@ -150,13 +152,28 @@ public class WeiboDetail extends AppCompatActivity {
     }
 
     private void getComments(){
-        mCommentsAPI.show(id, 0, 0, 20, 1, 0, new RequestListener() {
+        mCommentsAPI.show(id, 0, MAX_ID, 20, 1, 0, new RequestListener() {
             @Override
             public void onComplete(String s) {
                 if (!TextUtils.isEmpty(s)){
                     mCommentList=CommentList.parse(s);
-                    if (mCommentList != null) {
-                        setAdapter();
+                    if (mCommentList != null && mCommentList.total_number != 0) {
+                        if (mAdapter == null){
+                            setAdapter();
+                            MAX_ID =Long.parseLong(mCommentList.commentList.get(mCommentList.commentList.size() - 1).mid)-1;
+                        }else {
+                            if (mAdapter.getCount() < mCommentList.total_number){
+                                mAdapter.refresh(mCommentList.commentList);
+                                visibleControl(false);
+                                MAX_ID =Long.parseLong(mCommentList.commentList.get(mCommentList.commentList.size() - 1).mid)-1;
+                            }else if (mAdapter.getCount() == mCommentList.total_number){
+                                visibleControl(false);
+                                load_more.setText("已无更多评论");
+                            }
+                        }
+                    }else {
+                        visibleControl(false);
+                        load_more.setText("暂时无人评论");
                     }
                 }
             }
@@ -201,4 +218,20 @@ public class WeiboDetail extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void visibleControl(boolean isShow){
+        load_more.setVisibility(isShow?View.GONE:View.VISIBLE);
+        done.setVisibility(isShow?View.VISIBLE:View.GONE);
+    }
+
+    public void loadMore(){
+        getComments();
+    }
+
+    final class loadMoreOnClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            visibleControl(true);
+            loadMore();
+        }
+    }
 }
