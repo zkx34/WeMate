@@ -1,6 +1,8 @@
 package com.zkx.weipo.app.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Spannable;
@@ -8,12 +10,18 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.zkx.weipo.app.ImagePagerActivity;
 import com.zkx.weipo.app.R;
+import com.zkx.weipo.app.adapter.GridViewAdapter;
 import com.zkx.weipo.app.openapi.models.User;
+import com.zkx.weipo.app.view.MyGridView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +35,9 @@ import java.util.regex.Pattern;
  */
 public class Tools  {
 
+    public static boolean isEmpty(String s){
+        return null==s||"".equals(s);
+    }
     /**
      * 识别文字中的@用户、话题、网址等内容
      * @param context
@@ -208,5 +219,64 @@ public class Tools  {
         }
     }
 
+    public static void initInfoImages(final Activity context, int wh, MyGridView gv_images, final ArrayList<String> list){
+        if(list!=null&&!list.equals("")){
+            int w=0;
+            switch (list.size()) {
+                case 1:
+                    w=wh;
+                    gv_images.setNumColumns(1);
+                    break;
+                case 2:
+                case 4:
+                    w=2*wh+ Dp2Px(context, 2);
+                    gv_images.setNumColumns(2);
+                    break;
+                case 3:
+                case 5:
+                case 6:
+                    w=wh*3+Dp2Px(context, 2)*2;
+                    gv_images.setNumColumns(3);
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    w=wh*3+Dp2Px(context, 2)*2;
+                    gv_images.setNumColumns(3);
+                    break;
+            }
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            gv_images.setLayoutParams(lp);
+            GridViewAdapter nearByInfoImgsAdapter = new GridViewAdapter(context, list);
+            gv_images.setAdapter(nearByInfoImgsAdapter);
+            nearByInfoImgsAdapter.setOnItemClickLitener(new GridViewAdapter.OnItemClickLitener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent intent = new Intent(context, ImagePagerActivity.class);
+                    // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+                    intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, Tools.getOriginalPicUrls(list));
+                    intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+                    context.startActivity(intent);
+                }
+            });
+        }
+    }
 
+    public static int getWidth(Activity context){
+        return (getScreenWidth(context)- Dp2Px(context, 99))/3;
+    }
+
+    public static int Dp2Px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static int getScreenWidth(Activity activity){
+        int width;
+        WindowManager windowManager = activity.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        width=display.getWidth();
+        return width;
+    }
 }

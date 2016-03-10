@@ -1,5 +1,6 @@
 package com.zkx.weipo.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -25,10 +26,12 @@ public class DetailPageListViewAdapter extends BaseAdapter {
 
     private List<Comment> mComments;
     private LayoutInflater mInflater;
-    private Context context;
+    private static Activity context;
     private OnItemClickLitener mOnItemClickLitener;
+   // private static Activity context;
+    private static int wh;
 
-    public DetailPageListViewAdapter(Context context,List<Comment> commentList) {
+    public DetailPageListViewAdapter(Activity context, List<Comment> commentList) {
         this.context=context;
         this.mComments = commentList;
         mInflater=(LayoutInflater) context
@@ -133,4 +136,5 @@ public class DetailPageListViewAdapter extends BaseAdapter {
         ContentTextView de_detail;
         CardView cardview_item;
     }
+
 }

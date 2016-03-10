@@ -1,19 +1,19 @@
 package com.zkx.weipo.app.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.zkx.weipo.app.ImagePagerActivity;
 import com.zkx.weipo.app.R;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.models.Status;
 import com.zkx.weipo.app.openapi.models.StatusList;
-import com.zkx.weipo.app.util.*;
+import com.zkx.weipo.app.util.ContentTextView;
+import com.zkx.weipo.app.util.CustomLinkMovementMethod;
+import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.view.MyGridView;
 
 import java.util.ArrayList;
@@ -28,13 +28,11 @@ public class HomePageListAdapater extends BaseAdapter {
     private List<Status> mStatuslist;
     private LayoutInflater mInflater;
     private static Activity context;
-    private static int wh;
 
     public HomePageListAdapater(StatusList mStatuslist, Activity context) {
         this.mStatuslist = mStatuslist.statusList;
         mInflater= LayoutInflater.from(context);
         HomePageListAdapater.context = context;
-        wh=(SysUtils.getScreenWidth(context)- SysUtils.Dp2Px(context, 99))/3;
     }
 
     private static class ViewHolder{
@@ -141,10 +139,10 @@ public class HomePageListAdapater extends BaseAdapter {
         Tools.checkVerified(list.user,holder.verified);
 
         //判断微博中是否有图片
-        if (!StringUtil.isEmpty(list.thumbnail_pic)){
+        if (!Tools.isEmpty(list.thumbnail_pic)){
             ArrayList<String> list1=list.pic_urls;
             holder.rl4.setVisibility(View.VISIBLE);
-            initInfoImages(holder.gv_images,list1);
+            Tools.initInfoImages(context,Tools.getWidth(context),holder.gv_images,list1);
         }else {
             holder.rl4.setVisibility(View.GONE);
         }
@@ -158,10 +156,10 @@ public class HomePageListAdapater extends BaseAdapter {
                             ":"+list.retweeted_status.text,holder.retweeted_detail));
             holder.retweeted_detail.setMovementMethod(CustomLinkMovementMethod.getInstance());
             //转发图片是否有图片
-            if (!StringUtil.isEmpty(list.retweeted_status.thumbnail_pic)){
+            if (!Tools.isEmpty(list.retweeted_status.thumbnail_pic)){
                 ArrayList<String> list2=list.retweeted_status.pic_urls;
                 holder.rl5.setVisibility(View.VISIBLE);
-                initInfoImages(holder.re_images,list2);
+                Tools.initInfoImages(context,Tools.getWidth(context),holder.re_images,list2);
             }else {
                 holder.rl5.setVisibility(View.GONE);
             }
@@ -233,52 +231,5 @@ public class HomePageListAdapater extends BaseAdapter {
         });
 
         return v;
-    }
-
-    public static void initInfoImages(MyGridView gv_images, final ArrayList<String> list){
-        if(list!=null&&!list.equals("")){
-            int w=0;
-            switch (list.size()) {
-                case 1:
-                    w=wh;
-                    gv_images.setNumColumns(1);
-                    break;
-                case 2:
-                case 4:
-                    w=2*wh+ SysUtils.Dp2Px(context, 2);
-                    gv_images.setNumColumns(2);
-                    break;
-                case 3:
-                case 5:
-                case 6:
-                    w=wh*3+SysUtils.Dp2Px(context, 2)*2;
-                    gv_images.setNumColumns(3);
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                    w=wh*3+SysUtils.Dp2Px(context, 2)*2;
-                    gv_images.setNumColumns(3);
-                    break;
-            }
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            gv_images.setLayoutParams(lp);
-            GridViewAdapter nearByInfoImgsAdapter = new GridViewAdapter(context, list);
-            gv_images.setAdapter(nearByInfoImgsAdapter);
-            gv_images.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
-                    imageBrower(arg2,Tools.getOriginalPicUrls(list));
-                }
-            });
-        }
-    }
-
-    protected static void imageBrower(int position, ArrayList<String> urls2) {
-        Intent intent = new Intent(context, ImagePagerActivity.class);
-        // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
-        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
-        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
-        context.startActivity(intent);
     }
 }

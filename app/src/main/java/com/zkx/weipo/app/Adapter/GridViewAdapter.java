@@ -9,7 +9,7 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.zkx.weipo.app.R;
-import com.zkx.weipo.app.util.SysUtils;
+import com.zkx.weipo.app.util.Tools;
 
 import java.util.ArrayList;
 
@@ -19,10 +19,22 @@ public class GridViewAdapter extends BaseAdapter {
 	ArrayList<String> list;
 	private int wh;
 
+	public interface OnItemClickLitener
+	{
+		void onItemClick(View view, int position);
+	}
+
+	private OnItemClickLitener mOnItemClickLitener;
+
+	public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
+	{
+		this.mOnItemClickLitener = mOnItemClickLitener;
+	}
+
 	public GridViewAdapter(Activity context, ArrayList<String> data) {
 		this.context=context;
-		this.wh=(SysUtils.getScreenWidth(context)-SysUtils.Dp2Px(context, 99))/3;
 		this.list=data;
+		this.wh= Tools.getWidth(context);
 	}
 
 	@Override
@@ -39,7 +51,6 @@ public class GridViewAdapter extends BaseAdapter {
 	public long getItemId(int arg0) {
 		return arg0;
 	}
-
 
 	@Override
 	public View getView(final int position, View view, ViewGroup arg2) {
@@ -59,9 +70,15 @@ public class GridViewAdapter extends BaseAdapter {
 		} else {
 			holder = (Holder) view.getTag();
 		}
-		SimpleDraweeView draweeView = holder.imageView;
+		final SimpleDraweeView draweeView = holder.imageView;
 		Uri uri=Uri.parse(list.get(position));
 		draweeView.setImageURI(uri);
+		draweeView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mOnItemClickLitener.onItemClick(draweeView,position);
+			}
+		});
 		return view;
 	}
 

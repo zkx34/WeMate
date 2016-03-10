@@ -15,7 +15,6 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.zkx.weipo.app.adapter.DetailPageListViewAdapter;
-import com.zkx.weipo.app.adapter.HomePageListAdapater;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.CommentsAPI;
@@ -36,7 +35,7 @@ public class WeiboDetail extends AppCompatActivity {
     private DetailPageListViewAdapter mAdapter;
     private ListView mListView;
     private CommentList mCommentList;
-    private TextView txt_retweet;
+    private Button retweet;
     private TextView txt_comment;
     private CommentsAPI mCommentsAPI;
     private long id;
@@ -57,13 +56,18 @@ public class WeiboDetail extends AppCompatActivity {
 
         mListView=(ListView) findViewById(R.id.de_list);
         LayoutInflater inflater=(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View Header=inflater.inflate(R.layout.card_view_detail,mListView,false);
+        View Header=inflater.inflate(R.layout.card_view_detail,null);
         mListView.addHeaderView(Header);
         mListView.setAdapter(null);
-        //ScrollView mSv = (ScrollView) findViewById(R.id.de_sv);
-       // mSv.smoothScrollTo(0,0);
-        txt_retweet=(TextView)Header.findViewById(R.id.txt_retweet);
+        retweet=(Button) Header.findViewById(R.id.de_repeat);
         txt_comment=(TextView)Header.findViewById(R.id.txt_comment);
+
+        retweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(WeiboDetail.this, "点击头像短", Toast.LENGTH_LONG).show();
+            }
+        });
 
         final de.hdodenhof.circleimageview.CircleImageView profile=(de.hdodenhof.circleimageview.CircleImageView)Header.findViewById(R.id.de_profile);
         final TextView de_name=(TextView)Header.findViewById(R.id.de_name);
@@ -87,10 +91,10 @@ public class WeiboDetail extends AppCompatActivity {
         //判断用户是否认证
         Tools.checkVerified(list.user,de_verified);
         //判断微博中是否有图片
-        if (!StringUtil.isEmpty(list.thumbnail_pic)){
-            ArrayList<String> list2=list.pic_urls;
+        if (!Tools.isEmpty(list.thumbnail_pic)){
+            final ArrayList<String> list2=list.pic_urls;
             de_r14.setVisibility(View.VISIBLE);
-            HomePageListAdapater.initInfoImages(de_images1,list2);
+            Tools.initInfoImages(WeiboDetail.this,Tools.getWidth(WeiboDetail.this),de_images1,list2);
         }else {
             de_r14.setVisibility(View.GONE);
         }
@@ -100,10 +104,10 @@ public class WeiboDetail extends AppCompatActivity {
             de_retweet_detail.setText(Tools.getContent(this,"@"+list.retweeted_status.user.name+
                     ":"+list.retweeted_status.text,de_retweet_detail));
             //转发图片是否有图片
-            if (!StringUtil.isEmpty(list.retweeted_status.thumbnail_pic)){
+            if (!Tools.isEmpty(list.retweeted_status.thumbnail_pic)){
                 ArrayList<String> list2=list.retweeted_status.pic_urls;
                 de_rl5.setVisibility(View.VISIBLE);
-                HomePageListAdapater.initInfoImages(de_images2,list2);
+                Tools.initInfoImages(WeiboDetail.this,Tools.getWidth(WeiboDetail.this),de_images2,list2);
             }else {
                 de_rl5.setVisibility(View.GONE);
             }
