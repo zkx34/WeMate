@@ -22,16 +22,14 @@ import java.util.List;
 /**
  * Created by Administrator on 2015/11/21.
  */
-public class DetailPageListViewAdapter extends BaseAdapter {
+public class DetailPage_ListView_Comment_Adapter extends BaseAdapter {
 
     private List<Comment> mComments;
     private LayoutInflater mInflater;
     private static Activity context;
     private OnItemClickLitener mOnItemClickLitener;
-   // private static Activity context;
-    private static int wh;
 
-    public DetailPageListViewAdapter(Activity context, List<Comment> commentList) {
+    public DetailPage_ListView_Comment_Adapter(Activity context, List<Comment> commentList) {
         this.context=context;
         this.mComments = commentList;
         mInflater=(LayoutInflater) context

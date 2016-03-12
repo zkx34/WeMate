@@ -17,11 +17,13 @@
     <string name="logout">退出当前帐号</string>
     <string name="retweet_title">转发微博</string>
     <string name="retweet">转发</string>
+    <string name="retweet_cout">转发数</string>
     <string name="cancle">取消</string>
     <string name="input_hint">说说分享心得</string>
     <string name="com_hint">说点什么好呢</string>
     <string name="com_title">评论给Ta</string>
     <string name="comment">评论</string>
+    <string name="comment_cout">评论数</string>
     <string name="exit">退出</string>
     <string name="loading">加载中</string>
     <string name="total">140/140</string>

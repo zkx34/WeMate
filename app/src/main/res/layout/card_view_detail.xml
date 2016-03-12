@@ -203,7 +203,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/retweet"
+                        android:text="@string/retweet_cout"
                         android:textColor="@color/text_grey"
                         android:textSize="16sp"
                         android:layout_marginLeft="24dp"
@@ -215,7 +215,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="10"
                         android:textColor="@color/text_grey"
                         android:textSize="16sp"/>
 
@@ -232,7 +231,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/comment"
+                        android:text="@string/comment_cout"
                         android:textColor="@color/text_grey"
                         android:textSize="16sp"
                         android:layout_marginLeft="16dp"
@@ -244,7 +243,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="10"
                         android:textColor="@color/text_grey"
                         android:textSize="16sp"/>
             </LinearLayout>

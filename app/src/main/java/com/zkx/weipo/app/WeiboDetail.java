@@ -10,18 +10,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.zkx.weipo.app.adapter.DetailPageListViewAdapter;
+import com.zkx.weipo.app.adapter.DetailPage_ListView_Comment_Adapter;
+import com.zkx.weipo.app.adapter.DetailPage_ListView_Repost_Adapter;
 import com.zkx.weipo.app.api.Constants;
 import com.zkx.weipo.app.app.WeiboApplication;
 import com.zkx.weipo.app.openapi.CommentsAPI;
+import com.zkx.weipo.app.openapi.legacy.StatusesAPI;
 import com.zkx.weipo.app.openapi.models.CommentList;
 import com.zkx.weipo.app.openapi.models.ErrorInfo;
+import com.zkx.weipo.app.openapi.models.RepostList;
 import com.zkx.weipo.app.openapi.models.Status;
-import com.zkx.weipo.app.util.*;
+import com.zkx.weipo.app.util.AccessTokenKeeper;
+import com.zkx.weipo.app.util.CustomLinkMovementMethod;
+import com.zkx.weipo.app.util.Tools;
 import com.zkx.weipo.app.view.MyGridView;
 
 import java.util.ArrayList;
@@ -32,15 +38,19 @@ import java.util.Date;
  */
 public class WeiboDetail extends AppCompatActivity {
 
-    private DetailPageListViewAdapter mAdapter;
+    private DetailPage_ListView_Comment_Adapter mAdapter;
+    private DetailPage_ListView_Repost_Adapter mRepostAdapter;
     private ListView mListView;
     private CommentList mCommentList;
-    private Button retweet;
+    private RepostList mRepostList;
     private TextView load_more;
     private CommentsAPI mCommentsAPI;
+    private StatusesAPI mStatusesAPI;
     private long id;
-    private long MAX_ID=0;
+    private long COMMENT_MAX_ID =0;
+    private long REPOST_MAX_ID=0;
     private LinearLayout done;
+    private int TAG=0;
 
     private void bindView(){
         //获取微博ID
@@ -62,14 +72,14 @@ public class WeiboDetail extends AppCompatActivity {
         mListView.addHeaderView(Header);
         mListView.addFooterView(Footer,null,true);
         mListView.setAdapter(null);
-        retweet=(Button) Header.findViewById(R.id.de_repeat);
+        TextView retweet_Count = (TextView) Header.findViewById(R.id.retweet_count);
+        TextView comment_Count = (TextView) Header.findViewById(R.id.comment_count);
+        retweet_Count.setText(String.valueOf(list.reposts_count));
+        comment_Count.setText(String.valueOf(list.comments_count));
+        Button retweet = (Button) Header.findViewById(R.id.de_repeat);
+        Button comment = (Button) Header.findViewById(R.id.de_comment);
         load_more=(TextView)Footer.findViewById(R.id.load_more);
         done=(LinearLayout)Footer.findViewById(R.id.done);
-        Footer.setOnClickListener(new loadMoreOnClickListener());
-        retweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {Toast.makeText(WeiboDetail.this, "点击头像短", Toast.LENGTH_LONG).show();}
-        });
 
         final de.hdodenhof.circleimageview.CircleImageView profile=(de.hdodenhof.circleimageview.CircleImageView)Header.findViewById(R.id.de_profile);
         final TextView de_name=(TextView)Header.findViewById(R.id.de_name);
@@ -121,12 +131,101 @@ public class WeiboDetail extends AppCompatActivity {
             de_retweet_content.setVisibility(View.GONE);
         }
 
+        Footer.setOnClickListener(new loadMoreOnClickListener());
+        retweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TAG=3;
+                new MaterialDialog.Builder(WeiboDetail.this)
+                        .title(R.string.retweet_title)
+                        .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                                if (charSequence.length() > 140){
+                                    Toast.makeText(WeiboDetail.this,"转发内容超出限制",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (charSequence==""){
+                                    charSequence="转发微博";
+                                }
+                                mStatusesAPI.repost(id, String.valueOf(charSequence),0,mListener);
+                            }
+                        })
+                        .show();
+            }
+        });
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TAG=4;
+                new MaterialDialog.Builder(WeiboDetail.this)
+                        .title(R.string.com_title)
+                        .input(R.string.com_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
+                                mCommentsAPI.create(String.valueOf(charSequence),id,false,mListener);
+                            }
+                        })
+                        .show();
+            }
+        });
+        retweet_Count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mRepostAdapter != null){
+                    mListView.setAdapter(mRepostAdapter);
+                }
+                getRepost();
+            }
+        });
+        comment_Count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAdapter != null){
+                    mListView.setAdapter(mAdapter);
+                }
+                getComments();
+            }
+        });
+    }
+
+    private void getRepost(){
+        TAG=2;
+        mStatusesAPI.repostTimeline(id,0,REPOST_MAX_ID,20,1,0,mListener);
     }
 
     private void setAdapter(){
-        mAdapter = new DetailPageListViewAdapter(WeiboDetail.this, mCommentList.commentList);
+        mAdapter = new DetailPage_ListView_Comment_Adapter(WeiboDetail.this, mCommentList.commentList);
         mListView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickLitener(new DetailPageListViewAdapter.OnItemClickLitener() {
+        mAdapter.setOnItemClickLitener(new DetailPage_ListView_Comment_Adapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position, long id) {
+                switch (view.getId()){
+                    case R.id.user_profile:
+                        Toast.makeText(WeiboDetail.this, "点击头像短", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.de_detail:
+                    case R.id.cardview_item:
+                        Toast.makeText(WeiboDetail.this,"点击文章短1" , Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position, long id) {
+                switch (view.getId()){
+                    case R.id.cardview_item:
+                        Toast.makeText(WeiboDetail.this,"点击文章长1" , Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void setmRepostAdapter(){
+        mRepostAdapter = new DetailPage_ListView_Repost_Adapter(WeiboDetail.this, mRepostList.repostsList);
+        mListView.setAdapter(mRepostAdapter);
+        mRepostAdapter.setOnItemClickLitener(new DetailPage_ListView_Repost_Adapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position, long id) {
                 switch (view.getId()){
@@ -152,38 +251,8 @@ public class WeiboDetail extends AppCompatActivity {
     }
 
     private void getComments(){
-        mCommentsAPI.show(id, 0, MAX_ID, 20, 1, 0, new RequestListener() {
-            @Override
-            public void onComplete(String s) {
-                if (!TextUtils.isEmpty(s)){
-                    mCommentList=CommentList.parse(s);
-                    if (mCommentList != null && mCommentList.total_number != 0) {
-                        if (mAdapter == null){
-                            setAdapter();
-                            MAX_ID =Long.parseLong(mCommentList.commentList.get(mCommentList.commentList.size() - 1).mid)-1;
-                        }else {
-                            if (mAdapter.getCount() < mCommentList.total_number){
-                                mAdapter.refresh(mCommentList.commentList);
-                                visibleControl(false);
-                                MAX_ID =Long.parseLong(mCommentList.commentList.get(mCommentList.commentList.size() - 1).mid)-1;
-                            }else if (mAdapter.getCount() == mCommentList.total_number){
-                                visibleControl(false);
-                                load_more.setText("已无更多评论");
-                            }
-                        }
-                    }else {
-                        visibleControl(false);
-                        load_more.setText("暂时无人评论");
-                    }
-                }
-            }
-
-            @Override
-            public void onWeiboException(WeiboException e) {
-                ErrorInfo info = ErrorInfo.parse(e.getMessage());
-                Toast.makeText(WeiboDetail.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
-            }
-        });
+        TAG=1;
+        mCommentsAPI.show(id, 0, COMMENT_MAX_ID, 20, 1, 0, mListener);
     }
 
     @Override
@@ -193,6 +262,7 @@ public class WeiboDetail extends AppCompatActivity {
         Oauth2AccessToken mAccessToken = AccessTokenKeeper.readAccessToken(this);
         // 获取用户信息接口
         mCommentsAPI=new CommentsAPI(this, Constants.APP_KEY,mAccessToken);
+        mStatusesAPI=new StatusesAPI(this,Constants.APP_KEY,mAccessToken);
         WeiboApplication.getInstance();
         WeiboApplication.addActivity(this);
         bindView();
@@ -226,6 +296,93 @@ public class WeiboDetail extends AppCompatActivity {
     public void loadMore(){
         getComments();
     }
+
+    private RequestListener mListener=new RequestListener() {
+        @Override
+        public void onComplete(String s) {
+            switch (TAG){
+                case 1://获取评论的处理
+                    if (!TextUtils.isEmpty(s)){
+                        mCommentList=CommentList.parse(s);
+                        if (mCommentList.commentList != null && mCommentList.total_number != 0) {
+                            if (mAdapter == null){
+                                setAdapter();
+                                COMMENT_MAX_ID =Long.parseLong(mCommentList.commentList.get(mCommentList.commentList.size() - 1).mid)-1;
+                                if (mAdapter.getCount() == mCommentList.total_number){
+                                    visibleControl(false);
+                                    load_more.setText(R.string.done);
+                                }
+                            }else {
+                                if (mAdapter.getCount() < mCommentList.total_number){
+                                    mAdapter.refresh(mCommentList.commentList);
+                                    visibleControl(false);
+                                    COMMENT_MAX_ID =Long.parseLong(mCommentList.commentList.get(mCommentList.commentList.size() - 1).mid)-1;
+                                }else if (mAdapter.getCount() == mCommentList.total_number){
+                                    visibleControl(false);
+                                    load_more.setText(R.string.done);
+                                }
+                            }
+                        }else {
+                            visibleControl(false);
+                            load_more.setText(R.string.done);
+                        }
+                    }
+                    break;
+
+                case 2://获取转发微博的处理
+                    if (!TextUtils.isEmpty(s)){
+                        mRepostList=RepostList.parse(s);
+                        if (mRepostList.repostsList != null && mRepostList.total_number != 0) {
+                            if (mRepostAdapter == null){
+                                setmRepostAdapter();
+                                REPOST_MAX_ID =(mRepostList.repostsList.get(mRepostList.repostsList.size() - 1).mid)-1;
+                                if (mRepostAdapter.getCount() == mRepostList.total_number){
+                                    visibleControl(false);
+                                    load_more.setText(R.string.done);
+                                }
+                            }else {
+                                if (mRepostAdapter.getCount() < mRepostList.total_number){
+                                    mRepostAdapter.refresh(mRepostList.repostsList);
+                                    visibleControl(false);
+                                    REPOST_MAX_ID =(mRepostList.repostsList.get(mRepostList.repostsList.size() - 1).mid)-1;
+                                }else if (mRepostAdapter.getCount() == mRepostList.total_number){
+                                    visibleControl(false);
+                                    load_more.setText(R.string.done);
+                                }
+                            }
+                        }else {
+                            visibleControl(false);
+                            load_more.setText(R.string.done);
+                        }
+                    }
+                    break;
+
+                case 3://转发微博的处理
+                    if (!TextUtils.isEmpty(s)){
+                        Toast.makeText(WeiboDetail.this, "转发成功",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+
+                case 4://评论微博的处理
+                    if (!TextUtils.isEmpty(s)){
+                        Toast.makeText(WeiboDetail.this, "评论成功",
+                                Toast.LENGTH_SHORT).show();
+                        getComments();
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+            ErrorInfo info = ErrorInfo.parse(e.getMessage());
+            Toast.makeText(WeiboDetail.this, info != null ? info.toString() : null, Toast.LENGTH_LONG).show();
+        }
+    };
 
     final class loadMoreOnClickListener implements View.OnClickListener{
         @Override
