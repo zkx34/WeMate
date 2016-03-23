@@ -39,6 +39,10 @@
             android:name=".user_main_page"
             android:label="@string/title_activity_user_main_page" >
         </activity>
+        <activity
+            android:name=".WebView"
+            android:label="@string/title_activity_web_view" >
+        </activity>
     </application>
 
 </manifest>

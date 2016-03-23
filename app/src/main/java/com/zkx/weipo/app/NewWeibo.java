@@ -37,7 +37,6 @@ public class NewWeibo extends AppCompatActivity {
     private void initViews(){
         //Toolbar声明
         Toolbar mToolBar=(Toolbar)findViewById(R.id.new_weibo_toolbar);
-        mToolBar.setTitle("新的微博");
         setSupportActionBar(mToolBar);
         mToolBar.setNavigationIcon(R.mipmap.ic_back_dark);
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {

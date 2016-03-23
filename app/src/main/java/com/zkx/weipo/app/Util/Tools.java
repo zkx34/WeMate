@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.zkx.weipo.app.ImagePagerActivity;
 import com.zkx.weipo.app.R;
+import com.zkx.weipo.app.WebView;
 import com.zkx.weipo.app.adapter.GridViewAdapter;
 import com.zkx.weipo.app.openapi.models.User;
 import com.zkx.weipo.app.view.MyGridView;
@@ -116,7 +117,10 @@ public class Tools  {
                 MyClickableSpan clickableSpan = new MyClickableSpan() {
                     @Override
                     public void onClick(View widget) {
-                        Toast.makeText(context, "点击了网址：" + url, Toast.LENGTH_LONG).show();
+                        Intent intent=new Intent(context,WebView.class);
+                        intent.putExtra("URL",url);
+                        context.startActivity(intent);
+                        //Toast.makeText(context, "点击了网址：" + url, Toast.LENGTH_LONG).show();
                     }
                 };
                 spannableString.setSpan(clickableSpan, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

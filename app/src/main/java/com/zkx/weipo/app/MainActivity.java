@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private ImageView mVerified;
     private boolean comment_ori=false;
     private static  int TYPE=0;   //1是评论，2是转发，3是获取微博信息流,4是收藏,5是刷新主页
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mNavigationView.inflateHeaderView(R.layout.navi_header);
         mNavigationView.inflateMenu(R.menu.menu_nav);
         onNavigationViewMenuItemSelected(mNavigationView);
+
+        mProgressBar=(ProgressBar)findViewById(R.id.main_progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
+
         mListView=(HomePage_ListView)findViewById(R.id.home_listview);
         mListView.setDivider(null);
         mListView.initFooterView();
@@ -408,6 +413,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if ((mStatusLists != null ? mStatusLists.statusList : null) != null && mStatusLists.total_number > 0) {
                         if (mAdapter==null){
                             initAdapter();
+                            mProgressBar.setVisibility(View.GONE);
                             statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         }else {
                             loading.setVisibility(View.GONE);
