@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.*;
-import android.widget.*;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -30,17 +35,15 @@ import com.zkx.weipo.app.openapi.models.StatusList;
 import com.zkx.weipo.app.openapi.models.User;
 import com.zkx.weipo.app.util.AccessTokenKeeper;
 import com.zkx.weipo.app.util.Tools;
-import com.zkx.weipo.app.view.HomePage_ListView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.maxwin.view.XListView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements XListView.IXListViewListener {
 
-    private boolean isLoadMore=false;
     private DrawerLayout mDrawerLayout;
     private StatusList mStatusLists;
-    private SwipeRefreshLayout mRefreshLayout;
     /** 用户信息接口 */
     private UsersAPI mUsersAPI;
     private User mUser;
@@ -49,17 +52,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private AccountAPI mAccountAPI;
     private StatusesAPI mStatusesAPI;
     private FavoritesAPI mFavoritesAPI;
-    private HomePage_ListView mListView;
+    private XListView mListView;
     private HomePageListAdapater mAdapter;
     private long statusMaxId =0;
-    private LinearLayout loading;
-    private LinearLayout done;
     private CircleImageView mUserProfile;
     private TextView mUserName;
     private TextView mUserDesc;
     private ImageView mVerified;
     private boolean comment_ori=false;
-    private static  int TYPE=0;   //1是评论，2是转发，3是获取微博信息流,4是收藏,5是刷新主页
+    private static  int TYPE=0;
     private ProgressBar mProgressBar;
 
     @Override
@@ -87,14 +88,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void initViews(){
 
-        View header = new View(MainActivity.this);
-        header.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(int)getResources().getDimension(R.dimen.abc_action_bar_default_height_material)));
-
-        mRefreshLayout =(SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
-        mRefreshLayout.setOnRefreshListener(this);
-        mRefreshLayout.setColorSchemeResources(R.color.red, R.color.orange, R.color.yellow, R.color.green);
-        mRefreshLayout.setProgressViewEndTarget(false,220);
-
         Toolbar mToolbar = (Toolbar) findViewById(R.id.id_Toolbar);
         setSupportActionBar(mToolbar);
         mDrawerLayout=(DrawerLayout)findViewById(R.id.id_DrawerLayout);
@@ -110,25 +103,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mProgressBar=(ProgressBar)findViewById(R.id.main_progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        mListView=(HomePage_ListView)findViewById(R.id.home_listview);
+        mListView=(XListView) findViewById(R.id.home_listview);
+        mListView.setPullLoadEnable(true);
+        mListView.setPullRefreshEnable(true);
         mListView.setDivider(null);
-        mListView.initFooterView();
-        mListView.addHeaderView(header);
-        mListView.setOnBottomListener(new HomePage_ListView.OnBottomListener() {
-            @Override
-            public void onBottom() {
-                //mListView.showFooterView();
-                loading.setVisibility(View.VISIBLE);
-                if (!isLoadMore){
-                    loadMore();
-                    isLoadMore=true;
-                }else {
-                    isLoadMore=false;
-                }
-            }
-        });
-        loading=(LinearLayout)findViewById(R.id.loading);
-        done=(LinearLayout)findViewById(R.id.done);
+        mListView.setAdapter(null);
+        mListView.setXListViewListener(this);
+
         mUserProfile=(CircleImageView)findViewById(R.id.user_head_large);
         mUserName=(TextView)findViewById(R.id.user_name);
         mUserDesc=(TextView)findViewById(R.id.user_description);
@@ -273,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                 .show();
                         break;
                     case R.id.user_headimg:
-                        Toast.makeText(MainActivity.this,"无法查看其他用户信息",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this,"点击头像",Toast.LENGTH_SHORT).show();
                         /*Intent intent=new Intent(MainActivity.this,user_main_page.class);
                         intent.putExtra("screen_name",
                                 mAdapter.getScreenName(position));
@@ -337,20 +318,26 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     /**
-     * 加载更多微博
-     */
-    public void loadMore()
-    {
-        getStatus();
-    }
-
-    /**
      * 下拉刷新
      */
     @Override
     public void onRefresh() {
         TYPE=5;
         mStatusesAPI.homeTimeline(0L, 0L, 20, 1, false, 0, false, mListener);
+    }
+
+    /**
+     * 上滑加载更多微博
+     */
+    @Override
+    public void onLoadMore() {
+        getStatus();
+    }
+
+    private void onLoad(){
+        mListView.stopRefresh();
+        mListView.stopLoadMore();
+        mListView.setRefreshTime("刚刚");
     }
 
     @Override
@@ -393,14 +380,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         @Override
         public void onComplete(String s) {
             switch (TYPE){
-                case 1:
+                case 1:/**评论微博的处理*/
                     if (!TextUtils.isEmpty(s)){
                         Toast.makeText(MainActivity.this, "评论成功",
                                 Toast.LENGTH_SHORT).show();
                     }
                     TYPE=0;
                     break;
-                case 2:
+                case 2:/**转发微博的处理，3是获取微博信息流,4是收藏,5是刷新主页*/
                     if (!TextUtils.isEmpty(s)){
                         Toast.makeText(MainActivity.this, "转发成功",
                                 Toast.LENGTH_SHORT).show();
@@ -408,38 +395,38 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         onRefresh();
                     }
                     break;
-                case 3:
+                case 3:/**获取微博信息流的处理*/
                     mStatusLists=StatusList.parse(s);
                     if ((mStatusLists != null ? mStatusLists.statusList : null) != null && mStatusLists.total_number > 0) {
                         if (mAdapter==null){
                             initAdapter();
+                            onLoad();
                             mProgressBar.setVisibility(View.GONE);
                             statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         }else {
-                            loading.setVisibility(View.GONE);
+                            onLoad();
                             mAdapter.refresh(mStatusLists.statusList);
                             statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
                         }
                     }else {
                         //加载完150条微博后
-                        loading.setVisibility(View.GONE);
-                        done.setVisibility(View.VISIBLE);
+                        onLoad();
                     }
                     TYPE=0;
                     break;
-                case 4:
+                case 4:/**收藏微博的处理*/
                     if (!TextUtils.isEmpty(s)){
                         Toast.makeText(MainActivity.this, "收藏成功",
                                 Toast.LENGTH_SHORT).show();
                     }
                     TYPE=0;
                     break;
-                case 5:
+                case 5:/**刷新主页的处理*/
                     mStatusLists=StatusList.parse(s);
                     if (mStatusLists != null && mStatusLists.total_number > 0) {
                         statusMaxId =Long.parseLong(mStatusLists.statusList.get(mStatusLists.statusList.size() - 1).mid)-1;
+                        onLoad();
                         initAdapter();
-                        mRefreshLayout.setRefreshing(false);
                     }
                     TYPE=0;
                     break;
